@@ -97,6 +97,9 @@
         <div class="header-inner"><div class="site-brand-container">
   <div class="site-nav-toggle">
     <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line toggle-line-first"></span>
+        <span class="toggle-line toggle-line-middle"></span>
+        <span class="toggle-line toggle-line-last"></span>
     </div>
   </div>
 
@@ -118,6 +121,30 @@
 
 
 
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
 
 
 
@@ -157,9 +184,17 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-count">6</span>
           <span class="site-state-item-name">日志</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span>
       </div>
   </nav>
 </div>
@@ -194,7 +229,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://ylyang999.gitee.io/2020/07/16/test/">
+    <link itemprop="mainEntityOfPage" href="https://ylyang999.gitee.io/2018/11/25/%E6%95%B4%E6%95%B0%E5%8F%8D%E8%BD%AC/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -208,7 +243,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/07/16/test/" class="post-title-link" itemprop="url">test</a>
+            <a href="/2018/11/25/%E6%95%B4%E6%95%B0%E5%8F%8D%E8%BD%AC/" class="post-title-link" itemprop="url">整数反转</a>
         </h2>
 
         <div class="post-meta">
@@ -217,8 +252,18 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2020-07-16 09:36:18" itemprop="dateCreated datePublished" datetime="2020-07-16T09:36:18+08:00">2020-07-16</time>
+              <time title="创建时间：2018-11-25 21:51:48 / 修改时间：22:17:44" itemprop="dateCreated datePublished" datetime="2018-11-25T21:51:48+08:00">2018-11-25</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+                </span>
             </span>
 
           
@@ -232,7 +277,38 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          
+          <ul>
+<li>Reverse digits of an integer.</li>
+</ul>
+<p><strong>Example1:</strong> x = 123, return 321<br><strong>Example2:</strong> x = -123, return -321</p>
+<p><a href="https://www.nowcoder.com/profile/8403160/codeBookDetail?submissionId=12652940#" target="_blank" rel="noopener">click to show spoilers.</a></p>
+<ul>
+<li>Have you thought about this?</li>
+</ul>
+<p>Here are some good questions to ask before coding. Bonus points for you if you have already thought through this!</p>
+<p>If the integer’s last digit is 0, what should the output be? ie, cases such as 10, 100.</p>
+<p>Did you notice that the reversed integer might overflow? Assume the input is a 32-bit integer, then the reverse of 1000000003 overflows. How should you handle such cases?</p>
+<p>Throw an exception? Good, but what if throwing an exception is not an option? You would then have to re-design the function (ie, add an extra parameter).</p>
+<ul>
+<li>題目大意：把一个整数的数字顺序反转，正负号不变。</li>
+<li>思路：定义一个临时变量转存这个整数，如果是负数就变成它的相反数，然后进行循环，每次对10求余取出这个整数的最后一位，然后把这个数除以10。</li>
+<li>代码：</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">reverse</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> temp = x &gt; <span class="number">0</span> ? x : (-x);</span><br><span class="line">        <span class="keyword">int</span> result = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(temp)</span><br><span class="line">        &#123;</span><br><span class="line">            result = result * <span class="number">10</span> + temp % <span class="number">10</span>;</span><br><span class="line">            temp /= <span class="number">10</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> x &gt; <span class="number">0</span> ? result : (-result);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>然后这样的话是可以通过牛客网上的测试数据的，但是关键是它题目<code>Have you thought about this?</code>后边的要求，大意是要考虑<code>int</code>类型的溢出问题，这里有两种思路：</li>
+</ul>
+<p>（1）定义为返回的变量为<code>long</code>或者<code>long long</code>类型，判断如果大于<code>int</code> <code>max32 = 0x7fffffff;</code>或者小于<code>int</code> <code>min32 = 0x80000000;</code>就是溢出了。</p>
+<p>（2）每次计算新的结果时，再用逆运算（把结果除以10）判断与上一次循环的结果是否相同，不同就溢出。</p>
+<p>第二种思路很巧妙，我喜欢第二种思路。</p>
+<ul>
+<li>代码：</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">reverse</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> temp = x &gt; <span class="number">0</span> ? x : (-x);</span><br><span class="line">        <span class="keyword">int</span> result = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(temp)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">int</span> newResult = result * <span class="number">10</span> + temp % <span class="number">10</span>;</span><br><span class="line">            <span class="comment">// 把newResult/10也就是把加上的temp%10又除掉了，如果不等于result，说明发生了溢出</span></span><br><span class="line">            <span class="keyword">if</span>((newRessult / <span class="number">10</span>) != result) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">            result = newRessult;</span><br><span class="line">            temp /= <span class="number">10</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> x &gt; <span class="number">0</span> ? result : (-result);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>以上。</p>
+
       
     </div>
 
@@ -251,7 +327,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://ylyang999.gitee.io/2020/07/16/hello-world/">
+    <link itemprop="mainEntityOfPage" href="https://ylyang999.gitee.io/2018/11/25/PyCharm%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -265,7 +341,209 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/07/16/hello-world/" class="post-title-link" itemprop="url">Hello World</a>
+            <a href="/2018/11/25/PyCharm%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/" class="post-title-link" itemprop="url">PyCharm安装教程</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2018-11-25 18:58:37 / 修改时间：20:37:50" itemprop="dateCreated datePublished" datetime="2018-11-25T18:58:37+08:00">2018-11-25</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">安装教程</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h1><ul>
+<li>官网下载安装包，这里选择professional版本。</li>
+</ul>
+<p><img src="PyCharm%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/download.png" alt=""></p>
+<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><h2 id="开始安装，选择next"><a href="#开始安装，选择next" class="headerlink" title="开始安装，选择next"></a>开始安装，选择next</h2><p><img src="PyCharm%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/startInstall.png" alt="img"></p>
+<h2 id="选择安装路径，继续next"><a href="#选择安装路径，继续next" class="headerlink" title="选择安装路径，继续next"></a>选择安装路径，继续next</h2><p><img src="PyCharm%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/selectInstallPath.png" alt=""></p>
+<h2 id="选择安装选项，继续next"><a href="#选择安装选项，继续next" class="headerlink" title="选择安装选项，继续next"></a>选择安装选项，继续next</h2><p><img src="PyCharm%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/installOption.png" alt=""></p>
+<h2 id="进入这一页面，默认选择，点击install"><a href="#进入这一页面，默认选择，点击install" class="headerlink" title="进入这一页面，默认选择，点击install"></a>进入这一页面，默认选择，点击install</h2><p><img src="PyCharm%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/end.png" alt=""></p>
+<h2 id="安装中，等待就好了"><a href="#安装中，等待就好了" class="headerlink" title="安装中，等待就好了"></a>安装中，等待就好了</h2><p><img src="PyCharm%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/installing.png" alt=""></p>
+<h2 id="安装完毕"><a href="#安装完毕" class="headerlink" title="安装完毕"></a>安装完毕</h2><p><img src="PyCharm%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/finish.png" alt=""></p>
+<p>因为在前边安装选项中的时候我们选择了<code>Add launchers dir to the path</code>，所以需要重启电脑，这里有两个选项：</p>
+<ul>
+<li><p>现在立即重启</p>
+</li>
+<li><p>稍后手动重启</p>
+</li>
+</ul>
+<p>选择立即重启，因为我们要立刻建一个python项目尝试一下。</p>
+<h1 id="用PyCharm新建第一个python项目"><a href="#用PyCharm新建第一个python项目" class="headerlink" title="用PyCharm新建第一个python项目"></a>用PyCharm新建第一个python项目</h1><blockquote>
+<p>这里我实际上是已经安装了anaconda，所以电脑里已经有了python环境，而且也已经配置了anaconda的环境变量（D:\Program Files\anconda和D:\Program Files\anconda\Scripts配置到Path）</p>
+</blockquote>
+<h2 id="软件初始配置"><a href="#软件初始配置" class="headerlink" title="软件初始配置"></a>软件初始配置</h2><ul>
+<li><p>配置导入，选择不导入</p>
+</li>
+<li><p>主题选择，选择Darcula的暗黑系主题</p>
+</li>
+<li><p>开始使用</p>
+</li>
+</ul>
+<p><img src="PyCharm%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/welcome.PNG" alt=""></p>
+<h2 id="新建一个项目"><a href="#新建一个项目" class="headerlink" title="新建一个项目"></a>新建一个项目</h2><p><img src="PyCharm%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/creatNewProject.png" alt=""></p>
+<h2 id="选择路径"><a href="#选择路径" class="headerlink" title="选择路径"></a>选择路径</h2><ul>
+<li><p>Location：项目路径</p>
+</li>
+<li><p>Base interpreter：python.exe的路径，这里我是安装了anaconda，所以已经有了python环境，而且我还配置了环境变量，所以PyCharm可以自动找到python.exe的路径。点击creat。</p>
+</li>
+</ul>
+<p><img src="PyCharm%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/newProject.png" alt=""></p>
+<h2 id="新建Python文件"><a href="#新建Python文件" class="headerlink" title="新建Python文件"></a>新建Python文件</h2><p>项目名处右键 -&gt; new -&gt; python file -&gt; test01 -&gt; OK</p>
+<p><img src="PyCharm%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/newPython.png" alt=""></p>
+<h2 id="更改编辑器区域字体大小"><a href="#更改编辑器区域字体大小" class="headerlink" title="更改编辑器区域字体大小"></a>更改编辑器区域字体大小</h2><ul>
+<li>编辑区字体太小了，改一下字体。</li>
+</ul>
+<p><img src="PyCharm%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/changeFontSize.png" alt=""></p>
+<h2 id="输出一行hello-world"><a href="#输出一行hello-world" class="headerlink" title="输出一行hello world!!!"></a>输出一行<code>hello world!!!</code></h2><p>输入代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="string">'hello world!!!'</span>);</span><br></pre></td></tr></table></figure>
+
+<p>看到界面上，运行按钮是灰色的，右键test01.py -&gt; 运行</p>
+<p><img src="PyCharm%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/noRun.png" alt=""></p>
+<p>可以看到运行出来了，而且运行按钮也亮起来了。</p>
+<p><img src="PyCharm%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/run.png" alt=""></p>
+<p>以上。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ylyang999.gitee.io/2018/11/23/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%9C%80%E5%B0%8F%E6%B7%B1%E5%BA%A6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ylyang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="杨远林的个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/11/23/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%9C%80%E5%B0%8F%E6%B7%B1%E5%BA%A6/" class="post-title-link" itemprop="url">二叉树的最小深度</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2018-11-23 23:28:16 / 修改时间：23:41:26" itemprop="dateCreated datePublished" datetime="2018-11-23T23:28:16+08:00">2018-11-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <ul>
+<li>minimum depth of binary tree</li>
+</ul>
+<p>Given a binary tree, find its minimum depth.<br/>The minimum depth is the number of nodes along the shortest path from the root node down to the nearest leaf node.</p>
+
+<ul>
+<li>题目大意：给定一颗二叉树，找到它的最小深度。最小深度指的是，从根节点到最近的叶子节点，沿着这条路径走过的节点的数目。</li>
+<li>思路：利用队列采用层序遍历，一旦找到一个叶节点，它肯定是最短的。</li>
+<li>代码：</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        <span class="keyword">typedef</span> TreeNode* tree;</span><br><span class="line">        <span class="function"><span class="keyword">int</span> <span class="title">run</span><span class="params">(TreeNode *root)</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            <span class="comment">// 层序遍历，一旦找到一个叶节点，它肯定是最短的</span></span><br><span class="line">            <span class="keyword">if</span> (root == <span class="literal">NULL</span>)<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">            <span class="built_in">queue</span>&lt;tree&gt; qu;</span><br><span class="line">            tree now = root; <span class="comment">// 记录该层的当前节点</span></span><br><span class="line">            tree last = root; <span class="comment">// 记录该层的最后一个节点</span></span><br><span class="line">            <span class="keyword">int</span> level = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">int</span> <span class="built_in">size</span> = <span class="number">0</span>;</span><br><span class="line">            qu.push(root);</span><br><span class="line">            <span class="keyword">while</span> (!qu.empty())</span><br><span class="line">            &#123;</span><br><span class="line">                now = qu.front(); <span class="comment">// 取队首</span></span><br><span class="line">                qu.pop(); <span class="comment">// 出队首</span></span><br><span class="line">                <span class="built_in">size</span> = qu.<span class="built_in">size</span>();</span><br><span class="line">                <span class="keyword">if</span> (now-&gt;left != <span class="literal">NULL</span>)qu.push(now-&gt;left);</span><br><span class="line">                <span class="keyword">if</span> (now-&gt;right != <span class="literal">NULL</span>)qu.push(now-&gt;right);</span><br><span class="line">                <span class="comment">// 没有元素进队，说明这是一个叶子节点，找到的第一个叶子节点为最短的</span></span><br><span class="line">                <span class="keyword">if</span> (<span class="built_in">size</span> - qu.<span class="built_in">size</span>() == <span class="number">0</span>)<span class="keyword">break</span>;</span><br><span class="line">                <span class="comment">// last==now，说明当前节点走到了该层的最后一个节点</span></span><br><span class="line">                <span class="keyword">if</span> (last == now)</span><br><span class="line">                &#123;</span><br><span class="line">                    level++;</span><br><span class="line">                    <span class="comment">// last指向下一层的最后一个节点</span></span><br><span class="line">                    <span class="keyword">if</span> (!qu.empty())last = qu.back();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> level;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>测试结果：</li>
+</ul>
+<p><img src="%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%9C%80%E7%9F%AD%E5%B1%82%E6%95%B0/1.PNG" alt=""></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ylyang999.gitee.io/2018/11/23/github-hexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E7%BD%91%E7%AB%99/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ylyang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="杨远林的个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/11/23/github-hexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E7%BD%91%E7%AB%99/" class="post-title-link" itemprop="url">Github+HEXO搭建个人博客网站</a>
         </h2>
 
         <div class="post-meta">
@@ -275,8 +553,204 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-07-16 09:25:52" itemprop="dateCreated datePublished" datetime="2020-07-16T09:25:52+08:00">2020-07-16</time>
+              <time title="创建时间：2018-11-23 14:02:49" itemprop="dateCreated datePublished" datetime="2018-11-23T14:02:49+08:00">2018-11-23</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2018-11-24 18:51:48" itemprop="dateModified" datetime="2018-11-24T18:51:48+08:00">2018-11-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/" itemprop="url" rel="index"><span itemprop="name">搭建博客</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="1-原理"><a href="#1-原理" class="headerlink" title="1. 原理"></a>1. 原理</h1><p>​    Github Pages：github是项目托管网站，列出了项目的源文件，所以github有一个pages功能，用来介绍你的项目目录，可以自定义主页，用来代替默认的列出源列表的这个页面。所以，Github Pages可以被认为是用户编写的、托管在github上的静态网页。</p>
+<h1 id="2-搭建本地环境"><a href="#2-搭建本地环境" class="headerlink" title="2. 搭建本地环境"></a>2. 搭建本地环境</h1><p>​    首先需要搭建本地环境：Git + Node.js + Hexo + Typora，Typora是一款专门写markdown文件的编辑器，如果习惯用其他的编辑器写md，也可以。</p>
+<p>​    操作系统：windows 7，其他系统安装方式类似。</p>
+<p>​    安装顺序是先安装Git和Node.js，这两个安装完以后才能安装Hexo。</p>
+<h2 id="2-1-安装Git"><a href="#2-1-安装Git" class="headerlink" title="2.1 安装Git"></a>2.1 安装Git</h2><p>​    官网下载Git安装包，安装路径自定义，有一个选项自动添加到环境变量的，要勾上。这里因为我之前就已经在用Git作为版本控制工具，所以就没有重新安装。</p>
+<p>​    安装完成后，win+r 输入cmd打开命令行，输入git –version，返回所安装的Git的版本信息，说明安装成功。</p>
+<h2 id="2-2-安装Node-js"><a href="#2-2-安装Node-js" class="headerlink" title="2.2 安装Node.js"></a>2.2 安装Node.js</h2><p>​    同样官网下载安装包，全部选择默认安装。</p>
+<p>​    安装完成后，win+r 输入cmd打开命令行，输入node -v，返回所安装的node.js的版本信息，说明安装成功。</p>
+<h2 id="2-3-安装Hexo"><a href="#2-3-安装Hexo" class="headerlink" title="2.3 安装Hexo"></a>2.3 安装Hexo</h2><p>​    安装Hexo建议照着官方文档来，网上的博客鉴于时间以及版本说法五花八门，按照官方文档来最为稳妥，而且这个是有中文官方文档的，不用担心看不懂。</p>
+<ul>
+<li><a href="https://hexo.io/zh-cn/docs/" target="_blank">中文官方文档</a></li>
+<li><a href="https://hexo.io/docs/index.html" target="_blank">英文官方文档</a></li>
+</ul>
+<p>​    在电脑磁盘上找一个你想存放博客相关文件的地方，新建文件夹Hexo_Blog，进入，右键Git Bush Here，即可在命令行中使用npm命令安装Hexo。</p>
+<h3 id="2-3-1-安装命令："><a href="#2-3-1-安装命令：" class="headerlink" title="2.3.1 安装命令："></a>2.3.1 安装命令：</h3><p>​    <code>$ npm install -g hexo-cli</code></p>
+<p>​    然后等待一会儿，等待时间跟你的网速有关。</p>
+<h3 id="2-3-2-初始化Hexo"><a href="#2-3-2-初始化Hexo" class="headerlink" title="2.3.2 初始化Hexo"></a>2.3.2 初始化Hexo</h3><p>​    安装 Hexo 完成后，请执行下列命令，Hexo 将会在指定文件夹中新建所需要的文件。</p>
+<p>​    <code>$ hexo init</code></p>
+<p>​    <code>$ npm install</code></p>
+<p>​    然后等待安装结束。结束后会生成一些配置文件，具体信息参考官方文档，很详细。</p>
+<h3 id="2-3-3-体验Hexo"><a href="#2-3-3-体验Hexo" class="headerlink" title="2.3.3 体验Hexo"></a>2.3.3 体验Hexo</h3><p>​    同样是在命令行中，输入：</p>
+<p>​    <code>$ hexo g</code></p>
+<p>​    <code>$ hexo s</code></p>
+<p>​    提示：</p>
+<p>​    <code>INFO  Hexo is running at http://localhost:4000 . Press Ctrl+C to stop.</code></p>
+<p>​    说明建站成功，博客网站已经成功在本地建立起来啦！</p>
+<p>​    在浏览器中打开<code>http://localhost:4000/</code>，你将会看到：</p>
+<p><img src="github-hexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E7%BD%91%E7%AB%99/hexo-first-time.png" alt=""></p>
+<p>​    一片美丽的星空！！！</p>
+<p>​    说明建站成功，主题有点丑，所以我们后边会换主题。</p>
+<h1 id="3-Guthub"><a href="#3-Guthub" class="headerlink" title="3. Guthub"></a>3. Guthub</h1><p>未完待续……</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ylyang999.gitee.io/2018/11/23/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%9C%80%E5%A4%A7%E6%B7%B1%E5%BA%A6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ylyang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="杨远林的个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/11/23/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%9C%80%E5%A4%A7%E6%B7%B1%E5%BA%A6/" class="post-title-link" itemprop="url">二叉树的最大深度</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2018-11-23 00:07:31 / 修改时间：23:47:22" itemprop="dateCreated datePublished" datetime="2018-11-23T00:07:31+08:00">2018-11-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <ul>
+<li>maximum depth of binary tree<p>Given a binary tree, find its maximum depth.<br/>
+The maximum depth is the number of nodes along the longest path from the root node down to the farthest leaf node.</p>
+
+
+</li>
+</ul>
+<ul>
+<li><p>题目大意：给定一棵二叉树，找它的最大深度。最大深度指的是从根节点向下到最远的叶子节点，沿着这条路径走过所经过的节点的数目。</p>
+</li>
+<li><p>思路：递归左右子树，左右子树最深的子树的高度加一，就是当前二叉树的最大深度。</p>
+</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Definition for binary tree</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">TreeNode</span> &#123;</span></span><br><span class="line">  <span class="keyword">int</span> val;</span><br><span class="line">  TreeNode *left;</span><br><span class="line">  TreeNode *right;</span><br><span class="line">  TreeNode(<span class="keyword">int</span> x) : val(x), left(<span class="literal">NULL</span>), right(<span class="literal">NULL</span>) &#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">  <span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxDepth</span><span class="params">(TreeNode *root)</span> </span>&#123;</span><br><span class="line">      <span class="comment">// 需要填入的代码块</span></span><br><span class="line">      <span class="keyword">if</span>(root == <span class="literal">NULL</span>)<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">      <span class="keyword">int</span> leftLength = maxDepth(root-&gt;left);</span><br><span class="line">      <span class="keyword">int</span> rightLength = maxDepth(root-&gt;right);</span><br><span class="line">      <span class="keyword">return</span> leftLength &gt; rightLength ? (leftLength+<span class="number">1</span>) : (rightLength+<span class="number">1</span>);</span><br><span class="line">      <span class="comment">// 需要填入的代码块</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>测试结果</li>
+</ul>
+<p><img src="maximum-depth-of-binary-tree/1.PNG" alt="测试结果"></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ylyang999.gitee.io/2018/08/08/hello-world/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ylyang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="杨远林的个人博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/08/08/hello-world/" class="post-title-link" itemprop="url">Hello World</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-08-08 00:00:00" itemprop="dateCreated datePublished" datetime="2018-08-08T00:00:00+08:00">2018-08-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2018-11-23 01:18:04" itemprop="dateModified" datetime="2018-11-23T01:18:04+08:00">2018-11-23</time>
+              </span>
 
           
 
@@ -301,7 +775,7 @@
 <p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
 <h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
 
       
     </div>
