@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/logo.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/logo.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/logo.ico">
+  <link rel="mask-icon" href="/images/logo.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  
+  <link rel="stylesheet" href="/lib/animate-css/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ylyang999.gitee.io","root":"/","scheme":"Gemini","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}}};
+  </script>
+
+  <meta name="description" content="添加分类、标签、关于等页面 以添加分类页面为例：  在站点目录下，打开Git Bash Here，输入 hexo new page &quot;categories&quot; 之后在站点目录下的source文件夹下，会新增一个categories的文件夹，里面有一个index.md文件，打开如下 12345title: categoriesdate: 2015-12-04 15:37:22typ">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Github+Hexo博客体验优化（添加功能）">
+<meta property="og:url" content="https://ylyang999.gitee.io/2018/11/24/%E5%8D%9A%E5%AE%A2%E4%BD%93%E9%AA%8C%E4%BC%98%E5%8C%96/index.html">
+<meta property="og:site_name" content="杨远林的个人博客">
+<meta property="og:description" content="添加分类、标签、关于等页面 以添加分类页面为例：  在站点目录下，打开Git Bash Here，输入 hexo new page &quot;categories&quot; 之后在站点目录下的source文件夹下，会新增一个categories的文件夹，里面有一个index.md文件，打开如下 12345title: categoriesdate: 2015-12-04 15:37:22typ">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ylyang999.gitee.io/2018/11/24/%E5%8D%9A%E5%AE%A2%E4%BD%93%E9%AA%8C%E4%BC%98%E5%8C%96/IP%E5%9C%B0%E5%9D%80.PNG">
+<meta property="og:image" content="https://ylyang999.gitee.io/2018/11/24/%E5%8D%9A%E5%AE%A2%E4%BD%93%E9%AA%8C%E4%BC%98%E5%8C%96/%E5%9F%9F%E5%90%8D%E8%A7%A3%E6%9E%90.PNG">
+<meta property="og:image" content="https://ylyang999.gitee.io/2018/11/24/%E5%8D%9A%E5%AE%A2%E4%BD%93%E9%AA%8C%E4%BC%98%E5%8C%96/setting.PNG">
+<meta property="og:image" content="https://ylyang999.gitee.io/2018/11/24/%E5%8D%9A%E5%AE%A2%E4%BD%93%E9%AA%8C%E4%BC%98%E5%8C%96/ns.PNG">
+<meta property="og:image" content="https://ylyang999.gitee.io/2018/11/24/%E5%8D%9A%E5%AE%A2%E4%BD%93%E9%AA%8C%E4%BC%98%E5%8C%96/active.PNG">
+<meta property="og:image" content="https://ylyang999.gitee.io/2018/11/24/%E5%8D%9A%E5%AE%A2%E4%BD%93%E9%AA%8C%E4%BC%98%E5%8C%96/%E5%8D%9A%E5%AE%A2%E4%BD%93%E9%AA%8C%E4%BC%98%E5%8C%96/https.PNG">
+<meta property="og:image" content="https://ylyang999.gitee.io/2018/11/24/%E5%8D%9A%E5%AE%A2%E4%BD%93%E9%AA%8C%E4%BC%98%E5%8C%96/%E8%AF%81%E4%B9%A6.PNG">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006qRazegy1fkwo2fpoetj30h40coaak.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006qRazegy1fkwo6w2b6uj30xe0etjt4.jpg">
+<meta property="article:published_time" content="2018-11-24T05:16:57.000Z">
+<meta property="article:modified_time" content="2018-12-10T08:05:14.000Z">
+<meta property="article:author" content="ylyang">
+<meta property="article:tag" content="github">
+<meta property="article:tag" content="hexo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ylyang999.gitee.io/2018/11/24/%E5%8D%9A%E5%AE%A2%E4%BD%93%E9%AA%8C%E4%BC%98%E5%8C%96/IP%E5%9C%B0%E5%9D%80.PNG">
+
+<link rel="canonical" href="https://ylyang999.gitee.io/2018/11/24/%E5%8D%9A%E5%AE%A2%E4%BD%93%E9%AA%8C%E4%BC%98%E5%8C%96/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Github+Hexo博客体验优化（添加功能） | 杨远林的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <main class="main">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+        <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line toggle-line-first"></span>
+        <span class="toggle-line toggle-line-middle"></span>
+        <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">杨远林的个人博客</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">ylyang's blogs</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#添加分类、标签、关于等页面"><span class="nav-number">1.</span> <span class="nav-text">添加分类、标签、关于等页面</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#设置头像"><span class="nav-number">2.</span> <span class="nav-text">设置头像</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#上传本地图片"><span class="nav-number">3.</span> <span class="nav-text">上传本地图片</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#添加社交链接"><span class="nav-number">4.</span> <span class="nav-text">添加社交链接</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#添加友情链接"><span class="nav-number">5.</span> <span class="nav-text">添加友情链接</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#绑定自己的域名"><span class="nav-number">6.</span> <span class="nav-text">绑定自己的域名</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#图床工具（还没用）"><span class="nav-number">7.</span> <span class="nav-text">图床工具（还没用）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#添加百度SEO"><span class="nav-number">8.</span> <span class="nav-text">添加百度SEO</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#评论系统valine"><span class="nav-number">9.</span> <span class="nav-text">评论系统valine</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特性"><span class="nav-number">9.1.</span> <span class="nav-text">特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开始搭建"><span class="nav-number">9.2.</span> <span class="nav-text">开始搭建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTML-片段"><span class="nav-number">9.3.</span> <span class="nav-text">HTML 片段</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置"><span class="nav-number">9.4.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#npm"><span class="nav-number">9.5.</span> <span class="nav-text">npm</span></a></li></ol></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ylyang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">68</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">63</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </section>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </header>
+
+      
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div id="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+      <div class="main-inner">
+        
+
+        <div class="content post posts-expand">
+          
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ylyang999.gitee.io/2018/11/24/%E5%8D%9A%E5%AE%A2%E4%BD%93%E9%AA%8C%E4%BC%98%E5%8C%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ylyang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="杨远林的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Github+Hexo博客体验优化（添加功能）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-11-24 13:16:57" itemprop="dateCreated datePublished" datetime="2018-11-24T13:16:57+08:00">2018-11-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2018-12-10 16:05:14" itemprop="dateModified" datetime="2018-12-10T16:05:14+08:00">2018-12-10</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/" itemprop="url" rel="index"><span itemprop="name">搭建博客</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="添加分类、标签、关于等页面"><a href="#添加分类、标签、关于等页面" class="headerlink" title="添加分类、标签、关于等页面"></a>添加分类、标签、关于等页面</h1><ul>
+<li>以添加<strong>分类</strong>页面为例：</li>
+</ul>
+<p>在<strong>站点目录</strong>下，打开<code>Git Bash Here</code>，输入</p>
+<p><code>hexo new page &quot;categories&quot;</code></p>
+<p>之后在站点目录下的source文件夹下，会新增一个<code>categories</code>的文件夹，里面有一个<code>index.md</code>文件，打开如下</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">title: categories</span><br><span class="line">date: 2015-12-04 15:37:22</span><br><span class="line">type: "categories"</span><br><span class="line">comments: false</span><br><span class="line">------------------------------</span><br></pre></td></tr></table></figure>
+
+<p>其中，comments可以设置为false，含义是打开分类页面，评论插件不显示；如要显示则改为<code>true</code>。</p>
+<p>tags, about页面的创建类似，分别输入</p>
+<p><code>hexo new page &quot;tags&quot;</code><br><code>hexo new page &quot;about&quot;</code></p>
+<h1 id="设置头像"><a href="#设置头像" class="headerlink" title="设置头像"></a>设置头像</h1><p>编辑站点配置文件，添加如下内容</p>
+<p><code>avatar: url</code></p>
+<p>其中，<code>url</code>可以是<br>(1) 完整的互联网URL，你可以先将设置的头像图片放到网上；<br>(2) 本地地址：如<code>/upload/image/avatar.png</code> (你需要将<code>avatar.png</code>文件放在<code>/站点目录/source/upload/image/</code>里面)。</p>
+<h1 id="上传本地图片"><a href="#上传本地图片" class="headerlink" title="上传本地图片"></a>上传本地图片</h1><ul>
+<li>打开博客根目录下的配置文件_config.yml，找到post_asset_folder参数，设置为true，之后在每次使用命令<code>$ hexo new &quot;pages&quot;</code>新建文件时，Hexo会自动建立一个与文章同名的文件夹，把与该文章相关的所有资源都放到那个文件夹，就可以方便的使用资源。</li>
+<li>在hexo的目录下执行<code>npm install https://github.com/CodeFalling/hexo-asset-image --save</code>（需要等待一段时间）。</li>
+<li>完成安装后用hexo新建文章的时候会发现_posts目录下面会多出一个和文章名字一样的文件夹。图片就可以放在文件夹下面。</li>
+<li>把图片放在与pages.md文件同名的文件夹pages下，引用图片时使用格式<code>![图片名](pages/pic.jpg)</code>，就可以显示图片了。</li>
+</ul>
+<h1 id="添加社交链接"><a href="#添加社交链接" class="headerlink" title="添加社交链接"></a>添加社交链接</h1><ul>
+<li>编辑站点配置文件，添加</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">social:</span><br><span class="line">  github: https:&#x2F;&#x2F;github.com&#x2F;</span><br><span class="line">  twitter: https:&#x2F;&#x2F;twitter.com&#x2F;</span><br><span class="line">  weibo: http:&#x2F;&#x2F;weibo.com&#x2F;</span><br><span class="line">  zhihu: http:&#x2F;&#x2F;www.zhihu.com&#x2F;</span><br><span class="line">  ......</span><br></pre></td></tr></table></figure>
+
+<p>可根据自身需要自行删减。</p>
+<h1 id="添加友情链接"><a href="#添加友情链接" class="headerlink" title="添加友情链接"></a>添加友情链接</h1><ul>
+<li>以添加github官网(<code>https://www.github.com</code>)为友情链接为例</li>
+</ul>
+<p>编辑站点配置文件，添加如下内容</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">links_title: 友情链接</span><br><span class="line">links:</span><br><span class="line">  Github: https:&#x2F;&#x2F;www.github.com</span><br></pre></td></tr></table></figure>
+
+<p>其中，links_title为友情链接的名称。</p>
+<h1 id="绑定自己的域名"><a href="#绑定自己的域名" class="headerlink" title="绑定自己的域名"></a>绑定自己的域名</h1><ul>
+<li>域名解析</li>
+</ul>
+<ol>
+<li>打开cmd，ing之前github_username.github.io，得到IP地址。</li>
+</ol>
+<p><img src="/2018/11/24/%E5%8D%9A%E5%AE%A2%E4%BD%93%E9%AA%8C%E4%BC%98%E5%8C%96/IP%E5%9C%B0%E5%9D%80.PNG" alt="IP地址"></p>
+<ol start="2">
+<li>登录腾讯云，控制台-&gt;云解析-&gt;解析-&gt;新手快速添加，添加记录：</li>
+</ol>
+<p><img src="/2018/11/24/%E5%8D%9A%E5%AE%A2%E4%BD%93%E9%AA%8C%E4%BC%98%E5%8C%96/%E5%9F%9F%E5%90%8D%E8%A7%A3%E6%9E%90.PNG" alt="域名解析"></p>
+<ul>
+<li>Github操作</li>
+</ul>
+<p>打开创建的github_user.github.io的仓库，选择setting -&gt; GitHub Pages -&gt; Custom domain -&gt; 输入自己的域名 -&gt; save：</p>
+<p><img src="/2018/11/24/%E5%8D%9A%E5%AE%A2%E4%BD%93%E9%AA%8C%E4%BC%98%E5%8C%96/setting.PNG" alt></p>
+<p>到现在，打开浏览器地址栏输入<code>http://yangyuanlin.club</code>已经可以访问到了，但是浏览器提示是不安全的访问，如何通过HTTPS访问自定义域名呢？</p>
+<ul>
+<li>通过HTTPS访问自定义域名</li>
+</ul>
+<p><strong>HTTP与HTTPS</strong><br>HTTP是明文传输协议，传输内容容易被嗅探和篡改。<br>而HTTPS，即HTTP over SSL/TLS,是添加了一层SSL(Secure Sockets Layer，安全套接层)，或者是TLS(Transport Layer Security,传输层安全协议)，所以HTTPS就可以视为HTTP和SSL/TLS协议的组合。<br>HTTPS能做到良好的保密性(防嗅探)，真实性(防篡改)，完整性(防域名劫持和域名欺骗)。</p>
+<p><strong>SSL证书</strong><br>SSL是TLS的前身，但TLS通常也被标志为SSL。<br>SSL/TLS协议的基本思路是采用公钥加密法，也就是说，客户端先向服务器端索要公钥，然后用公钥加密信息(会话秘钥)，服务器收到密文后，用自己的私钥解密。<br>这个公钥就放在数字证书中。只要证书是可信的，公钥就是可信的。</p>
+<p><strong>申请SSL证书</strong><br>SSL证书由你的NS(Name Server，域名服务商)颁发，由于腾讯云的SSL证书超级贵，所以我们可以迁移到免费提供SSL的NS处，比如国内的DNSpod(国内都需要备案),还有国外的Netlify和Cloudflare，从速度和操作性考虑，本人选择了Cloudflare。 </p>
+<ol>
+<li>到Cloudflare官网注册； </li>
+<li>根据指引点击Add Site，添加自定义域名<code>www.yangyuanlin.club</code>，会自动开始扫描DNS解析记录； </li>
+<li>扫描完成后，<strong>Cloudflare</strong>会选择给我们分配两个NS地址，将这两个地址替换腾讯云上的原NS地址，等待生效； e721ccd1d0e34d95515e1157e726508e</li>
+</ol>
+<p><img src="/2018/11/24/%E5%8D%9A%E5%AE%A2%E4%BD%93%E9%AA%8C%E4%BC%98%E5%8C%96/ns.PNG" alt></p>
+<ol start="4">
+<li>在<strong>Cloudflare</strong>上检查自己网站的状态，显示为<code>Active</code>时表示NS更改成功； </li>
+</ol>
+<p><img src="/2018/11/24/%E5%8D%9A%E5%AE%A2%E4%BD%93%E9%AA%8C%E4%BC%98%E5%8C%96/active.PNG" alt></p>
+<ol start="5">
+<li>在<strong>Cloudflare</strong>将自己网站的<strong>SSL</strong>状态改变为<code>Full</code>状态，等待<strong>Status</strong>变为<code>Active Certificate</code>，通常生效需要十几分钟。</li>
+<li>再访问自定义域名时，就可以看见是<code>https</code>传输，网址前也有一把绿色小锁,可以看到这个证书其实是<strong>Cloudflare</strong>的证书。</li>
+</ol>
+<p><img src="%E5%8D%9A%E5%AE%A2%E4%BD%93%E9%AA%8C%E4%BC%98%E5%8C%96/https.PNG" alt></p>
+<p><img src="/2018/11/24/%E5%8D%9A%E5%AE%A2%E4%BD%93%E9%AA%8C%E4%BC%98%E5%8C%96/%E8%AF%81%E4%B9%A6.PNG" alt></p>
+<h1 id="图床工具（还没用）"><a href="#图床工具（还没用）" class="headerlink" title="图床工具（还没用）"></a>图床工具（还没用）</h1><p>图床就是一个在网络上存储图片的地方，目的是为了节省本地服务器空间，加快图片打开速度。个人用户一般不会使用，主要是个人博客和小网站使用。</p>
+<ul>
+<li>七牛云</li>
+</ul>
+<p>另外，这里也有很多：</p>
+<p><code>https://www.jianshu.com/p/718173c339ee</code></p>
+<h1 id="添加百度SEO"><a href="#添加百度SEO" class="headerlink" title="添加百度SEO"></a>添加百度SEO</h1><ul>
+<li>百度搜索<code>site:www.yangyuanlin.club</code> -&gt; 提交网址，填写<code>ywww.yangyuanlin.club</code> -&gt; 提交。</li>
+<li>在<a href="http://zhanzhang.baidu.com/site/index?site=http://www.visugar.com/" target="_blank">百度搜索资源平台</a>中对网站进行验证，文件验证搞不了（html文件总是被重新编译），html标签验证不会，CNAME验证还没搞完。</li>
+<li>安装地图生成插件，生成网站地图，Git Bush中执行：</li>
+</ul>
+<p><code>npm install hexo-generator-sitemap --save  # sitemap.xml适合提交给谷歌搜素引擎</code></p>
+<p><code>npm install hexo-generator-baidu-sitemap --save  # baidusitemap.xml适合提交百度搜索引擎</code></p>
+<p>然后在站点配置文件_config.yml中添加以下代码（我没加就生成了sitemap）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 自动生成sitemap</span><br><span class="line">sitemap:</span><br><span class="line">path: sitemap.xml</span><br><span class="line">baidusitemap:</span><br><span class="line">path: baidusitemap.xml</span><br></pre></td></tr></table></figure>
+
+<p>最后修改站点配置文件_config.yml</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># URL</span><br><span class="line">## If your site is put in a subdirectory, set url as &#39;http:&#x2F;&#x2F;yoursite.com&#x2F;child&#39; and root as &#39;&#x2F;child&#x2F;&#39;</span><br><span class="line">url: https:&#x2F;&#x2F;yangyuanlin.club</span><br><span class="line">root: &#x2F;</span><br><span class="line">permalink: :year&#x2F;:month&#x2F;:day&#x2F;:title&#x2F;</span><br><span class="line">permalink_defaults:</span><br></pre></td></tr></table></figure>
+
+<p>以后每次hexo g后都会在/public目录下生成sitemap.xml和baidusitemap.xml，这就是你的站点地图。</p>
+<ul>
+<li>首页标题优化</li>
+</ul>
+<p>SEO最重要的是你的标题，一般搜索都是搜索你的标题。</p>
+<p>更改<code>index.swig</code>文件<code>(HEXO_Blog\themes\next\layout);</code></p>
+<h1 id="评论系统valine"><a href="#评论系统valine" class="headerlink" title="评论系统valine"></a>评论系统valine</h1><blockquote>
+<ul>
+<li><a href="https://valine.js.org/" target="_blank" rel="noopener">Valine</a>一款快速、简洁且高效的无后端评论系统。</li>
+</ul>
+</blockquote>
+<h2 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h2><ul>
+<li>快速</li>
+<li>安全</li>
+<li>Emoji 😉</li>
+<li>无后端实现</li>
+<li>MarkDown 全语法支持</li>
+<li>轻量易用(~15kb gzipped)</li>
+<li><a href="https://valine.js.org/visitor.html" target="_blank" rel="noopener">文章阅读量统计</a> <code>v1.2.0+</code></li>
+</ul>
+<h2 id="开始搭建"><a href="#开始搭建" class="headerlink" title="开始搭建"></a>开始搭建</h2><p>评论内容需要保存到LeanCloud，注册账号并创建应用，<a href="https://tab.leancloud.cn/" target="_blank" rel="noopener">注册官网</a>。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006qRazegy1fkwo2fpoetj30h40coaak.jpg" alt="img"></p>
+<p>应用创建好以后，进入刚刚创建的应用，选择左下角的<code>设置</code>&gt;<code>应用Key</code>，然后就能看到你的<code>APP ID</code>和<code>APP Key</code>了：</p>
+<p><img src="https://ws1.sinaimg.cn/large/006qRazegy1fkwo6w2b6uj30xe0etjt4.jpg" alt="img"></p>
+<h2 id="HTML-片段"><a href="#HTML-片段" class="headerlink" title="HTML 片段"></a>HTML 片段</h2><p>修改初始化对象中的<code>appId</code>和<code>appKey</code>的值为上面刚刚获取到的值即可(其他可以默认)。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    ...</span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"//cdn1.lncld.net/static/js/3.0.4/av-min.js"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">'//unpkg.com/valine/dist/Valine.min.js'</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    ...</span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    ...</span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"vcomments"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="actionscript">        <span class="keyword">new</span> Valine(&#123;</span></span><br><span class="line"><span class="actionscript">            el: <span class="string">'#vcomments'</span>,</span></span><br><span class="line"><span class="actionscript">            appId: <span class="string">'&lt;API_ID&gt;'</span>,</span></span><br><span class="line"><span class="actionscript">            appKey: <span class="string">'&lt;API_Key&gt;'</span></span></span><br><span class="line">        &#125;)</span><br><span class="line">    <span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><p>修改初始化对象中的<code>APP_ID</code>和<code>APP_KEY</code>的值为上面刚刚获取到的值即可(<code>其他可以默认</code>)。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> Valine(&#123;</span><br><span class="line">    el: <span class="string">'#vcomments'</span> ,</span><br><span class="line">    appId: <span class="string">'&lt;APP_ID&gt;'</span>,</span><br><span class="line">    appKey: <span class="string">'&lt;APP_KEY&gt;'</span>,</span><br><span class="line">    notify:<span class="literal">false</span>, </span><br><span class="line">    verify:<span class="literal">false</span>, </span><br><span class="line">    avatar:<span class="string">'mm'</span>, </span><br><span class="line">    placeholder: <span class="string">'just go go'</span> </span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="npm"><a href="#npm" class="headerlink" title="npm"></a>npm</h2><p>Valine 现已发布到<a href="https://www.npmjs.com/package/valine" target="_blank" rel="noopener">npm</a>，可以直接用命令安装：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Install leancloud's js-sdk</span></span><br><span class="line">npm install leancloud-storage --save</span><br><span class="line"><span class="comment"># Install valine</span></span><br><span class="line">npm install valine --save</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Register AV objects to the global</span></span><br><span class="line"><span class="built_in">window</span>.AV = <span class="built_in">require</span>(<span class="string">'leancloud-storage'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Use import</span></span><br><span class="line"><span class="keyword">import</span> Valine <span class="keyword">from</span> <span class="string">'valine'</span>;</span><br><span class="line"><span class="comment">// or Use require</span></span><br><span class="line"><span class="keyword">const</span> Valine = <span class="built_in">require</span>(<span class="string">'valine'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> Valine(&#123;</span><br><span class="line">    el:<span class="string">'#vcomments'</span>,</span><br><span class="line">    <span class="comment">// other config</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>未完待续……</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/github/" rel="tag"># github</a>
+              <a href="/tags/hexo/" rel="tag"># hexo</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/11/23/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%9C%80%E5%B0%8F%E6%B7%B1%E5%BA%A6/" rel="prev" title="二叉树的最小深度">
+      <i class="fa fa-chevron-left"></i> 二叉树的最小深度
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/11/25/PyCharm%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/" rel="next" title="PyCharm安装教程">
+      PyCharm安装教程 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+        </div>
+        
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ylyang</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

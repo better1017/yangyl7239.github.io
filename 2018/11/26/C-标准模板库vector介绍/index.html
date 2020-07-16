@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/logo.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/logo.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/logo.ico">
+  <link rel="mask-icon" href="/images/logo.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  
+  <link rel="stylesheet" href="/lib/animate-css/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ylyang999.gitee.io","root":"/","scheme":"Gemini","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}}};
+  </script>
+
+  <meta name="description" content="介绍（1）vector是表示可变大小数组的序列容器。 （2）就像数组一样，vector也采用的连续存储空间来存储元素。也就是意味着可以采用下标对vector的元素进行访问，和数组一样高效。但是又不像数组，它的大小是可以动态改变的，而且它的大小会被容器自动处理。 （3）本质讲，vector使用动态分配数组来存储它的元素。当新元素插入时候，这个数组需要被重新分配大小为了增加存储空间。其做法是，分配一个">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++标准模板库vector介绍">
+<meta property="og:url" content="https://ylyang999.gitee.io/2018/11/26/C-%E6%A0%87%E5%87%86%E6%A8%A1%E6%9D%BF%E5%BA%93vector%E4%BB%8B%E7%BB%8D/index.html">
+<meta property="og:site_name" content="杨远林的个人博客">
+<meta property="og:description" content="介绍（1）vector是表示可变大小数组的序列容器。 （2）就像数组一样，vector也采用的连续存储空间来存储元素。也就是意味着可以采用下标对vector的元素进行访问，和数组一样高效。但是又不像数组，它的大小是可以动态改变的，而且它的大小会被容器自动处理。 （3）本质讲，vector使用动态分配数组来存储它的元素。当新元素插入时候，这个数组需要被重新分配大小为了增加存储空间。其做法是，分配一个">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ylyang999.gitee.io/2018/11/26/C-%E6%A0%87%E5%87%86%E6%A8%A1%E6%9D%BF%E5%BA%93vector%E4%BB%8B%E7%BB%8D/result.PNG">
+<meta property="article:published_time" content="2018-11-26T04:55:20.000Z">
+<meta property="article:modified_time" content="2018-11-26T08:42:06.000Z">
+<meta property="article:author" content="ylyang">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="STL">
+<meta property="article:tag" content="vector">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ylyang999.gitee.io/2018/11/26/C-%E6%A0%87%E5%87%86%E6%A8%A1%E6%9D%BF%E5%BA%93vector%E4%BB%8B%E7%BB%8D/result.PNG">
+
+<link rel="canonical" href="https://ylyang999.gitee.io/2018/11/26/C-%E6%A0%87%E5%87%86%E6%A8%A1%E6%9D%BF%E5%BA%93vector%E4%BB%8B%E7%BB%8D/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>C++标准模板库vector介绍 | 杨远林的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <main class="main">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+        <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line toggle-line-first"></span>
+        <span class="toggle-line toggle-line-middle"></span>
+        <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">杨远林的个人博客</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">ylyang's blogs</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#用法"><span class="nav-number">2.</span> <span class="nav-text">用法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#头文件"><span class="nav-number">2.1.</span> <span class="nav-text">头文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定义方式"><span class="nav-number">2.2.</span> <span class="nav-text">定义方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常用操作"><span class="nav-number">2.3.</span> <span class="nav-text">常用操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#举个栗子"><span class="nav-number">2.4.</span> <span class="nav-text">举个栗子</span></a></li></ol></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ylyang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">68</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">63</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </section>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </header>
+
+      
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div id="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+      <div class="main-inner">
+        
+
+        <div class="content post posts-expand">
+          
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ylyang999.gitee.io/2018/11/26/C-%E6%A0%87%E5%87%86%E6%A8%A1%E6%9D%BF%E5%BA%93vector%E4%BB%8B%E7%BB%8D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ylyang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="杨远林的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C++标准模板库vector介绍
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2018-11-26 12:55:20 / 修改时间：16:42:06" itemprop="dateCreated datePublished" datetime="2018-11-26T12:55:20+08:00">2018-11-26</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>（1）vector是表示可变大小数组的序列容器。</p>
+<p>（2）就像数组一样，vector也采用的连续存储空间来存储元素。也就是意味着可以采用下标对vector的元素进行访问，和数组一样高效。但是又不像数组，它的大小是可以动态改变的，而且它的大小会被容器自动处理。</p>
+<p>（3）本质讲，vector使用动态分配数组来存储它的元素。当新元素插入时候，这个数组需要被重新分配大小为了增加存储空间。其做法是，分配一个新的数组，然后将全部元素移到这个数组。就时间而言，这是一个相对代价高的任务，因为每当一个新的元素加入到容器的时候，vector并不会每次都重新分配大小。</p>
+<p>（4）vector分配空间策略：vector会分配一些额外的空间以适应可能的增长，因为存储空间比实际需要的存储空间更大。不同的库采用不同的策略权衡空间的使用和重新分配。但是无论如何，重新分配都应该是对数增长的间隔大小，以至于在末尾插入一个元素的时候是在常数时间的复杂度完成的。</p>
+<p>（5）因此，vector占用了更多的存储空间，为了获得管理存储空间的能力，并且以一种有效的方式动态增长。与其它动态序列容器相比（deques, lists and forward_lists）， vector在访问元素的时候更加高效，在末尾添加和删除元素相对高效。对于其它不在末尾的删除和插入操作，效率更低。比起lists和forward_lists统一的迭代器和引用更好。</p>
+<h1 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h1><h2 id="头文件"><a href="#头文件" class="headerlink" title="头文件"></a>头文件</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<h2 id="定义方式"><a href="#定义方式" class="headerlink" title="定义方式"></a>定义方式</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; v1; <span class="comment">// vector元素为 int 类型  </span></span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; v2; <span class="comment">// vector元素为 string 类型  </span></span><br><span class="line"><span class="built_in">vector</span>&lt;node&gt; v3; <span class="comment">// vector元素为结构体型，结构体可以自行定义</span></span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;::iterator it; <span class="comment">// 用迭代器方式进行遍历</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="常用操作"><a href="#常用操作" class="headerlink" title="常用操作"></a>常用操作</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">Constructors <span class="comment">// 构造函数 </span></span><br><span class="line">Operators <span class="comment">// 对vector进行赋值或比较 </span></span><br><span class="line">assign() <span class="comment">// 对Vector中的元素赋值 </span></span><br><span class="line">at() <span class="comment">// 返回指定位置的元素 </span></span><br><span class="line">back() <span class="comment">// 返回最末一个元素 </span></span><br><span class="line"><span class="built_in">begin</span>() <span class="comment">// 返回第一个元素的迭代器 </span></span><br><span class="line">capacity() <span class="comment">// 返回vector所能容纳的元素数量(在不重新分配内存的情况下） </span></span><br><span class="line"><span class="built_in">clear</span>() <span class="comment">// 清空所有元素 </span></span><br><span class="line">empty() <span class="comment">// 判断Vector是否为空（返回true时为空） </span></span><br><span class="line"><span class="built_in">end</span>() <span class="comment">// 返回最末元素的迭代器(译注:实指向最末元素的下一个位置) </span></span><br><span class="line">erase() <span class="comment">// 删除指定元素 </span></span><br><span class="line">front() <span class="comment">// 返回第一个元素 </span></span><br><span class="line">get_allocator() <span class="comment">// 返回vector的内存分配器 </span></span><br><span class="line">insert() <span class="comment">// 插入元素到Vector中 </span></span><br><span class="line">max_size() <span class="comment">// 返回Vector所能容纳元素的最大数量（上限） </span></span><br><span class="line">pop_back() <span class="comment">// 移除最后一个元素 </span></span><br><span class="line">push_back() <span class="comment">// 在Vector最后添加一个元素 </span></span><br><span class="line">rbegin() <span class="comment">// 返回Vector尾部的逆迭代器 </span></span><br><span class="line">rend() <span class="comment">// 返回Vector起始的逆迭代器 </span></span><br><span class="line">reserve() <span class="comment">// 设置Vector最小的元素容纳数量 </span></span><br><span class="line">resize() <span class="comment">// 改变Vector元素数量的大小 </span></span><br><span class="line"><span class="built_in">size</span>() <span class="comment">// 返回Vector元素数量的大小 </span></span><br><span class="line">swap() <span class="comment">// 交换两个Vector</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="举个栗子"><a href="#举个栗子" class="headerlink" title="举个栗子"></a>举个栗子</h2><ul>
+<li>代码</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">vector</span> &lt;<span class="keyword">int</span>&gt; v;                            <span class="comment">//定义vector</span></span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;::iterator it;                 <span class="comment">//定义一个vector迭代器</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">10</span>; i &gt;= <span class="number">1</span>; i--)              <span class="comment">//插入数据</span></span><br><span class="line">        v.push_back(i);</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"输出："</span>;</span><br><span class="line">    <span class="keyword">for</span>(it=v.<span class="built_in">begin</span>();it!=v.<span class="built_in">end</span>();it++)       <span class="comment">//输出迭代器的值</span></span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;*it&lt;&lt;<span class="string">" "</span>;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    it-=<span class="number">1</span>;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"最后一个的值为："</span>&lt;&lt;*it&lt;&lt;<span class="string">"     "</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    v.erase(it);                             <span class="comment">//删除最后一个元素</span></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt;<span class="string">"元素个数："</span> &lt;&lt;v.<span class="built_in">size</span>() &lt;&lt; <span class="built_in">endl</span>;    <span class="comment">//输出元素个数</span></span><br><span class="line">    sort(v.<span class="built_in">begin</span>(), v.<span class="built_in">end</span>());                    <span class="comment">//vector排序</span></span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"排序后："</span>;</span><br><span class="line">    <span class="keyword">for</span>(it=v.<span class="built_in">begin</span>();it!=v.<span class="built_in">end</span>();it++)            <span class="comment">//输出vector元素</span></span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; *it &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    v.insert(v.<span class="built_in">begin</span>(),<span class="number">100</span>) ;                 <span class="comment">//在pos位置插入一个elem</span></span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"第一个元素为："</span> &lt;&lt;v.front()&lt;&lt;<span class="built_in">endl</span>;<span class="comment">//输出第一个元素</span></span><br><span class="line">    v.pop_back();                         <span class="comment">//去掉最后一个元素</span></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"元素个数："</span> &lt;&lt;v.<span class="built_in">size</span>() &lt;&lt; <span class="built_in">endl</span>;<span class="comment">//输出元素个数</span></span><br><span class="line">    v.<span class="built_in">clear</span>();                                <span class="comment">//vector清空</span></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt;<span class="string">"清空后元素个数："</span> &lt;&lt; v.<span class="built_in">size</span>() &lt;&lt; <span class="built_in">endl</span>;    <span class="comment">//输出元素个数</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>运行结果</li>
+</ul>
+<p><img src="/2018/11/26/C-%E6%A0%87%E5%87%86%E6%A8%A1%E6%9D%BF%E5%BA%93vector%E4%BB%8B%E7%BB%8D/result.PNG" alt></p>
+<ul>
+<li>以上。</li>
+</ul>
+<hr>
+<blockquote>
+<p>版权声明：本文为博主原创文章，转载请注明出处。<br>个人博客地址：<a href="https://yangyuanlin.club" target="_blank" rel="noopener">https://yangyuanlin.club</a><br>欢迎来踩<del>~</del></p>
+</blockquote>
+<hr>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"># C++</a>
+              <a href="/tags/STL/" rel="tag"># STL</a>
+              <a href="/tags/vector/" rel="tag"># vector</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/11/25/%E8%82%A1%E7%A5%A8%E6%9C%80%E5%A4%A7%E5%88%A9%E6%B6%A6/" rel="prev" title="股票最大利润II">
+      <i class="fa fa-chevron-left"></i> 股票最大利润II
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/11/27/%E5%AE%B9%E5%99%A8%E6%9C%80%E5%A4%A7%E5%AE%B9%E6%B0%B4%E9%87%8F/" rel="next" title="容器最大容水量">
+      容器最大容水量 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+        </div>
+        
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ylyang</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
