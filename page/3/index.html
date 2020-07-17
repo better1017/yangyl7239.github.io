@@ -193,20 +193,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">74</span>
+          <span class="site-state-item-count">95</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">73</span>
+        <span class="site-state-item-count">101</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -242,7 +242,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/01/09/plus-one%EF%BC%88%E5%8A%A0%E4%B8%80%EF%BC%89/">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/10/03/Java%E9%94%81%E4%B9%8B%E5%85%AC%E5%B9%B3%E9%94%81%E5%92%8C%E9%9D%9E%E5%85%AC%E5%B9%B3%E9%94%81/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -256,7 +256,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2019/01/09/plus-one%EF%BC%88%E5%8A%A0%E4%B8%80%EF%BC%89/" class="post-title-link" itemprop="url">plus-one（加一）</a>
+            <a href="/2019/10/03/Java%E9%94%81%E4%B9%8B%E5%85%AC%E5%B9%B3%E9%94%81%E5%92%8C%E9%9D%9E%E5%85%AC%E5%B9%B3%E9%94%81/" class="post-title-link" itemprop="url">Java锁之公平锁和非公平锁</a>
         </h2>
 
         <div class="post-meta">
@@ -266,14 +266,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-01-09 11:51:31" itemprop="dateCreated datePublished" datetime="2019-01-09T11:51:31+08:00">2019-01-09</time>
+              <time title="文章创建时间：2019-10-03 00:59:41" itemprop="dateCreated datePublished" datetime="2019-10-03T00:59:41+08:00">2019-10-03</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-16 20:47:03" itemprop="dateModified" datetime="2020-07-16T20:47:03+08:00">2020-07-16</time>
+                <time title="最后修改时间：2020-07-17 16:18:01" itemprop="dateModified" datetime="2020-07-17T16:18:01+08:00">2020-07-17</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -281,7 +281,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
                 </span>
             </span>
 
@@ -296,11 +296,11 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>Given a number represented as an array of digits, plus one to the number.</p>
-<h1 id="题目大意"><a href="#题目大意" class="headerlink" title="题目大意"></a>题目大意</h1><p>用一个数组表示一个数，把这个数做加一操作。</p>
+          <h1 id="Java锁之公平锁和非公平锁"><a href="#Java锁之公平锁和非公平锁" class="headerlink" title="Java锁之公平锁和非公平锁"></a>Java锁之公平锁和非公平锁</h1><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><h3 id="公平锁"><a href="#公平锁" class="headerlink" title="公平锁"></a>公平锁</h3><p>是指多个线程按照申请锁的顺序来获取锁，类似于排队买饭，先来后到，先来先服务，就是公平的，也就是队列</p>
+<h3 id="非公平锁"><a href="#非公平锁" class="headerlink" title="非公平锁"></a>非公平锁</h3><p>是指多个线程获取锁的顺序，并不是按照申请锁的顺序，有可能申请的线程比先申请的线程优先获取锁，在高并发环境下，有可能造成优先级翻转，或者饥饿的线程（也就是某个线程一直得不到锁）</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/01/09/plus-one%EF%BC%88%E5%8A%A0%E4%B8%80%EF%BC%89/#more" rel="contents">
+              <a class="btn" href="/2019/10/03/Java%E9%94%81%E4%B9%8B%E5%85%AC%E5%B9%B3%E9%94%81%E5%92%8C%E9%9D%9E%E5%85%AC%E5%B9%B3%E9%94%81/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -324,7 +324,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/01/08/merge-sorted-array%EF%BC%88%E5%90%88%E5%B9%B6%E5%B7%B2%E6%8E%92%E5%BA%8F%E7%9A%84%E6%95%B0%E7%BB%84%EF%BC%89/">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/10/02/%E5%AF%B9Java%E4%B8%AD%E4%BC%A0%E5%80%BC%E5%92%8C%E4%BC%A0%E5%9D%80%E7%9A%84%E5%88%86%E6%9E%90/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -338,7 +338,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2019/01/08/merge-sorted-array%EF%BC%88%E5%90%88%E5%B9%B6%E5%B7%B2%E6%8E%92%E5%BA%8F%E7%9A%84%E6%95%B0%E7%BB%84%EF%BC%89/" class="post-title-link" itemprop="url">merge-sorted-array（合并已排序的数组）</a>
+            <a href="/2019/10/02/%E5%AF%B9Java%E4%B8%AD%E4%BC%A0%E5%80%BC%E5%92%8C%E4%BC%A0%E5%9D%80%E7%9A%84%E5%88%86%E6%9E%90/" class="post-title-link" itemprop="url">对Java中传值和传址的分析</a>
         </h2>
 
         <div class="post-meta">
@@ -348,14 +348,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-01-08 15:59:25" itemprop="dateCreated datePublished" datetime="2019-01-08T15:59:25+08:00">2019-01-08</time>
+              <time title="文章创建时间：2019-10-02 12:29:23" itemprop="dateCreated datePublished" datetime="2019-10-02T12:29:23+08:00">2019-10-02</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-16 20:47:14" itemprop="dateModified" datetime="2020-07-16T20:47:14+08:00">2020-07-16</time>
+                <time title="最后修改时间：2020-07-17 15:45:20" itemprop="dateModified" datetime="2020-07-17T15:45:20+08:00">2020-07-17</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -363,7 +363,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
                 </span>
             </span>
 
@@ -378,10 +378,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>Given two sorted integer arrays A and B, merge B into A as one sorted array.<br><strong>Note:</strong><br>You may assume that A has enough space to hold additional elements from B. The number of elements initialized in A and B are <em>m</em> and <em>n</em> respectively.</p>
+          <h1 id="值传递和引用传递"><a href="#值传递和引用传递" class="headerlink" title="值传递和引用传递"></a>值传递和引用传递</h1><h2 id="举例"><a href="#举例" class="headerlink" title="举例"></a>举例</h2>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/01/08/merge-sorted-array%EF%BC%88%E5%90%88%E5%B9%B6%E5%B7%B2%E6%8E%92%E5%BA%8F%E7%9A%84%E6%95%B0%E7%BB%84%EF%BC%89/#more" rel="contents">
+              <a class="btn" href="/2019/10/02/%E5%AF%B9Java%E4%B8%AD%E4%BC%A0%E5%80%BC%E5%92%8C%E4%BC%A0%E5%9D%80%E7%9A%84%E5%88%86%E6%9E%90/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -405,7 +405,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/01/06/count-and-say/">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/10/02/%E5%AF%B9ArrayList%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%88%86%E6%9E%90/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -419,7 +419,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2019/01/06/count-and-say/" class="post-title-link" itemprop="url">count-and-say</a>
+            <a href="/2019/10/02/%E5%AF%B9ArrayList%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%88%86%E6%9E%90/" class="post-title-link" itemprop="url">对ArrayList线程不安全的分析</a>
         </h2>
 
         <div class="post-meta">
@@ -429,14 +429,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-01-06 20:59:09" itemprop="dateCreated datePublished" datetime="2019-01-06T20:59:09+08:00">2019-01-06</time>
+              <time title="文章创建时间：2019-10-02 11:45:32" itemprop="dateCreated datePublished" datetime="2019-10-02T11:45:32+08:00">2019-10-02</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-16 20:47:27" itemprop="dateModified" datetime="2020-07-16T20:47:27+08:00">2020-07-16</time>
+                <time title="最后修改时间：2020-07-17 15:49:35" itemprop="dateModified" datetime="2020-07-17T15:49:35+08:00">2020-07-17</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -444,7 +444,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
                 </span>
             </span>
 
@@ -459,13 +459,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>The count-and-say sequence is the sequence of integers beginning as follows:<br>1, 11, 21, 1211, 111221, …</p>
-<p>1 is read off as”one 1”or11.<br>1 1is read off as”two 1s”or21.<br>2 1is read off as”one 2, thenone 1”or1211.</p>
-<p>Given an integer <em>n</em>, generate the <em>n</em> <sup>th</sup> sequence.</p>
-<p>Note: The sequence of integers will be represented as a string.</p>
+          <h2 id="Collection线程不安全的举例"><a href="#Collection线程不安全的举例" class="headerlink" title="Collection线程不安全的举例"></a>Collection线程不安全的举例</h2><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>1、当我们执行下面语句的时候，底层进行了什么操作</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">new ArrayList&lt;Integer&gt;();</span><br></pre></td></tr></table></figure>
+
+<p>底层创建了一个空的数组，伴随着初始值为10</p>
+<p>当执行add方法后，如果超过了10，那么会进行扩容，扩容的大小为原值的一半，也就是5个，使用下列方法扩容</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Arrays.copyOf(elementData, netCapacity)</span><br></pre></td></tr></table></figure>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/01/06/count-and-say/#more" rel="contents">
+              <a class="btn" href="/2019/10/02/%E5%AF%B9ArrayList%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%88%86%E6%9E%90/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -489,7 +491,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/01/05/swap-nodes-in-pairs%EF%BC%88%E6%88%90%E5%AF%B9%E7%9A%84%E4%BA%A4%E6%8D%A2%E9%93%BE%E8%A1%A8%E7%BB%93%E7%82%B9%EF%BC%89/">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/10/01/%E5%8E%9F%E5%AD%90%E7%B1%BBAtomicInteger%E7%9A%84ABA%E9%97%AE%E9%A2%98/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -503,7 +505,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2019/01/05/swap-nodes-in-pairs%EF%BC%88%E6%88%90%E5%AF%B9%E7%9A%84%E4%BA%A4%E6%8D%A2%E9%93%BE%E8%A1%A8%E7%BB%93%E7%82%B9%EF%BC%89/" class="post-title-link" itemprop="url">swap nodes in pairs（成对的交换链表结点）</a>
+            <a href="/2019/10/01/%E5%8E%9F%E5%AD%90%E7%B1%BBAtomicInteger%E7%9A%84ABA%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">原子类AtomicInteger的ABA问题</a>
         </h2>
 
         <div class="post-meta">
@@ -513,14 +515,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-01-05 16:51:49" itemprop="dateCreated datePublished" datetime="2019-01-05T16:51:49+08:00">2019-01-05</time>
+              <time title="文章创建时间：2019-10-01 11:29:31" itemprop="dateCreated datePublished" datetime="2019-10-01T11:29:31+08:00">2019-10-01</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-16 20:47:34" itemprop="dateModified" datetime="2020-07-16T20:47:34+08:00">2020-07-16</time>
+                <time title="最后修改时间：2020-07-17 15:47:52" itemprop="dateModified" datetime="2020-07-17T15:47:52+08:00">2020-07-17</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -528,7 +530,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
                 </span>
             </span>
 
@@ -543,10 +545,12 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>Given a linked list, swap every two adjacent nodes and return its head.<br>For example,<br>Given1-&gt;2-&gt;3-&gt;4, you should return the list as2-&gt;1-&gt;4-&gt;3.<br>Your algorithm should use only constant space. You may <strong>not</strong> modify the values in the list, only nodes itself can be changed.</p>
+          <h1 id="原子类AtomicInteger的ABA问题"><a href="#原子类AtomicInteger的ABA问题" class="headerlink" title="原子类AtomicInteger的ABA问题"></a>原子类AtomicInteger的ABA问题</h1><h2 id="连环问题"><a href="#连环问题" class="headerlink" title="连环问题"></a>连环问题</h2><p>从AtomicInteger引出下面的问题</p>
+<p>CAS -&gt; Unsafe -&gt; CAS底层思想 -&gt; ABA -&gt; 原子引用更新 -&gt; 如何规避ABA问题</p>
+<h2 id="ABA问题是什么"><a href="#ABA问题是什么" class="headerlink" title="ABA问题是什么"></a>ABA问题是什么</h2>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/01/05/swap-nodes-in-pairs%EF%BC%88%E6%88%90%E5%AF%B9%E7%9A%84%E4%BA%A4%E6%8D%A2%E9%93%BE%E8%A1%A8%E7%BB%93%E7%82%B9%EF%BC%89/#more" rel="contents">
+              <a class="btn" href="/2019/10/01/%E5%8E%9F%E5%AD%90%E7%B1%BBAtomicInteger%E7%9A%84ABA%E9%97%AE%E9%A2%98/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -570,7 +574,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/01/05/Symmetric-Tree%EF%BC%88%E5%AF%B9%E7%A7%B0%E6%A0%91%EF%BC%89/">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/10/01/CAS%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -584,7 +588,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2019/01/05/Symmetric-Tree%EF%BC%88%E5%AF%B9%E7%A7%B0%E6%A0%91%EF%BC%89/" class="post-title-link" itemprop="url">Symmetric Tree（对称树）</a>
+            <a href="/2019/10/01/CAS%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/" class="post-title-link" itemprop="url">CAS底层原理分析</a>
         </h2>
 
         <div class="post-meta">
@@ -594,14 +598,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-01-05 12:52:53" itemprop="dateCreated datePublished" datetime="2019-01-05T12:52:53+08:00">2019-01-05</time>
+              <time title="文章创建时间：2019-10-01 11:23:52" itemprop="dateCreated datePublished" datetime="2019-10-01T11:23:52+08:00">2019-10-01</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-16 20:47:43" itemprop="dateModified" datetime="2020-07-16T20:47:43+08:00">2020-07-16</time>
+                <time title="最后修改时间：2020-07-17 15:56:44" itemprop="dateModified" datetime="2020-07-17T15:56:44+08:00">2020-07-17</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -609,7 +613,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
                 </span>
             </span>
 
@@ -624,11 +628,12 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>Given a binary tree, check whether it is a mirror of itself (ie, symmetric around its center).<br>For example, this binary tree is symmetric:</p>
-<p><img data-src="https://upload-images.jianshu.io/upload_images/15108298-d9b6796319d21653.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+          <h1 id="CAS底层原理"><a href="#CAS底层原理" class="headerlink" title="CAS底层原理"></a>CAS底层原理</h1><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>CAS的全称是Compare-And-Swap，它是CPU并发原语</p>
+<p>它的功能是判断内存某个位置的值是否为预期值，如果是则更改为新的值，这个过程是原子的</p>
+<p>CAS并发原语体现在Java语言中就是sun.misc.Unsafe类的各个方法。调用UnSafe类中的CAS方法，JVM会帮我们实现出CAS汇编指令，这是一种完全依赖于硬件的功能，通过它实现了原子操作，再次强调，由于CAS是一种系统原语，原语属于操作系统用于范畴，是由若干条指令组成，用于完成某个功能的一个过程，并且原语的执行必须是连续的，在执行过程中不允许被中断，也就是说CAS是一条CPU的原子指令，不会造成所谓的数据不一致的问题，也就是说CAS是线程安全的。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/01/05/Symmetric-Tree%EF%BC%88%E5%AF%B9%E7%A7%B0%E6%A0%91%EF%BC%89/#more" rel="contents">
+              <a class="btn" href="/2019/10/01/CAS%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -652,7 +657,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/01/03/permutations%EF%BC%88%E5%85%A8%E6%8E%92%E5%88%97%EF%BC%89/">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/09/30/Volatile%E7%9A%84%E5%BA%94%E7%94%A8%EF%BC%88DCL%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -666,7 +671,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2019/01/03/permutations%EF%BC%88%E5%85%A8%E6%8E%92%E5%88%97%EF%BC%89/" class="post-title-link" itemprop="url">permutations（全排列）</a>
+            <a href="/2019/09/30/Volatile%E7%9A%84%E5%BA%94%E7%94%A8%EF%BC%88DCL%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%EF%BC%89/" class="post-title-link" itemprop="url">Volatile的应用（DCL单例模式）</a>
         </h2>
 
         <div class="post-meta">
@@ -676,14 +681,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-01-03 16:43:48" itemprop="dateCreated datePublished" datetime="2019-01-03T16:43:48+08:00">2019-01-03</time>
+              <time title="文章创建时间：2019-09-30 11:21:08" itemprop="dateCreated datePublished" datetime="2019-09-30T11:21:08+08:00">2019-09-30</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-16 20:47:50" itemprop="dateModified" datetime="2020-07-16T20:47:50+08:00">2020-07-16</time>
+                <time title="最后修改时间：2020-07-17 15:54:15" itemprop="dateModified" datetime="2020-07-17T15:54:15+08:00">2020-07-17</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -691,7 +696,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+                  <a href="/categories/JVM/" itemprop="url" rel="index"><span itemprop="name">JVM</span></a>
                 </span>
             </span>
 
@@ -706,10 +711,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>Given a collection of numbers, return all possible permutations.<br>For example,<br>[1,2,3]have the following permutations:<br>[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2], and[3,2,1].</p>
+          <h1 id="Volatile的应用"><a href="#Volatile的应用" class="headerlink" title="Volatile的应用"></a>Volatile的应用</h1><h2 id="单例模式DCL代码"><a href="#单例模式DCL代码" class="headerlink" title="单例模式DCL代码"></a>单例模式DCL代码</h2><p>首先回顾一下，单线程下的单例模式代码</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/01/03/permutations%EF%BC%88%E5%85%A8%E6%8E%92%E5%88%97%EF%BC%89/#more" rel="contents">
+              <a class="btn" href="/2019/09/30/Volatile%E7%9A%84%E5%BA%94%E7%94%A8%EF%BC%88DCL%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%EF%BC%89/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -733,7 +738,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/01/02/path-sum%EF%BC%88%E8%B7%AF%E5%BE%84%E5%92%8C%EF%BC%89/">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/09/30/%E5%AF%B9Volatile%E7%A6%81%E6%AD%A2%E6%8C%87%E4%BB%A4%E9%87%8D%E6%8E%92%E7%9A%84%E5%88%86%E6%9E%90/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -747,7 +752,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2019/01/02/path-sum%EF%BC%88%E8%B7%AF%E5%BE%84%E5%92%8C%EF%BC%89/" class="post-title-link" itemprop="url">path sum（路径和）</a>
+            <a href="/2019/09/30/%E5%AF%B9Volatile%E7%A6%81%E6%AD%A2%E6%8C%87%E4%BB%A4%E9%87%8D%E6%8E%92%E7%9A%84%E5%88%86%E6%9E%90/" class="post-title-link" itemprop="url">对Volatile禁止指令重排的分析</a>
         </h2>
 
         <div class="post-meta">
@@ -757,14 +762,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-01-02 19:33:46" itemprop="dateCreated datePublished" datetime="2019-01-02T19:33:46+08:00">2019-01-02</time>
+              <time title="文章创建时间：2019-09-30 11:16:28" itemprop="dateCreated datePublished" datetime="2019-09-30T11:16:28+08:00">2019-09-30</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-16 20:47:59" itemprop="dateModified" datetime="2020-07-16T20:47:59+08:00">2020-07-16</time>
+                <time title="最后修改时间：2020-07-17 15:56:05" itemprop="dateModified" datetime="2020-07-17T15:56:05+08:00">2020-07-17</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -772,7 +777,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+                  <a href="/categories/JVM/" itemprop="url" rel="index"><span itemprop="name">JVM</span></a>
                 </span>
             </span>
 
@@ -787,11 +792,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>Given a binary tree and a sum, determine if the tree has a root-to-leaf path such that adding up all the values along the path equals the given sum.<br>For example:<br>Given the below binary tree andsum = 22,</p>
-<p><img data-src="https://upload-images.jianshu.io/upload_images/15108298-2afa6162e511a6df.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+          <h1 id="Volatile禁止指令重排"><a href="#Volatile禁止指令重排" class="headerlink" title="Volatile禁止指令重排"></a>Volatile禁止指令重排</h1><p>计算机在执行程序时，为了提高性能，编译器和处理器常常会对指令重排，一般分为以下三种：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">源代码 -&gt; 编译器优化的重排 -&gt; 指令并行的重排 -&gt; 内存系统的重排 -&gt; 最终执行指令</span><br></pre></td></tr></table></figure>
+
+<p>单线程环境里面确保最终执行结果和代码顺序的结果一致</p>
+<p>处理器在进行重排序时，必须要考虑指令之间的<code>数据依赖性</code></p>
+<p>多线程环境中线程交替执行，由于编译器优化重排的存在，两个线程中使用的变量能否保证一致性是无法确定的，结果无法预测。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/01/02/path-sum%EF%BC%88%E8%B7%AF%E5%BE%84%E5%92%8C%EF%BC%89/#more" rel="contents">
+              <a class="btn" href="/2019/09/30/%E5%AF%B9Volatile%E7%A6%81%E6%AD%A2%E6%8C%87%E4%BB%A4%E9%87%8D%E6%8E%92%E7%9A%84%E5%88%86%E6%9E%90/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -815,7 +824,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/01/01/remove-duplicates-from-sorted-list%EF%BC%88%E7%A7%BB%E9%99%A4%E6%9C%89%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0%EF%BC%89/">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/09/29/%E5%AF%B9Volatile%E4%B8%8D%E4%BF%9D%E8%AF%81%E5%8E%9F%E5%AD%90%E6%80%A7%E8%BF%9B%E8%A1%8C%E5%88%86%E6%9E%90/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -829,7 +838,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2019/01/01/remove-duplicates-from-sorted-list%EF%BC%88%E7%A7%BB%E9%99%A4%E6%9C%89%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0%EF%BC%89/" class="post-title-link" itemprop="url">remove duplicates from sorted list（移除有序链表中的重复元素）</a>
+            <a href="/2019/09/29/%E5%AF%B9Volatile%E4%B8%8D%E4%BF%9D%E8%AF%81%E5%8E%9F%E5%AD%90%E6%80%A7%E8%BF%9B%E8%A1%8C%E5%88%86%E6%9E%90/" class="post-title-link" itemprop="url">对Volatile不保证原子性进行分析</a>
         </h2>
 
         <div class="post-meta">
@@ -839,14 +848,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-01-01 16:06:41" itemprop="dateCreated datePublished" datetime="2019-01-01T16:06:41+08:00">2019-01-01</time>
+              <time title="文章创建时间：2019-09-29 10:39:43" itemprop="dateCreated datePublished" datetime="2019-09-29T10:39:43+08:00">2019-09-29</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-16 20:48:20" itemprop="dateModified" datetime="2020-07-16T20:48:20+08:00">2020-07-16</time>
+                <time title="最后修改时间：2020-07-17 15:57:19" itemprop="dateModified" datetime="2020-07-17T15:57:19+08:00">2020-07-17</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -854,7 +863,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+                  <a href="/categories/JVM/" itemprop="url" rel="index"><span itemprop="name">JVM</span></a>
                 </span>
             </span>
 
@@ -869,11 +878,11 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>Given a sorted linked list, delete all duplicates such that each element appear only <em>once</em>.</p>
-<p>For example,<br>Given1-&gt;1-&gt;2, return1-&gt;2.<br>Given1-&gt;1-&gt;2-&gt;3-&gt;3, return1-&gt;2-&gt;3.</p>
+          <h1 id="Volatile不保证原子性"><a href="#Volatile不保证原子性" class="headerlink" title="Volatile不保证原子性"></a>Volatile不保证原子性</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>通过前面对JMM的介绍，我们知道，各个线程对主内存中共享变量的操作都是各个线程各自拷贝到自己的工作内存进行操作后在写回到主内存中的。</p>
+<p>这就可能存在一个线程AAA修改了共享变量X的值，但是还未写入主内存时，另外一个线程BBB又对主内存中同一共享变量X进行操作，但此时A线程工作内存中共享变量X对线程B来说是不可见，这种工作内存与主内存同步延迟现象就造成了可见性问题。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/01/01/remove-duplicates-from-sorted-list%EF%BC%88%E7%A7%BB%E9%99%A4%E6%9C%89%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0%EF%BC%89/#more" rel="contents">
+              <a class="btn" href="/2019/09/29/%E5%AF%B9Volatile%E4%B8%8D%E4%BF%9D%E8%AF%81%E5%8E%9F%E5%AD%90%E6%80%A7%E8%BF%9B%E8%A1%8C%E5%88%86%E6%9E%90/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -897,7 +906,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2018/12/30/Binary-Tree-Level-Order-Traversal%EF%BC%88%E4%BA%8C%E5%8F%89%E6%A0%91%E5%B1%82%E5%BA%8F%E9%81%8D%E5%8E%86-%E4%BF%9D%E5%AD%98%E5%B9%B6%E8%BF%94%E5%9B%9E%E7%BB%93%E6%9E%9C%E9%9B%86%EF%BC%89/">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/09/28/Volatile%E5%92%8CJMM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%8F%AF%E8%A7%81%E6%80%A7/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -911,7 +920,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2018/12/30/Binary-Tree-Level-Order-Traversal%EF%BC%88%E4%BA%8C%E5%8F%89%E6%A0%91%E5%B1%82%E5%BA%8F%E9%81%8D%E5%8E%86-%E4%BF%9D%E5%AD%98%E5%B9%B6%E8%BF%94%E5%9B%9E%E7%BB%93%E6%9E%9C%E9%9B%86%EF%BC%89/" class="post-title-link" itemprop="url">Binary Tree Level Order Traversal（二叉树层序遍历-保存并返回结果集）</a>
+            <a href="/2019/09/28/Volatile%E5%92%8CJMM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%8F%AF%E8%A7%81%E6%80%A7/" class="post-title-link" itemprop="url">Volatile和JMM内存模型的可见性</a>
         </h2>
 
         <div class="post-meta">
@@ -921,14 +930,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2018-12-30 17:34:19" itemprop="dateCreated datePublished" datetime="2018-12-30T17:34:19+08:00">2018-12-30</time>
+              <time title="文章创建时间：2019-09-28 20:15:57" itemprop="dateCreated datePublished" datetime="2019-09-28T20:15:57+08:00">2019-09-28</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-16 20:48:34" itemprop="dateModified" datetime="2020-07-16T20:48:34+08:00">2020-07-16</time>
+                <time title="最后修改时间：2020-07-17 15:44:56" itemprop="dateModified" datetime="2020-07-17T15:44:56+08:00">2020-07-17</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -936,7 +945,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+                  <a href="/categories/JVM/" itemprop="url" rel="index"><span itemprop="name">JVM</span></a>
                 </span>
             </span>
 
@@ -951,11 +960,32 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>Given a binary tree, return the <em>level order</em> traversal of its nodes’ values. (ie, from left to right, level by level).<br>For example:<br>Given binary tree{3,9,20,#,#,15,7},</p>
-<p><img data-src="https://upload-images.jianshu.io/upload_images/15108298-8069e9a71691ac7a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+          <ul>
+<li>JUC（java.util.concurrent）<ul>
+<li>进程和线程<ul>
+<li>进程：后台运行的程序（我们打开的一个软件，就是进程）</li>
+<li>线程：轻量级的进程，并且一个进程包含多个线程（同在一个软件内，同时运行窗口，就是线程）</li>
+</ul>
+</li>
+<li>并发和并行<ul>
+<li>并发：同时访问某个东西，就是并发</li>
+<li>并行：一起做某些事情，就是并行</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>JUC下的三个包<ul>
+<li>java.util.concurrent<ul>
+<li>java.util.concurrent.atomic</li>
+<li>java.util.concurrent.locks</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2018/12/30/Binary-Tree-Level-Order-Traversal%EF%BC%88%E4%BA%8C%E5%8F%89%E6%A0%91%E5%B1%82%E5%BA%8F%E9%81%8D%E5%8E%86-%E4%BF%9D%E5%AD%98%E5%B9%B6%E8%BF%94%E5%9B%9E%E7%BB%93%E6%9E%9C%E9%9B%86%EF%BC%89/#more" rel="contents">
+              <a class="btn" href="/2019/09/28/Volatile%E5%92%8CJMM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%8F%AF%E8%A7%81%E6%80%A7/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -979,7 +1009,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2018/12/29/n-queens-ii%EF%BC%88n%E7%9A%87%E5%90%8E%E9%97%AE%E9%A2%982-%E5%8F%AA%E8%AE%A1%E6%95%B0%E4%B8%8D%E4%BF%9D%E5%AD%98%EF%BC%89/">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/09/27/hadoop-NameNode%E5%92%8CSecondaryNameNode%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6%E8%AE%B2%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -993,7 +1023,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2018/12/29/n-queens-ii%EF%BC%88n%E7%9A%87%E5%90%8E%E9%97%AE%E9%A2%982-%E5%8F%AA%E8%AE%A1%E6%95%B0%E4%B8%8D%E4%BF%9D%E5%AD%98%EF%BC%89/" class="post-title-link" itemprop="url">n queens ii（n皇后问题2-只计数不保存）</a>
+            <a href="/2019/09/27/hadoop-NameNode%E5%92%8CSecondaryNameNode%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6%E8%AE%B2%E8%A7%A3/" class="post-title-link" itemprop="url">hadoop - NameNode和SecondaryNameNode工作机制讲解</a>
         </h2>
 
         <div class="post-meta">
@@ -1003,14 +1033,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2018-12-29 23:36:58" itemprop="dateCreated datePublished" datetime="2018-12-29T23:36:58+08:00">2018-12-29</time>
+              <time title="文章创建时间：2019-09-27 21:00:22" itemprop="dateCreated datePublished" datetime="2019-09-27T21:00:22+08:00">2019-09-27</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-16 20:49:01" itemprop="dateModified" datetime="2020-07-16T20:49:01+08:00">2020-07-16</time>
+                <time title="最后修改时间：2020-07-16 20:44:32" itemprop="dateModified" datetime="2020-07-16T20:44:32+08:00">2020-07-16</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1018,7 +1048,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+                  <a href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">大数据</span></a>
                 </span>
             </span>
 
@@ -1033,14 +1063,11 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <blockquote>
-<p><a href="https://yangyuanlin.club/2018/12/28/n-queens（n皇后问题）/#more" target="_blank" rel="noopener">n皇后问题（保存并返回所有的解决方案）</a></p>
-</blockquote>
-<h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>Follow up for N-Queens problem.<br>Now, instead outputting board configurations, return the total number of distinct solutions.</p>
-<p><img data-src="http://upload-images.jianshu.io/upload_images/15108298-1bf68a71b367b0f0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+          <h2 id="1-流程图如下："><a href="#1-流程图如下：" class="headerlink" title="1. 流程图如下："></a>1. 流程图如下：</h2><p><img data-src="https://upload-images.jianshu.io/upload_images/15108298-5f345cec02de9258.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<h2 id="2-FSImage和Edits"><a href="#2-FSImage和Edits" class="headerlink" title="2. FSImage和Edits"></a>2. FSImage和Edits</h2><p>nodenode是HDFS的大脑,它维护着整个文件系统的目录树,以及目录树里所有的文件和目录,这些信息以俩种文件存储在文件系统:一种是命名空间镜像(也称为文件系统镜像,File System Image,FSImage),即HDFS元数据的完整快照,每次NameNode启动的时候,默认会加载最新的命名空间镜像,另一种是命令空间镜像的编辑日志(Edit log)。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2018/12/29/n-queens-ii%EF%BC%88n%E7%9A%87%E5%90%8E%E9%97%AE%E9%A2%982-%E5%8F%AA%E8%AE%A1%E6%95%B0%E4%B8%8D%E4%BF%9D%E5%AD%98%EF%BC%89/#more" rel="contents">
+              <a class="btn" href="/2019/09/27/hadoop-NameNode%E5%92%8CSecondaryNameNode%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6%E8%AE%B2%E8%A7%A3/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1063,7 +1090,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1111,7 +1138,7 @@
   </span>
   <span class="author" itemprop="copyrightHolder">ylyang</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  <div class="powered-by">©️2018-2020 YLYANG | https://ylyang.xyz
   </div>
 
         

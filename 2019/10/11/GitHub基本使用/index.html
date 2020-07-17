@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/logo.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/logo.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/logo.ico">
+  <link rel="mask-icon" href="/images/logo.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  
+  <link rel="stylesheet" href="/lib/animate-css/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ylyang.xyz","root":"/","scheme":"Gemini","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":{"enable":true,"onlypost":false},"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}}};
+  </script>
+
+  <meta name="description" content="GitHub学习使用Github可以查找很多优秀框架 + 源码 常用词含义 watch：会持续收到该项目的动态  fork：复制某个仓库到自己的Github仓库中  star：可以理解为点赞  clone：将项目下载至本地  follow：关注你感兴趣的作者，会收到他们的动态">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GitHub基本使用学习">
+<meta property="og:url" content="ylyang.xyz/2019/10/11/GitHub%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:site_name" content="杨远林的个人博客">
+<meta property="og:description" content="GitHub学习使用Github可以查找很多优秀框架 + 源码 常用词含义 watch：会持续收到该项目的动态  fork：复制某个仓库到自己的Github仓库中  star：可以理解为点赞  clone：将项目下载至本地  follow：关注你感兴趣的作者，会收到他们的动态">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="ylyang.xyz/2019/10/11/GitHub%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20200326212650322.png">
+<meta property="article:published_time" content="2019-10-11T13:41:08.000Z">
+<meta property="article:modified_time" content="2020-03-10T04:37:19.000Z">
+<meta property="article:author" content="ylyang">
+<meta property="article:tag" content="GitHub">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="ylyang.xyz/2019/10/11/GitHub%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20200326212650322.png">
+
+<link rel="canonical" href="ylyang.xyz/2019/10/11/GitHub%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>GitHub基本使用学习 | 杨远林的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <main class="main">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+        <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line toggle-line-first"></span>
+        <span class="toggle-line toggle-line-middle"></span>
+        <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">杨远林的个人博客</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">ylyang's blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#GitHub学习"><span class="nav-number">1.</span> <span class="nav-text">GitHub学习</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#常用词含义"><span class="nav-number">1.1.</span> <span class="nav-text">常用词含义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#in关键字限制搜索范围"><span class="nav-number">1.2.</span> <span class="nav-text">in关键字限制搜索范围</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#stars或fork数量关键字查找"><span class="nav-number">1.3.</span> <span class="nav-text">stars或fork数量关键字查找</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#awesome加强搜索"><span class="nav-number">1.4.</span> <span class="nav-text">awesome加强搜索</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#高亮显示某行代码"><span class="nav-number">1.5.</span> <span class="nav-text">高亮显示某行代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#项目内搜索"><span class="nav-number">1.6.</span> <span class="nav-text">项目内搜索</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#搜索某个地区内的大佬"><span class="nav-number">1.7.</span> <span class="nav-text">搜索某个地区内的大佬</span></a></li></ol></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ylyang</p>
+  <div class="site-description" itemprop="description">云山苍苍，江水泱泱；先生之风，山高水长。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">101</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </section>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </header>
+
+      
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div id="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+      <div class="main-inner">
+        
+
+        <div class="content post posts-expand">
+          
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/10/11/GitHub%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ylyang">
+      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="杨远林的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          GitHub基本使用学习
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="文章创建时间：2019-10-11 21:41:08" itemprop="dateCreated datePublished" datetime="2019-10-11T21:41:08+08:00">2019-10-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="最后修改时间：2020-03-10 12:37:19" itemprop="dateModified" datetime="2020-03-10T12:37:19+08:00">2020-03-10</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/GitHub/" itemprop="url" rel="index"><span itemprop="name">GitHub</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="GitHub学习"><a href="#GitHub学习" class="headerlink" title="GitHub学习"></a>GitHub学习</h1><p>使用Github可以查找很多优秀框架 + 源码</p>
+<h2 id="常用词含义"><a href="#常用词含义" class="headerlink" title="常用词含义"></a>常用词含义</h2><ul>
+<li><p>watch：会持续收到该项目的动态</p>
+</li>
+<li><p>fork：复制某个仓库到自己的Github仓库中</p>
+</li>
+<li><p>star：可以理解为点赞</p>
+</li>
+<li><p>clone：将项目下载至本地</p>
+</li>
+<li><p>follow：关注你感兴趣的作者，会收到他们的动态</p>
+<a id="more"></a>
+
+</li>
+</ul>
+<h2 id="in关键字限制搜索范围"><a href="#in关键字限制搜索范围" class="headerlink" title="in关键字限制搜索范围"></a>in关键字限制搜索范围</h2><ul>
+<li>公式：<code>XXX关键字 in:name 或 description 或 readme</code></li>
+<li>xxx in:name   项目名称含有XXX的</li>
+<li>xxx in:description   项目描述含有XXX的</li>
+<li>xxx in:readme   项目的readme文件中包含XXX的</li>
+<li>组合使用<ul>
+<li>xxx   in:name,readme    项目的名称和readme中包含xxx的</li>
+</ul>
+</li>
+</ul>
+<h2 id="stars或fork数量关键字查找"><a href="#stars或fork数量关键字查找" class="headerlink" title="stars或fork数量关键字查找"></a>stars或fork数量关键字查找</h2><ul>
+<li>公式：<ul>
+<li><code>xxx关键字  stars 通配符</code>  :&gt;  或者 :&gt;=</li>
+<li>区间范围数字：  <code>stars:数字1..数字2</code></li>
+</ul>
+</li>
+<li>案例<ul>
+<li>查找stars数大于等于5000的Springboot项目：springboot  stars:&gt;=5000</li>
+<li>查找forks数在1000~2000之间的springboot项目：springboot forks:1000..5000</li>
+</ul>
+</li>
+<li>组合使用<ul>
+<li>查找star大于1000，fork数在500到1000：<code>springboot stars:&gt;1000 forks:500..1000</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="awesome加强搜索"><a href="#awesome加强搜索" class="headerlink" title="awesome加强搜索"></a>awesome加强搜索</h2><ul>
+<li>公式：<code>awesome 关键字</code>：awesome系列，一般用来收集学习、工具、书籍类相关的项目</li>
+<li>搜索优秀的redis相关的项目，包括框架，教程等  awesome redis</li>
+</ul>
+<h2 id="高亮显示某行代码"><a href="#高亮显示某行代码" class="headerlink" title="高亮显示某行代码"></a>高亮显示某行代码</h2><ul>
+<li>一行：地址后面紧跟  #L10<ul>
+<li><code>https://github.com/moxi624/mogu_blog_v2/blob/master/mogu_admin/pom.xml#L13</code></li>
+</ul>
+</li>
+<li>多行：地址后面紧跟 #Lx - #Ln<ul>
+<li><code>https://github.com/moxi624/mogu_blog_v2/blob/master/mogu_admin/pom.xml#L13-L30</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="项目内搜索"><a href="#项目内搜索" class="headerlink" title="项目内搜索"></a>项目内搜索</h2><ul>
+<li>使用英文字母 <code>t</code> ,开启项目内搜索</li>
+</ul>
+<p><img data-src="image-20200326212650322.png" alt="image"></p>
+<h2 id="搜索某个地区内的大佬"><a href="#搜索某个地区内的大佬" class="headerlink" title="搜索某个地区内的大佬"></a>搜索某个地区内的大佬</h2><ul>
+<li>location：地区</li>
+<li>language：语言</li>
+<li>例如：<code>location:beijing language:java</code></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/GitHub/" rel="tag"># GitHub</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/10/11/%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%8F%98%E6%85%A2%EF%BC%8C%E8%AF%8A%E6%96%AD%E6%80%9D%E8%B7%AF%E5%92%8C%E6%80%A7%E8%83%BD%E8%AF%84%E4%BC%B0/" rel="prev" title="生产环境服务器变慢，诊断思路和性能评估">
+      <i class="fa fa-chevron-left"></i> 生产环境服务器变慢，诊断思路和性能评估
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/10/14/%E4%B9%90%E8%A7%82%E9%94%81%E5%92%8C%E6%82%B2%E8%A7%82%E9%94%81/" rel="next" title="乐观锁和悲观锁">
+      乐观锁和悲观锁 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+        </div>
+        
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ylyang</span>
+</div>
+  <div class="powered-by">©️2018-2020 YLYANG | https://ylyang.xyz
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/logo.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/logo.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/logo.ico">
+  <link rel="mask-icon" href="/images/logo.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  
+  <link rel="stylesheet" href="/lib/animate-css/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ylyang.xyz","root":"/","scheme":"Gemini","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":{"enable":true,"onlypost":false},"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}}};
+  </script>
+
+  <meta name="description" content="JVM之GCRootsJVM垃圾回收的时候如何确定垃圾？是否知道什么是GC Roots什么是垃圾简单来说就是内存中已经不再被使用的空间就是垃圾 如何判断一个对象是否可以被回收引用计数法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVM之GCRoots">
+<meta property="og:url" content="ylyang.xyz/2019/10/10/JVM%E4%B9%8BGCRoots/index.html">
+<meta property="og:site_name" content="杨远林的个人博客">
+<meta property="og:description" content="JVM之GCRootsJVM垃圾回收的时候如何确定垃圾？是否知道什么是GC Roots什么是垃圾简单来说就是内存中已经不再被使用的空间就是垃圾 如何判断一个对象是否可以被回收引用计数法">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="ylyang.xyz/2019/10/10/JVM%E4%B9%8BGCRoots/image-20200318213301603.png">
+<meta property="og:image" content="ylyang.xyz/2019/10/10/JVM%E4%B9%8BGCRoots/image-20200319113611244.png">
+<meta property="og:image" content="ylyang.xyz/2019/10/10/JVM%E4%B9%8BGCRoots/image-20200319114526625.png">
+<meta property="article:published_time" content="2019-10-10T00:55:19.000Z">
+<meta property="article:modified_time" content="2019-10-10T04:45:23.000Z">
+<meta property="article:author" content="ylyang">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="GCRoots">
+<meta property="article:tag" content="GC">
+<meta property="article:tag" content="Java垃圾回收">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="ylyang.xyz/2019/10/10/JVM%E4%B9%8BGCRoots/image-20200318213301603.png">
+
+<link rel="canonical" href="ylyang.xyz/2019/10/10/JVM%E4%B9%8BGCRoots/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>JVM之GCRoots | 杨远林的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <main class="main">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+        <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line toggle-line-first"></span>
+        <span class="toggle-line toggle-line-middle"></span>
+        <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">杨远林的个人博客</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">ylyang's blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#JVM之GCRoots"><span class="nav-number">1.</span> <span class="nav-text">JVM之GCRoots</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#JVM垃圾回收的时候如何确定垃圾？是否知道什么是GC-Roots"><span class="nav-number">1.1.</span> <span class="nav-text">JVM垃圾回收的时候如何确定垃圾？是否知道什么是GC Roots</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是垃圾"><span class="nav-number">1.1.1.</span> <span class="nav-text">什么是垃圾</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何判断一个对象是否可以被回收"><span class="nav-number">1.1.2.</span> <span class="nav-text">如何判断一个对象是否可以被回收</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#引用计数法"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">引用计数法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#枚举根节点做可达性分析"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">枚举根节点做可达性分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#一句话理解GC-Roots"><span class="nav-number">1.1.2.3.</span> <span class="nav-text">一句话理解GC Roots</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#那些对象可以当做GC-Roots"><span class="nav-number">1.1.2.4.</span> <span class="nav-text">那些对象可以当做GC Roots</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#代码说明"><span class="nav-number">1.1.2.5.</span> <span class="nav-text">代码说明</span></a></li></ol></li></ol></li></ol></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ylyang</p>
+  <div class="site-description" itemprop="description">云山苍苍，江水泱泱；先生之风，山高水长。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">101</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </section>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </header>
+
+      
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div id="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+      <div class="main-inner">
+        
+
+        <div class="content post posts-expand">
+          
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/10/10/JVM%E4%B9%8BGCRoots/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ylyang">
+      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="杨远林的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          JVM之GCRoots
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="文章创建时间：2019-10-10 08:55:19 / 最后修改时间：12:45:23" itemprop="dateCreated datePublished" datetime="2019-10-10T08:55:19+08:00">2019-10-10</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JVM/" itemprop="url" rel="index"><span itemprop="name">JVM</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="JVM之GCRoots"><a href="#JVM之GCRoots" class="headerlink" title="JVM之GCRoots"></a>JVM之GCRoots</h1><h2 id="JVM垃圾回收的时候如何确定垃圾？是否知道什么是GC-Roots"><a href="#JVM垃圾回收的时候如何确定垃圾？是否知道什么是GC-Roots" class="headerlink" title="JVM垃圾回收的时候如何确定垃圾？是否知道什么是GC Roots"></a>JVM垃圾回收的时候如何确定垃圾？是否知道什么是GC Roots</h2><h3 id="什么是垃圾"><a href="#什么是垃圾" class="headerlink" title="什么是垃圾"></a>什么是垃圾</h3><p>简单来说就是内存中已经不再被使用的空间就是垃圾</p>
+<h3 id="如何判断一个对象是否可以被回收"><a href="#如何判断一个对象是否可以被回收" class="headerlink" title="如何判断一个对象是否可以被回收"></a>如何判断一个对象是否可以被回收</h3><h4 id="引用计数法"><a href="#引用计数法" class="headerlink" title="引用计数法"></a>引用计数法</h4><a id="more"></a>
+
+<p>Java中，引用和对象是有关联的。如果要操作对象则必须用引用进行。</p>
+<p>因此，很显然一个简单的办法就是通过引用计数来判断一个对象是否可以回收。简单说，给对象中添加一个引用计数器</p>
+<p>每当有一个地方引用它，计数器值加1</p>
+<p>每当有一个引用失效，计数器值减1</p>
+<p>任何时刻计数器值为零的对象就是不可能再被使用的，那么这个对象就是可回收对象。</p>
+<p>那么为什么主流的Java虚拟机里面都没有选用这个方法呢？其中最主要的原因是它很难解决对象之间相互循环引用的问题。</p>
+<p>该算法存在但目前无人用了，解决不了循环引用的问题，了解即可。</p>
+<p><img data-src="image-20200318213301603.png" alt="image-1"></p>
+<h4 id="枚举根节点做可达性分析"><a href="#枚举根节点做可达性分析" class="headerlink" title="枚举根节点做可达性分析"></a>枚举根节点做可达性分析</h4><p>根搜索路径算法</p>
+<p>为了解决引用计数法的循环引用个问题，Java使用了可达性分析的方法：</p>
+<p><img data-src="image-20200319113611244.png" alt="image-2"></p>
+<p>所谓 GC Roots 或者说 Tracing Roots的“根集合” 就是一组必须活跃的引用</p>
+<p>基本思路就是通过一系列名为 GC Roots的对象作为起始点，从这个被称为GC Roots的对象开始向下搜索，如果一个对象到GC Roots没有任何引用链相连，则说明此对象不可用。也即给定一个集合的引用作为根出发，通过引用关系遍历对象图，能被遍历到的（可到达的）对象就被判定为存活，没有被遍历到的对象就被判定为死亡</p>
+<p><img data-src="image-20200319114526625.png" alt="image3"></p>
+<p>必须从GC Roots对象开始，这个类似于linux的 /  也就是根目录</p>
+<p>蓝色部分是从GC Roots出发，能够循环可达</p>
+<p>而白色部分，从GC Roots出发，无法到达</p>
+<h4 id="一句话理解GC-Roots"><a href="#一句话理解GC-Roots" class="headerlink" title="一句话理解GC Roots"></a>一句话理解GC Roots</h4><p>假设我们现在有三个实体，分别是 人，狗，毛衣</p>
+<p>然后他们之间的关系是：人 牵着 狗，狗穿着毛衣，他们之间是强连接的关系</p>
+<p>有一天人消失了，只剩下狗狗 和 毛衣，这个时候，把人想象成 GC Roots，因为 人 和 狗之间失去了绳子连接，</p>
+<p>那么狗可能被回收，也就是被警察抓起来，被送到流浪狗寄养所</p>
+<p>假设狗和人有强连接的时候，狗狗就不会被当成是流浪狗</p>
+<h4 id="那些对象可以当做GC-Roots"><a href="#那些对象可以当做GC-Roots" class="headerlink" title="那些对象可以当做GC Roots"></a>那些对象可以当做GC Roots</h4><ul>
+<li>虚拟机栈（栈帧中的局部变量区，也叫做局部变量表）中的引用对象</li>
+<li>方法区中的类静态属性引用的对象</li>
+<li>方法区中常量引用的对象</li>
+<li>本地方法栈中的JNI（Native方法）的引用对象</li>
+</ul>
+<h4 id="代码说明"><a href="#代码说明" class="headerlink" title="代码说明"></a>代码说明</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 在Java中，可以作为GC Roots的对象有：</span></span><br><span class="line"><span class="comment"> * - 虚拟机栈（栈帧中的局部变量区，也叫做局部变量表）中的引用对象</span></span><br><span class="line"><span class="comment"> * - 方法区中的类静态属性引用的对象</span></span><br><span class="line"><span class="comment"> * - 方法区中常量引用的对象</span></span><br><span class="line"><span class="comment"> * - 本地方法栈中的JNI（Native方法）的引用对象</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span>: ylyang</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GCRootDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 方法区中的类静态属性引用的对象</span></span><br><span class="line">    <span class="comment">// private static GCRootDemo2 t2;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 方法区中的常量引用，GC Roots 也会以这个为起点，进行遍历</span></span><br><span class="line">    <span class="comment">// private static final GCRootDemo3 t3 = new GCRootDemo3(8);</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">m1</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 第一种，虚拟机栈中的引用对象</span></span><br><span class="line">        GCRootDemo t1 = <span class="keyword">new</span> GCRootDemo();</span><br><span class="line">        System.gc();</span><br><span class="line">        System.out.println(<span class="string">"第一次GC完成"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        m1();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"># Java</a>
+              <a href="/tags/GCRoots/" rel="tag"># GCRoots</a>
+              <a href="/tags/GC/" rel="tag"># GC</a>
+              <a href="/tags/Java%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" rel="tag"># Java垃圾回收</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/10/10/JVM%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E6%A6%82%E8%BF%B0/" rel="prev" title="JVM体系结构概述">
+      <i class="fa fa-chevron-left"></i> JVM体系结构概述
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/10/10/JVM%E4%B9%8B%E5%8F%82%E6%95%B0%E8%B0%83%E4%BC%98/" rel="next" title="JVM之参数调优">
+      JVM之参数调优 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+        </div>
+        
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ylyang</span>
+</div>
+  <div class="powered-by">©️2018-2020 YLYANG | https://ylyang.xyz
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

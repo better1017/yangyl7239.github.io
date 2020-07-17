@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/logo.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/logo.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/logo.ico">
+  <link rel="mask-icon" href="/images/logo.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  
+  <link rel="stylesheet" href="/lib/animate-css/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ylyang.xyz","root":"/","scheme":"Gemini","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":{"enable":true,"onlypost":false},"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}}};
+  </script>
+
+  <meta name="description" content="JVM之垃圾收集器GC垃圾回收算法和垃圾收集器关系 天上飞的理念，要有落地的实现（垃圾收集器就是GC垃圾回收算法的实现） GC算法是内存回收的方法论，垃圾收集器就是算法的落地实现">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVM之垃圾回收器">
+<meta property="og:url" content="ylyang.xyz/2019/10/11/JVM%E4%B9%8B%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/index.html">
+<meta property="og:site_name" content="杨远林的个人博客">
+<meta property="og:description" content="JVM之垃圾收集器GC垃圾回收算法和垃圾收集器关系 天上飞的理念，要有落地的实现（垃圾收集器就是GC垃圾回收算法的实现） GC算法是内存回收的方法论，垃圾收集器就是算法的落地实现">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="ylyang.xyz/2019/10/11/JVM%E4%B9%8B%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/image-20200325084453631.png">
+<meta property="og:image" content="ylyang.xyz/2019/10/11/JVM%E4%B9%8B%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/image-20200325085320683.png">
+<meta property="og:image" content="ylyang.xyz/2019/10/11/JVM%E4%B9%8B%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/image-20200325085729428.png">
+<meta property="og:image" content="ylyang.xyz/2019/10/11/JVM%E4%B9%8B%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/image-20200325090858921.png">
+<meta property="og:image" content="ylyang.xyz/2019/10/11/JVM%E4%B9%8B%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/image-20200325093222711.png">
+<meta property="og:image" content="ylyang.xyz/2019/10/11/JVM%E4%B9%8B%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/image-20200325091619082.png">
+<meta property="og:image" content="ylyang.xyz/2019/10/11/JVM%E4%B9%8B%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/image-20200325100653829.png">
+<meta property="og:image" content="ylyang.xyz/2019/10/11/JVM%E4%B9%8B%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/image-20200325101451849.png">
+<meta property="og:image" content="ylyang.xyz/2019/10/11/JVM%E4%B9%8B%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/image-20200325102329216.png">
+<meta property="og:image" content="ylyang.xyz/2019/10/11/JVM%E4%B9%8B%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/image-20200325175208231.png">
+<meta property="og:image" content="ylyang.xyz/2019/10/11/JVM%E4%B9%8B%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/image-20200325175704604.png">
+<meta property="og:image" content="ylyang.xyz/2019/10/11/JVM%E4%B9%8B%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/image-20200325191328733.png">
+<meta property="og:image" content="ylyang.xyz/2019/10/11/JVM%E4%B9%8B%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/image-20200325194316660.png">
+<meta property="og:image" content="ylyang.xyz/2019/10/11/JVM%E4%B9%8B%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/image-20200325204437678.png">
+<meta property="og:image" content="ylyang.xyz/2019/10/11/JVM%E4%B9%8B%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/image-20200325211525152.png">
+<meta property="og:image" content="ylyang.xyz/2019/10/11/JVM%E4%B9%8B%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/image-20200325212836441.png">
+<meta property="og:image" content="ylyang.xyz/2019/10/11/JVM%E4%B9%8B%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/image-20200325215401981.png">
+<meta property="og:image" content="ylyang.xyz/2019/10/11/JVM%E4%B9%8B%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/image-20200326115120405.png">
+<meta property="og:image" content="ylyang.xyz/2019/10/11/JVM%E4%B9%8B%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/image-20200326120105859.png">
+<meta property="og:image" content="ylyang.xyz/2019/10/11/JVM%E4%B9%8B%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/image-20200326120130427.png">
+<meta property="og:image" content="ylyang.xyz/2019/10/11/JVM%E4%B9%8B%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/image-20200326121409237.png">
+<meta property="og:image" content="ylyang.xyz/2019/10/11/JVM%E4%B9%8B%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/image-20200326121622208.png">
+<meta property="og:image" content="ylyang.xyz/2019/10/11/JVM%E4%B9%8B%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/image-20200326121914326.png">
+<meta property="article:published_time" content="2019-10-11T04:22:39.000Z">
+<meta property="article:modified_time" content="2020-03-10T04:37:19.000Z">
+<meta property="article:author" content="ylyang">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="Java垃圾回收">
+<meta property="article:tag" content="JVM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="ylyang.xyz/2019/10/11/JVM%E4%B9%8B%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/image-20200325084453631.png">
+
+<link rel="canonical" href="ylyang.xyz/2019/10/11/JVM%E4%B9%8B%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>JVM之垃圾回收器 | 杨远林的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <main class="main">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+        <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line toggle-line-first"></span>
+        <span class="toggle-line toggle-line-middle"></span>
+        <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">杨远林的个人博客</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">ylyang's blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#JVM之垃圾收集器"><span class="nav-number">1.</span> <span class="nav-text">JVM之垃圾收集器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GC垃圾回收算法和垃圾收集器关系"><span class="nav-number">1.1.</span> <span class="nav-text">GC垃圾回收算法和垃圾收集器关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四种主要的垃圾收集器"><span class="nav-number">1.2.</span> <span class="nav-text">四种主要的垃圾收集器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Serial"><span class="nav-number">1.2.1.</span> <span class="nav-text">Serial</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Parallel"><span class="nav-number">1.2.2.</span> <span class="nav-text">Parallel</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CMS"><span class="nav-number">1.2.3.</span> <span class="nav-text">CMS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#G1"><span class="nav-number">1.2.4.</span> <span class="nav-text">G1</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#垃圾收集器总结"><span class="nav-number">1.3.</span> <span class="nav-text">垃圾收集器总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看默认垃圾收集器"><span class="nav-number">1.4.</span> <span class="nav-text">查看默认垃圾收集器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#默认垃圾收集器有哪些"><span class="nav-number">1.5.</span> <span class="nav-text">默认垃圾收集器有哪些</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#各垃圾收集器的使用范围"><span class="nav-number">1.6.</span> <span class="nav-text">各垃圾收集器的使用范围</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#部分参数说明"><span class="nav-number">1.7.</span> <span class="nav-text">部分参数说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java中的Server和Client模式"><span class="nav-number">1.8.</span> <span class="nav-text">Java中的Server和Client模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#新生代下的垃圾收集器"><span class="nav-number">1.9.</span> <span class="nav-text">新生代下的垃圾收集器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#串行GC-Serial"><span class="nav-number">1.9.1.</span> <span class="nav-text">串行GC(Serial)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#并行GC-ParNew"><span class="nav-number">1.9.2.</span> <span class="nav-text">并行GC(ParNew)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#并行回收GC（Parallel）-（Parallel-Scavenge）"><span class="nav-number">1.9.3.</span> <span class="nav-text">并行回收GC（Parallel）&#x2F; （Parallel Scavenge）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#老年代下的垃圾收集器"><span class="nav-number">1.10.</span> <span class="nav-text">老年代下的垃圾收集器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#串行GC（Serial-Old）-Serial-MSC"><span class="nav-number">1.10.1.</span> <span class="nav-text">串行GC（Serial Old） &#x2F; (Serial MSC)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#并行GC（Parallel-Old）-（Parallel-MSC）"><span class="nav-number">1.10.2.</span> <span class="nav-text">并行GC（Parallel Old）&#x2F; （Parallel MSC）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#并发标记清除GC（CMS）"><span class="nav-number">1.10.3.</span> <span class="nav-text">并发标记清除GC（CMS）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#四个步骤"><span class="nav-number">1.10.3.1.</span> <span class="nav-text">四个步骤</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#垃圾收集器如何选择"><span class="nav-number">1.11.</span> <span class="nav-text">垃圾收集器如何选择</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#组合的选择"><span class="nav-number">1.11.1.</span> <span class="nav-text">组合的选择</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#G1垃圾收集器"><span class="nav-number">1.12.</span> <span class="nav-text">G1垃圾收集器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#开启G1垃圾收集器"><span class="nav-number">1.12.1.</span> <span class="nav-text">开启G1垃圾收集器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#以前收集器的特点"><span class="nav-number">1.12.2.</span> <span class="nav-text">以前收集器的特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#G1是什么"><span class="nav-number">1.12.3.</span> <span class="nav-text">G1是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#特点"><span class="nav-number">1.12.4.</span> <span class="nav-text">特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#底层原理"><span class="nav-number">1.12.5.</span> <span class="nav-text">底层原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Region区域化垃圾收集器"><span class="nav-number">1.12.6.</span> <span class="nav-text">Region区域化垃圾收集器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#回收步骤"><span class="nav-number">1.12.7.</span> <span class="nav-text">回收步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四步过程"><span class="nav-number">1.12.8.</span> <span class="nav-text">四步过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参数配置"><span class="nav-number">1.12.9.</span> <span class="nav-text">参数配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#G1和CMS比较"><span class="nav-number">1.12.10.</span> <span class="nav-text">G1和CMS比较</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringBoot结合JVM-GC"><span class="nav-number">1.13.</span> <span class="nav-text">SpringBoot结合JVM GC</span></a></li></ol></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ylyang</p>
+  <div class="site-description" itemprop="description">云山苍苍，江水泱泱；先生之风，山高水长。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">101</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </section>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </header>
+
+      
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div id="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+      <div class="main-inner">
+        
+
+        <div class="content post posts-expand">
+          
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/10/11/JVM%E4%B9%8B%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ylyang">
+      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="杨远林的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          JVM之垃圾回收器
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="文章创建时间：2019-10-11 12:22:39" itemprop="dateCreated datePublished" datetime="2019-10-11T12:22:39+08:00">2019-10-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="最后修改时间：2020-03-10 12:37:19" itemprop="dateModified" datetime="2020-03-10T12:37:19+08:00">2020-03-10</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JVM/" itemprop="url" rel="index"><span itemprop="name">JVM</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="JVM之垃圾收集器"><a href="#JVM之垃圾收集器" class="headerlink" title="JVM之垃圾收集器"></a>JVM之垃圾收集器</h1><h2 id="GC垃圾回收算法和垃圾收集器关系"><a href="#GC垃圾回收算法和垃圾收集器关系" class="headerlink" title="GC垃圾回收算法和垃圾收集器关系"></a>GC垃圾回收算法和垃圾收集器关系</h2><blockquote>
+<p>天上飞的理念，要有落地的实现（垃圾收集器就是GC垃圾回收算法的实现）</p>
+<p>GC算法是内存回收的方法论，垃圾收集器就是算法的落地实现</p>
+</blockquote>
+<a id="more"></a>
+
+<p>GC算法主要有以下几种</p>
+<ul>
+<li>引用计数（几乎不用，无法解决循环引用的问题）</li>
+<li>复制拷贝（用于新生代）</li>
+<li>标记清除（用于老年代）</li>
+<li>标记整理（用于老年代）</li>
+</ul>
+<p>因为目前为止还没有完美的收集器出现，更没有万能的收集器，只是针对具体应用最合适的收集器，进行分代收集（那个代用什么收集器）</p>
+<h2 id="四种主要的垃圾收集器"><a href="#四种主要的垃圾收集器" class="headerlink" title="四种主要的垃圾收集器"></a>四种主要的垃圾收集器</h2><ul>
+<li>Serial：串行回收  <code>-XX:+UseSeriallGC</code></li>
+<li>Parallel：并行回收  <code>-XX:+UseParallelGC</code></li>
+<li>CMS：并发标记清除</li>
+<li>G1</li>
+<li>ZGC：（java 11 出现的）</li>
+</ul>
+<p><img data-src="image-20200325084453631.png" alt="image1"></p>
+<h3 id="Serial"><a href="#Serial" class="headerlink" title="Serial"></a>Serial</h3><p>串行垃圾回收器，它为单线程环境设计且值使用一个线程进行垃圾收集，会暂停所有的用户线程，只有当垃圾回收完成时，才会重新唤醒主线程继续执行。所以不适合服务器环境</p>
+<p><img data-src="image-20200325085320683.png" alt="image"></p>
+<h3 id="Parallel"><a href="#Parallel" class="headerlink" title="Parallel"></a>Parallel</h3><p>并行垃圾收集器，多个垃圾收集线程并行工作，此时用户线程也是阻塞的，适用于科学计算 / 大数据处理等弱交互场景，也就是说Serial 和 Parallel其实是类似的，不过是多了几个线程进行垃圾收集，但是主线程都会被暂停，但是并行垃圾收集器处理时间，肯定比串行的垃圾收集器要更短</p>
+<p><img data-src="image-20200325085729428.png" alt="image="></p>
+<h3 id="CMS"><a href="#CMS" class="headerlink" title="CMS"></a>CMS</h3><p>并发标记清除，用户线程和垃圾收集线程同时执行（不一定是并行，可能是交替执行），不需要停顿用户线程，互联网公司都在使用，适用于响应时间有要求的场景。并发是可以有交互的，也就是说可以一边进行收集，一边执行应用程序。</p>
+<p><img data-src="image-20200325090858921.png" alt="image"></p>
+<h3 id="G1"><a href="#G1" class="headerlink" title="G1"></a>G1</h3><p>G1垃圾回收器将堆内存分割成不同区域，然后并发的进行垃圾回收</p>
+<p><img data-src="image-20200325093222711.png" alt="image"></p>
+<h2 id="垃圾收集器总结"><a href="#垃圾收集器总结" class="headerlink" title="垃圾收集器总结"></a>垃圾收集器总结</h2><p>注意：并行垃圾回收在单核CPU下可能会更慢</p>
+<p><img data-src="image-20200325091619082.png" alt="image"></p>
+<h2 id="查看默认垃圾收集器"><a href="#查看默认垃圾收集器" class="headerlink" title="查看默认垃圾收集器"></a>查看默认垃圾收集器</h2><p>使用下面JVM命令，查看配置的初始参数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-XX:+PrintCommandLineFlags</span><br></pre></td></tr></table></figure>
+
+<p>然后运行一个程序后，能够看到它的一些初始配置信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-XX:InitialHeapSize&#x3D;266376000 -XX:MaxHeapSize&#x3D;4262016000 -XX:+PrintCommandLineFlags -XX:+UseCompressedClassPointers -XX:+UseCompressedOops -XX:-UseLargePagesIndividualAllocation -XX:+UseParallelGC</span><br></pre></td></tr></table></figure>
+
+<p>移动到最后一句，就能看到 <code>-XX:+UseParallelGC</code> 说明使用的是并行垃圾回收</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-XX:+UseParallelGC</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="默认垃圾收集器有哪些"><a href="#默认垃圾收集器有哪些" class="headerlink" title="默认垃圾收集器有哪些"></a>默认垃圾收集器有哪些</h2><p>Java中一共有7大垃圾收集器</p>
+<ul>
+<li>UserSerialGC：串行垃圾收集器</li>
+<li>UserParallelGC：并行垃圾收集器</li>
+<li>UseConcMarkSweepGC：（CMS）并发标记清除</li>
+<li>UseParNewGC：年轻代的并行垃圾回收器</li>
+<li>UseParallelOldGC：老年代的并行垃圾回收器</li>
+<li>UseG1GC：G1垃圾收集器</li>
+<li>UserSerialOldGC：串行老年代垃圾收集器（已经被移除）</li>
+</ul>
+<p>底层源码</p>
+<p><img data-src="image-20200325100653829.png" alt="image"></p>
+<h2 id="各垃圾收集器的使用范围"><a href="#各垃圾收集器的使用范围" class="headerlink" title="各垃圾收集器的使用范围"></a>各垃圾收集器的使用范围</h2><p><img data-src="image-20200325101451849.png" alt="image"></p>
+<p>新生代使用的：</p>
+<ul>
+<li>Serial Copying： UserSerialGC，串行垃圾回收器</li>
+<li>Parallel Scavenge：UserParallelGC，并行垃圾收集器</li>
+<li>ParNew：UserParNewGC，新生代并行垃圾收集器</li>
+</ul>
+<p>老年区使用的：</p>
+<ul>
+<li>Serial Old：UseSerialOldGC，老年代串行垃圾收集器</li>
+<li>Parallel Compacting（Parallel Old）：UseParallelOldGC，老年代并行垃圾收集器</li>
+<li>CMS：UseConcMarkSwepp，并行标记清除垃圾收集器</li>
+</ul>
+<p>各区都能使用的：</p>
+<p>G1：UseG1GC，G1垃圾收集器</p>
+<p>垃圾收集器就来具体实现这些GC算法并实现内存回收，不同厂商，不同版本的虚拟机实现差别很大，HotSpot中包含的收集器如下图所示：</p>
+<p><img data-src="image-20200325102329216.png" alt="image"></p>
+<h2 id="部分参数说明"><a href="#部分参数说明" class="headerlink" title="部分参数说明"></a>部分参数说明</h2><ul>
+<li>DefNew：Default New Generation</li>
+<li>Tenured：Old</li>
+<li>ParNew：Parallel New Generation</li>
+<li>PSYoungGen：Parallel Scavenge</li>
+<li>ParOldGen：Parallel Old Generation</li>
+</ul>
+<h2 id="Java中的Server和Client模式"><a href="#Java中的Server和Client模式" class="headerlink" title="Java中的Server和Client模式"></a>Java中的Server和Client模式</h2><p>使用范围：一般使用Server模式，Client模式基本不会使用</p>
+<p>操作系统</p>
+<ul>
+<li>32位的Window操作系统，不论硬件如何都默认使用Client的JVM模式</li>
+<li>32位的其它操作系统，2G内存同时有2个cpu以上用Server模式，低于该配置还是Client模式</li>
+<li>64位只有Server模式</li>
+</ul>
+<p><img data-src="image-20200325175208231.png" alt="image"></p>
+<h2 id="新生代下的垃圾收集器"><a href="#新生代下的垃圾收集器" class="headerlink" title="新生代下的垃圾收集器"></a>新生代下的垃圾收集器</h2><h3 id="串行GC-Serial"><a href="#串行GC-Serial" class="headerlink" title="串行GC(Serial)"></a>串行GC(Serial)</h3><p>串行GC（Serial）（Serial Copying）</p>
+<p>是一个单线程单线程的收集器，在进行垃圾收集时候，必须暂停其他所有的工作线程直到它收集结束。</p>
+<p><img data-src="image-20200325175704604.png" alt="image"></p>
+<p>串行收集器是最古老，最稳定以及效率高的收集器，只使用一个线程去回收但其在垃圾收集过程中可能会产生较长的停顿(Stop-The-World 状态)。 虽然在收集垃圾过程中需要暂停所有其它的工作线程，但是它简单高效，对于限定单个CPU环境来说，没有线程交互的开销可以获得最高的单线程垃圾收集效率，因此Serial垃圾收集器依然是Java虚拟机运行在Client模式下默认的新生代垃圾收集器</p>
+<p>对应JVM参数是：-XX:+UseSerialGC</p>
+<p>开启后会使用：Serial(Young区用) + Serial Old(Old区用) 的收集器组合</p>
+<p>表示：新生代、老年代都会使用串行回收收集器，新生代使用复制算法，老年代使用标记-整理算法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-Xms10m -Xmx10m -XX:PrintGCDetails -XX:+PrintConmandLineFlags -XX:+UseSerialGC</span><br></pre></td></tr></table></figure>
+
+<h3 id="并行GC-ParNew"><a href="#并行GC-ParNew" class="headerlink" title="并行GC(ParNew)"></a>并行GC(ParNew)</h3><p>并行收集器，使用多线程进行垃圾回收，在垃圾收集，会Stop-the-World暂停其他所有的工作线程直到它收集结束</p>
+<p><img data-src="image-20200325191328733.png" alt="image"></p>
+<p>ParNew收集器其实就是Serial收集器新生代的并行多线程版本，最常见的应用场景时配合老年代的CMS GC工作，其余的行为和Serial收集器完全一样，ParNew垃圾收集器在垃圾收集过程中同样也要暂停所有其他的工作线程。它是很多Java虚拟机运行在Server模式下新生代的默认垃圾收集器。</p>
+<p>常见对应JVM参数：-XX:+UseParNewGC     启动ParNew收集器，只影响新生代的收集，不影响老年代</p>
+<p>开启上述参数后，会使用：ParNew（Young区用） + Serial Old的收集器组合，新生代使用复制算法，老年代采用标记-整理算法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-Xms10m -Xmx10m -XX:PrintGCDetails -XX:+PrintConmandLineFlags -XX:+UseParNewGC</span><br></pre></td></tr></table></figure>
+
+<p>但是会出现警告，即 ParNew 和 Serial Old 这样搭配，Java8已经不再被推荐</p>
+<p><img data-src="image-20200325194316660.png" alt="image"></p>
+<p>备注： -XX:ParallelGCThreads   限制线程数量，默认开启和CPU数目相同的线程数</p>
+<h3 id="并行回收GC（Parallel）-（Parallel-Scavenge）"><a href="#并行回收GC（Parallel）-（Parallel-Scavenge）" class="headerlink" title="并行回收GC（Parallel）/ （Parallel Scavenge）"></a>并行回收GC（Parallel）/ （Parallel Scavenge）</h3><p>因为Serial 和 ParNew都不推荐使用了，因此现在新生代默认使用的是Parallel Scavenge，也就是新生代和老年代都是使用并行</p>
+<p><img data-src="image-20200325204437678.png" alt="image"></p>
+<p>Parallel Scavenge收集器类似ParNew也是一个新生代垃圾收集器，使用复制算法，也是一个并行的多线程的垃圾收集器，俗称吞吐量优先收集器。一句话：串行收集器在新生代和老年代的并行化</p>
+<p>它关注的重点是：</p>
+<p>可控制的吞吐量（Thoughput = 运行用户代码时间 / (运行用户代码时间 + 垃圾收集时间) ），也即比如程序运行100分钟，垃圾收集时间1分钟，吞吐量就是99%。高吞吐量意味着高效利用CPU时间，它多用于在后台运算而不需要太多交互的任务。</p>
+<p>自适应调节策略也是ParallelScavenge收集器与ParNew收集器的一个重要区别。（自适应调节策略：虚拟机会根据当前系统的运行情况收集性能监控信息，动态调整这些参数以提供最合适的停顿时间( -XX:MaxGCPauseMills)）或最大的吞吐量。</p>
+<p>常用JVM参数：-XX:+UseParallelGC 或 -XX:+UseParallelOldGC（可互相激活）使用Parallel Scanvenge收集器</p>
+<p>开启该参数后：新生代使用复制算法，老年代使用标记-整理算法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-Xms10m -Xmx10m -XX:PrintGCDetails -XX:+PrintConmandLineFlags -XX:+UseParallelGC</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="老年代下的垃圾收集器"><a href="#老年代下的垃圾收集器" class="headerlink" title="老年代下的垃圾收集器"></a>老年代下的垃圾收集器</h2><h3 id="串行GC（Serial-Old）-Serial-MSC"><a href="#串行GC（Serial-Old）-Serial-MSC" class="headerlink" title="串行GC（Serial Old） / (Serial MSC)"></a>串行GC（Serial Old） / (Serial MSC)</h3><p>Serial Old是Serial垃圾收集器老年代版本，它同样是一个单线程的收集器，使用标记-整理算法，这个收集器也主要是运行在Client默认的Java虚拟机中默认的老年代垃圾收集器</p>
+<p>在Server模式下，主要有两个用途（了解，版本已经到8及以后）</p>
+<ul>
+<li>在JDK1.5之前版本中与新生代的Parallel Scavenge收集器搭配使用（Parallel Scavenge + Serial Old）</li>
+<li>作为老年代版中使用CMS收集器的后备垃圾收集方案。</li>
+</ul>
+<p>配置方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-Xms10m -Xmx10m -XX:PrintGCDetails -XX:+PrintConmandLineFlags -XX:+UseSerialOldlGC</span><br></pre></td></tr></table></figure>
+
+<p>该垃圾收集器，目前已经不推荐使用了</p>
+<h3 id="并行GC（Parallel-Old）-（Parallel-MSC）"><a href="#并行GC（Parallel-Old）-（Parallel-MSC）" class="headerlink" title="并行GC（Parallel Old）/ （Parallel MSC）"></a>并行GC（Parallel Old）/ （Parallel MSC）</h3><p>Parallel Old收集器是Parallel Scavenge的老年代版本，使用多线程的标记-整理算法，Parallel Old收集器在JDK1.6才开始提供。</p>
+<p>在JDK1.6之前，新生代使用ParallelScavenge收集器只能搭配老年代的Serial Old收集器，只能保证新生代的吞吐量优先，无法保证整体的吞吐量。在JDK1.6以前(Parallel Scavenge + Serial Old)</p>
+<p>Parallel Old正是为了在老年代同样提供吞吐量优先的垃圾收集器，如果系统对吞吐量要求比较高，JDK1.8后可以考虑新生代Parallel Scavenge和老年代Parallel Old 收集器的搭配策略。在JDK1.8及后（Parallel Scavenge + Parallel Old）</p>
+<p>JVM常用参数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-XX +UseParallelOldGC：使用Parallel Old收集器，设置该参数后，新生代Parallel+老年代 Parallel Old</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="image-20200325211525152.png" alt="image"></p>
+<p>使用老年代并行收集器：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-Xms10m -Xmx10m -XX:PrintGCDetails -XX:+PrintConmandLineFlags -XX:+UseParallelOldlGC</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="并发标记清除GC（CMS）"><a href="#并发标记清除GC（CMS）" class="headerlink" title="并发标记清除GC（CMS）"></a>并发标记清除GC（CMS）</h3><p>CMS收集器（Concurrent Mark Sweep：并发标记清除）是一种以最短回收停顿时间为目标的收集器</p>
+<p>适合应用在互联网或者B/S系统的服务器上，这类应用尤其重视服务器的响应速度，希望系统停顿时间最短。</p>
+<p>CMS非常适合堆内存大，CPU核数多的服务器端应用，也是G1出现之前大型应用的首选收集器。</p>
+<p><img data-src="image-20200325212836441.png" alt="image"></p>
+<p>Concurrent Mark Sweep：并发标记清除，并发收集低停顿，并发指的是与用户线程一起执行</p>
+<p>开启该收集器的JVM参数： -XX:+UseConcMarkSweepGC  开启该参数后，会自动将 -XX:+UseParNewGC打开，开启该参数后，使用ParNew(young 区用）+ CMS（Old 区用） + Serial Old 的收集器组合，Serial Old将作为CMS出错的后备收集器</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-Xms10m -Xmx10m -XX:+PrintGCDetails -XX:+UseConcMarkSweepGC</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="四个步骤"><a href="#四个步骤" class="headerlink" title="四个步骤"></a>四个步骤</h4><ul>
+<li>初始标记（CMS initial mark）<ul>
+<li>只是标记一个GC Roots 能直接关联的对象，速度很快，仍然需要暂停所有的工作线程</li>
+</ul>
+</li>
+<li>并发标记（CMS concurrent mark）和用户线程一起<ul>
+<li>进行GC Roots跟踪过程，和用户线程一起工作，不需要暂停工作线程。主要标记过程，标记全部对象</li>
+</ul>
+</li>
+<li>重新标记（CMS remark）<ul>
+<li>为了修正在并发标记期间，因用户程序继续运行而导致标记产生变动的那一部分对象的标记记录，仍然需要暂停所有的工作线程，由于并发标记时，用户线程依然运行，因此在正式清理前，在做修正</li>
+</ul>
+</li>
+<li>并发清除（CMS concurrent sweep）和用户线程一起<ul>
+<li>清除GC Roots不可达对象，和用户线程一起工作，不需要暂停工作线程。基于标记结果，直接清理对象，由于耗时最长的并发标记和并发清除过程中，垃圾收集线程可以和用户现在一起并发工作，所以总体上来看CMS收集器的内存回收和用户线程是一起并发地执行。</li>
+</ul>
+</li>
+</ul>
+<p><img data-src="image-20200325215401981.png" alt="image"></p>
+<p>优点：并发收集低停顿</p>
+<p>缺点：并发执行，对CPU资源压力大，采用的标记清除算法会导致大量碎片</p>
+<p>由于并发进行，CMS在收集与应用线程会同时增加对堆内存的占用，也就是说，CMS必须在老年代堆内存用尽之前完成垃圾回收，否则CMS回收失败时，将触发担保机制，串行老年代收集器将会以STW方式进行一次GC，从而造成较大的停顿时间</p>
+<p>标记清除算法无法整理空间碎片，老年代空间会随着应用时长被逐步耗尽，最后将不得不通过担保机制对堆内存进行压缩，CMS也提供了参数 -XX:CMSFullGCSBeForeCompaction（默认0，即每次都进行内存整理）来指定多少次CMS收集之后，进行一次压缩的Full GC</p>
+<h2 id="垃圾收集器如何选择"><a href="#垃圾收集器如何选择" class="headerlink" title="垃圾收集器如何选择"></a>垃圾收集器如何选择</h2><h3 id="组合的选择"><a href="#组合的选择" class="headerlink" title="组合的选择"></a>组合的选择</h3><ul>
+<li>单CPU或者小内存，单机程序<ul>
+<li>-XX:+UseSerialGC</li>
+</ul>
+</li>
+<li>多CPU，需要最大的吞吐量，如后台计算型应用<ul>
+<li>-XX:+UseParallelGC（这两个相互激活）</li>
+<li>-XX:+UseParallelOldGC</li>
+</ul>
+</li>
+<li>多CPU，追求低停顿时间，需要快速响应如互联网应用<ul>
+<li>-XX:+UseConcMarkSweepGC</li>
+<li>-XX:+ParNewGC</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">参数</th>
+<th align="center">新生代垃圾收集器</th>
+<th align="center">新生代算法</th>
+<th align="center">老年代垃圾收集器</th>
+<th align="center">老年代算法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">-XX:+UseSerialGC</td>
+<td align="center">SerialGC</td>
+<td align="center">复制</td>
+<td align="center">SerialOldGC</td>
+<td align="center">标记整理</td>
+</tr>
+<tr>
+<td align="center">-XX:+UseParNewGC</td>
+<td align="center">ParNew</td>
+<td align="center">复制</td>
+<td align="center">SerialOldGC</td>
+<td align="center">标记整理</td>
+</tr>
+<tr>
+<td align="center">-XX:+UseParallelGC</td>
+<td align="center">Parallel [Scavenge]</td>
+<td align="center">复制</td>
+<td align="center">Parallel Old</td>
+<td align="center">标记整理</td>
+</tr>
+<tr>
+<td align="center">-XX:+UseConcMarkSweepGC</td>
+<td align="center">ParNew</td>
+<td align="center">复制</td>
+<td align="center">CMS + Serial Old的收集器组合，Serial Old作为CMS出错的后备收集器</td>
+<td align="center">标记清除</td>
+</tr>
+<tr>
+<td align="center">-XX:+UseG1GC</td>
+<td align="center">G1整体上采用标记整理算法</td>
+<td align="center">局部复制</td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<h2 id="G1垃圾收集器"><a href="#G1垃圾收集器" class="headerlink" title="G1垃圾收集器"></a>G1垃圾收集器</h2><p><img data-src="image-20200326115120405.png" alt="image"></p>
+<h3 id="开启G1垃圾收集器"><a href="#开启G1垃圾收集器" class="headerlink" title="开启G1垃圾收集器"></a>开启G1垃圾收集器</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-XX:+UseG1GC</span><br></pre></td></tr></table></figure>
+
+<h3 id="以前收集器的特点"><a href="#以前收集器的特点" class="headerlink" title="以前收集器的特点"></a>以前收集器的特点</h3><ul>
+<li>年轻代和老年代是各自独立且连续的内存块</li>
+<li>年轻代收集使用单eden + S0 + S1 进行复制算法</li>
+<li>老年代收集必须扫描珍整个老年代区域</li>
+<li>都是以尽可能少而快速地执行GC为设计原则</li>
+</ul>
+<h3 id="G1是什么"><a href="#G1是什么" class="headerlink" title="G1是什么"></a>G1是什么</h3><p>G1：Garbage-First 收集器，是一款面向服务端应用的收集器，应用在多处理器和大容量内存环境中，在实现高吞吐量的同时，尽可能满足垃圾收集暂停时间的要求。另外，它还具有一下特征：</p>
+<ul>
+<li>像CMS收集器一样，能与应用程序并发执行</li>
+<li>整理空闲空间更快</li>
+<li>需要更多的时间来预测GC停顿时间</li>
+<li>不希望牺牲大量的吞吐量性能</li>
+<li>不需要更大的Java Heap</li>
+</ul>
+<p>G1收集器设计目标是取代CMS收集器，它同CMS相比，在以下方面表现的更出色</p>
+<ul>
+<li>G1是一个有整理内存过程的垃圾收集器，不会产生很多内存碎片。</li>
+<li>G1的Stop The World（STW）更可控，G1在停顿时间上添加了预测机制，用户可以指定期望停顿时间。</li>
+</ul>
+<p>CMS垃圾收集器虽然减少了暂停应用程序的运行时间，但是它还存在着内存碎片问题。于是，为了去除内存碎片问题，同时又保留CMS垃圾收集器低暂停时间的优点，JAVA7发布了一个新的垃圾收集器-G1垃圾收集器</p>
+<p>G1是在2012奶奶才在JDK1.7中可用，Oracle官方计划在JDK9中将G1变成默认的垃圾收集器以替代CMS，它是一款面向服务端应用的收集器，主要应用在多CPU和大内存服务器环境下，极大减少垃圾收集的停顿时间，全面提升服务器的性能，逐步替换Java8以前的CMS收集器</p>
+<p>主要改变时：Eden，Survivor和Tenured等内存区域不再是连续了，而是变成一个个大小一样的region，每个region从1M到32M不等。一个region有可能属于Eden，Survivor或者Tenured内存区域。</p>
+<h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h3><ul>
+<li>G1能充分利用多CPU，多核环境硬件优势，尽量缩短STW</li>
+<li>G1整体上采用标记-整理算法，局部是通过复制算法，不会产生内存碎片</li>
+<li>宏观上看G1之中不再区分年轻代和老年代。把内存划分成多个独立的子区域（Region），可以近似理解为一个围棋的棋盘</li>
+<li>G1收集器里面将整个内存区域都混合在一起了，但其本身依然在小范围内要进行年轻代和老年代的区分，保留了新生代和老年代，但他们不再是物理隔离的，而是通过一部分Region的集合且不需要Region是连续的，也就是说依然会采取不同的GC方式来处理不同的区域</li>
+<li>G1虽然也是分代收集器，但整个内存分区不存在物理上的年轻代和老年代的区别，也不需要完全独立的Survivor（to space）堆做复制准备，G1只有逻辑上的分代概念，或者说每个分区都可能随G1的运行在不同代之间前后切换。</li>
+</ul>
+<h3 id="底层原理"><a href="#底层原理" class="headerlink" title="底层原理"></a>底层原理</h3><p>Region区域化垃圾收集器，化整为零，打破了原来新生区和老年区的壁垒，避免了全内存扫描，只需要按照区域来进行扫描即可。</p>
+<p>区域化内存划片Region，整体遍为了一些列不连续的内存区域，避免了全内存区的GC操作。</p>
+<p>核心思想是将整个堆内存区域分成大小相同的子区域（Region），在JVM启动时会自动设置子区域大小</p>
+<p>在堆的使用上，G1并不要求对象的存储一定是物理上连续的，只要逻辑上连续即可，每个分区也不会固定地为某个代服务，可以按需在年轻代和老年代之间切换。启动时可以通过参数<code>-XX:G1HeapRegionSize=n</code> 可指定分区大小（1MB~32MB，且必须是2的幂），默认将整堆划分为2048个分区。</p>
+<p>大小范围在1MB~32MB，最多能设置2048个区域，也即能够支持的最大内存为：32MB*2048 = 64G内存</p>
+<p>Region区域化垃圾收集器</p>
+<h3 id="Region区域化垃圾收集器"><a href="#Region区域化垃圾收集器" class="headerlink" title="Region区域化垃圾收集器"></a>Region区域化垃圾收集器</h3><p>G1将新生代、老年代的物理空间划分取消了</p>
+<p><img data-src="image-20200326120105859.png" alt="image"></p>
+<p>同时对内存进行了区域划分</p>
+<p><img data-src="image-20200326120130427.png" alt="image"></p>
+<p>G1算法将堆划分为若干个区域（Reign），它仍然属于分代收集器，这些Region的一部分包含新生代，新生代的垃圾收集依然采用暂停所有应用线程的方式，将存活对象拷贝到老年代或者Survivor空间</p>
+<p>这些Region的一部分包含老年代，G1收集器通过将对象从一个区域复制到另外一个区域，完成了清理工作。这就意味着，在正常的处理过程中，G1完成了堆的压缩（至少是部分堆的压缩），这样也就不会有CMS内存碎片的问题存在了。</p>
+<p>在G1中，还有一种特殊的区域，叫做Humongous（巨大的）区域，如果一个对象占用了空间超过了分区容量50%以上，G1收集器就认为这是一个巨型对象，这些巨型对象默认直接分配在老年代，但是如果他是一个短期存在的巨型对象，就会对垃圾收集器造成负面影响，为了解决这个问题，G1划分了一个Humongous区，它用来专门存放巨型对象。如果一个H区装不下一个巨型对象，那么G1会寻找连续的H区来存储，为了能找到连续的H区，有时候不得不启动Full GC。</p>
+<h3 id="回收步骤"><a href="#回收步骤" class="headerlink" title="回收步骤"></a>回收步骤</h3><p>针对Eden区进行收集，Eden区耗尽后会被触发，主要是小区域收集 + 形成连续的内存块，避免内碎片</p>
+<ul>
+<li>Eden区的数据移动到Survivor区，加入出现Survivor区空间不够，Eden区数据会晋升到Old区</li>
+<li>Survivor区的数据移动到新的Survivor区，部分数据晋升到Old区</li>
+<li>最后Eden区收拾干净了，GC结束，用户的应用程序继续执行</li>
+</ul>
+<p><img data-src="image-20200326121409237.png" alt="image"></p>
+<p>回收完成后</p>
+<p><img data-src="image-20200326121622208.png" alt="image"></p>
+<p>小区域收集 + 形成连续的内存块，最后在收集完成后，就会形成连续的内存空间，这样就解决了内存碎片的问题</p>
+<h3 id="四步过程"><a href="#四步过程" class="headerlink" title="四步过程"></a>四步过程</h3><ul>
+<li>初始标记：只标记GC Roots能直接关联到的对象</li>
+<li>并发标记：进行GC Roots Tracing（链路扫描）的过程</li>
+<li>最终标记：修正并发标记期间，因为程序运行导致标记发生变化的那一部分对象</li>
+<li>筛选回收：根据时间来进行价值最大化回收</li>
+</ul>
+<p><img data-src="image-20200326121914326.png" alt="image"></p>
+<h3 id="参数配置"><a href="#参数配置" class="headerlink" title="参数配置"></a>参数配置</h3><p>开发人员仅仅需要申明以下参数即可</p>
+<p>三步归纳：<code>-XX:+UseG1GC  -Xmx32G  -XX:MaxGCPauseMillis=100</code></p>
+<p>-XX:MaxGCPauseMillis=n：最大GC停顿时间单位毫秒，这是个软目标，JVM尽可能停顿小于这个时间</p>
+<h3 id="G1和CMS比较"><a href="#G1和CMS比较" class="headerlink" title="G1和CMS比较"></a>G1和CMS比较</h3><ul>
+<li>G1不会产生内碎片</li>
+<li>是可以精准控制停顿。该收集器是把整个堆（新生代、老年代）划分成多个固定大小的区域，每次根据允许停顿的时间去收集垃圾最多的区域。</li>
+</ul>
+<h2 id="SpringBoot结合JVM-GC"><a href="#SpringBoot结合JVM-GC" class="headerlink" title="SpringBoot结合JVM GC"></a>SpringBoot结合JVM GC</h2><p>启动微服务时候，就可以带上JVM和GC的参数</p>
+<ul>
+<li>IDEA开发完微服务工程</li>
+<li>maven进行clean package</li>
+<li>要求微服务启动的时候，同时配置我们的JVM/GC的调优参数</li>
+<li>我们就可以根据具体的业务配置我们启动的JVM参数</li>
+</ul>
+<p>例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -Xms1024m -Xmx1024 -XX:UseG1GC -jar   xxx.jar</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"># Java</a>
+              <a href="/tags/Java%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" rel="tag"># Java垃圾回收</a>
+              <a href="/tags/JVM/" rel="tag"># JVM</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/10/10/Java%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BAOOM/" rel="prev" title="Java内存溢出OOM">
+      <i class="fa fa-chevron-left"></i> Java内存溢出OOM
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/10/11/%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%8F%98%E6%85%A2%EF%BC%8C%E8%AF%8A%E6%96%AD%E6%80%9D%E8%B7%AF%E5%92%8C%E6%80%A7%E8%83%BD%E8%AF%84%E4%BC%B0/" rel="next" title="生产环境服务器变慢，诊断思路和性能评估">
+      生产环境服务器变慢，诊断思路和性能评估 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+        </div>
+        
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ylyang</span>
+</div>
+  <div class="powered-by">©️2018-2020 YLYANG | https://ylyang.xyz
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

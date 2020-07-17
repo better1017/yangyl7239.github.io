@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/logo.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/logo.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/logo.ico">
+  <link rel="mask-icon" href="/images/logo.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  
+  <link rel="stylesheet" href="/lib/animate-css/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ylyang.xyz","root":"/","scheme":"Gemini","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":{"enable":true,"onlypost":false},"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}}};
+  </script>
+
+  <meta name="description" content="Java内存溢出OOM经典错误JVM中常见的两个错误 StackoverFlowError ：栈溢出 OutofMemoryError: java heap space：堆溢出">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java内存溢出OOM">
+<meta property="og:url" content="ylyang.xyz/2019/10/10/Java%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BAOOM/index.html">
+<meta property="og:site_name" content="杨远林的个人博客">
+<meta property="og:description" content="Java内存溢出OOM经典错误JVM中常见的两个错误 StackoverFlowError ：栈溢出 OutofMemoryError: java heap space：堆溢出">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="ylyang.xyz/2019/10/10/Java%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BAOOM/image-20200324144802828.png">
+<meta property="og:image" content="ylyang.xyz/2019/10/10/Java%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BAOOM/image-20200324150646260.png">
+<meta property="article:published_time" content="2019-10-10T13:12:45.000Z">
+<meta property="article:modified_time" content="2020-03-10T04:37:19.000Z">
+<meta property="article:author" content="ylyang">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="OOM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="ylyang.xyz/2019/10/10/Java%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BAOOM/image-20200324144802828.png">
+
+<link rel="canonical" href="ylyang.xyz/2019/10/10/Java%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BAOOM/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Java内存溢出OOM | 杨远林的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <main class="main">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+        <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line toggle-line-first"></span>
+        <span class="toggle-line toggle-line-middle"></span>
+        <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">杨远林的个人博客</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">ylyang's blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java内存溢出OOM"><span class="nav-number">1.</span> <span class="nav-text">Java内存溢出OOM</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#经典错误"><span class="nav-number">1.1.</span> <span class="nav-text">经典错误</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#架构"><span class="nav-number">1.2.</span> <span class="nav-text">架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#StackoverFlowError"><span class="nav-number">1.3.</span> <span class="nav-text">StackoverFlowError</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OutOfMemoryError"><span class="nav-number">1.4.</span> <span class="nav-text">OutOfMemoryError</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#java-heap-space"><span class="nav-number">1.4.1.</span> <span class="nav-text">java heap space</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GC-overhead-limit-exceeded"><span class="nav-number">1.4.2.</span> <span class="nav-text">GC overhead limit exceeded</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Direct-buffer-memory"><span class="nav-number">1.4.3.</span> <span class="nav-text">Direct buffer memory</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#unable-to-create-new-native-thread"><span class="nav-number">1.4.4.</span> <span class="nav-text">unable to create new native thread</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Metaspace"><span class="nav-number">1.4.5.</span> <span class="nav-text">Metaspace</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#元空间是什么"><span class="nav-number">1.4.5.1.</span> <span class="nav-text">元空间是什么</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#代码"><span class="nav-number">1.4.5.2.</span> <span class="nav-text">代码</span></a></li></ol></li></ol></li></ol></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ylyang</p>
+  <div class="site-description" itemprop="description">云山苍苍，江水泱泱；先生之风，山高水长。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">101</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </section>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </header>
+
+      
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div id="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+      <div class="main-inner">
+        
+
+        <div class="content post posts-expand">
+          
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/10/10/Java%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BAOOM/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ylyang">
+      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="杨远林的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Java内存溢出OOM
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="文章创建时间：2019-10-10 21:12:45" itemprop="dateCreated datePublished" datetime="2019-10-10T21:12:45+08:00">2019-10-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="最后修改时间：2020-03-10 12:37:19" itemprop="dateModified" datetime="2020-03-10T12:37:19+08:00">2020-03-10</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Java内存溢出OOM"><a href="#Java内存溢出OOM" class="headerlink" title="Java内存溢出OOM"></a>Java内存溢出OOM</h1><h2 id="经典错误"><a href="#经典错误" class="headerlink" title="经典错误"></a>经典错误</h2><p>JVM中常见的两个错误</p>
+<p>StackoverFlowError ：栈溢出</p>
+<p>OutofMemoryError: java heap space：堆溢出</p>
+<a id="more"></a>
+
+<p>除此之外，还有以下的错误</p>
+<ul>
+<li>java.lang.StackOverflowError</li>
+<li>java.lang.OutOfMemoryError：java heap space</li>
+<li>java.lang.OutOfMemoryError：GC overhead limit exceeeded</li>
+<li>java.lang.OutOfMemoryError：Direct buffer memory</li>
+<li>java.lang.OutOfMemoryError：unable to create new native thread</li>
+<li>java.lang.OutOfMemoryError：Metaspace</li>
+</ul>
+<h2 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h2><p>OutOfMemoryError和StackOverflowError是属于Error，不是Exception</p>
+<p><img data-src="image-20200324144802828.png" alt="image-1"></p>
+<h2 id="StackoverFlowError"><a href="#StackoverFlowError" class="headerlink" title="StackoverFlowError"></a>StackoverFlowError</h2><p>堆栈溢出，我们有最简单的一个递归调用，就会造成堆栈溢出，也就是深度的方法调用</p>
+<p>栈一般是512K，不断的深度调用，直到栈被撑破</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * @author: ylyang</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class StackOverflowErrorDemo &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        stackOverflowError();</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 栈一般是512K，不断的深度调用，直到栈被撑破</span><br><span class="line">     * Exception in thread &quot;main&quot; java.lang.StackOverflowError</span><br><span class="line">     *&#x2F;</span><br><span class="line">    private static void stackOverflowError() &#123;</span><br><span class="line">        stackOverflowError();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Exception in thread &quot;main&quot; java.lang.StackOverflowError</span><br><span class="line">	at com.moxi.interview.study.oom.StackOverflowErrorDemo.stackOverflowError(StackOverflowErrorDemo.java:17)</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="OutOfMemoryError"><a href="#OutOfMemoryError" class="headerlink" title="OutOfMemoryError"></a>OutOfMemoryError</h2><h3 id="java-heap-space"><a href="#java-heap-space" class="headerlink" title="java heap space"></a>java heap space</h3><p>创建了很多对象，导致堆空间不够存储</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * Java堆内存不足</span><br><span class="line"> * @author: ylyang</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class JavaHeapSpaceDemo &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F; 堆空间的大小 -Xms10m -Xmx10m</span><br><span class="line">        &#x2F;&#x2F; 创建一个 80M的字节数组</span><br><span class="line">        byte [] bytes &#x3D; new byte[80 * 1024 * 1024];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们创建一个80M的数组，会直接出现Java heap space</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Exception in thread &quot;main&quot; java.lang.OutOfMemoryError: Java heap space</span><br></pre></td></tr></table></figure>
+
+<h3 id="GC-overhead-limit-exceeded"><a href="#GC-overhead-limit-exceeded" class="headerlink" title="GC overhead limit exceeded"></a>GC overhead limit exceeded</h3><p>GC回收时间过长时会抛出OutOfMemoryError，过长的定义是，超过了98%的时间用来做GC，并且回收了不到2%的堆内存</p>
+<p>连续多次GC都只回收了不到2%的极端情况下，才会抛出。假设不抛出GC overhead limit 错误会造成什么情况呢？</p>
+<p>那就是GC清理的这点内存很快会再次被填满，迫使GC再次执行，这样就形成了恶性循环，CPU的使用率一直都是100%，而GC却没有任何成果。</p>
+<p><img data-src="image-20200324150646260.png" alt="image1"></p>
+<p>代码演示：</p>
+<p>为了更快的达到效果，我们首先需要设置JVM启动参数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-Xms10m -Xmx10m -XX:+PrintGCDetails -XX:MaxDirectMemorySize&#x3D;5m</span><br></pre></td></tr></table></figure>
+
+<p>这个异常出现的步骤就是，我们不断的像list中插入String对象，直到启动GC回收</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * GC 回收超时</span><br><span class="line"> * JVM参数配置: -Xms10m -Xmx10m -XX:+PrintGCDetails -XX:MaxDirectMemorySize&#x3D;5m</span><br><span class="line"> * @author: ylyang</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class GCOverheadLimitDemo &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        int i &#x3D; 0;</span><br><span class="line">        List&lt;String&gt; list &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line">        try &#123;</span><br><span class="line">            while(true) &#123;</span><br><span class="line">                list.add(String.valueOf(++i).intern());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            System.out.println(&quot;***************i:&quot; + i);</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            throw e;</span><br><span class="line">        &#125; finally &#123;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[Full GC (Ergonomics) [PSYoungGen: 2047K-&gt;2047K(2560K)] [ParOldGen: 7106K-&gt;7106K(7168K)] 9154K-&gt;9154K(9728K), [Metaspace: 3504K-&gt;3504K(1056768K)], 0.0311093 secs] [Times: user&#x3D;0.13 sys&#x3D;0.00, real&#x3D;0.03 secs] </span><br><span class="line">[Full GC (Ergonomics) [PSYoungGen: 2047K-&gt;0K(2560K)] [ParOldGen: 7136K-&gt;667K(7168K)] 9184K-&gt;667K(9728K), [Metaspace: 3540K-&gt;3540K(1056768K)], 0.0058093 secs] [Times: user&#x3D;0.00 sys&#x3D;0.00, real&#x3D;0.01 secs] </span><br><span class="line">Heap</span><br><span class="line"> PSYoungGen      total 2560K, used 114K [0x00000000ffd00000, 0x0000000100000000, 0x0000000100000000)</span><br><span class="line">  eden space 2048K, 5% used [0x00000000ffd00000,0x00000000ffd1c878,0x00000000fff00000)</span><br><span class="line">  from space 512K, 0% used [0x00000000fff80000,0x00000000fff80000,0x0000000100000000)</span><br><span class="line">  to   space 512K, 0% used [0x00000000fff00000,0x00000000fff00000,0x00000000fff80000)</span><br><span class="line"> ParOldGen       total 7168K, used 667K [0x00000000ff600000, 0x00000000ffd00000, 0x00000000ffd00000)</span><br><span class="line">  object space 7168K, 9% used [0x00000000ff600000,0x00000000ff6a6ff8,0x00000000ffd00000)</span><br><span class="line"> Metaspace       used 3605K, capacity 4540K, committed 4864K, reserved 1056768K</span><br><span class="line">  class space    used 399K, capacity 428K, committed 512K, reserved 1048576K</span><br><span class="line">  </span><br><span class="line"> </span><br><span class="line">Exception in thread &quot;main&quot; java.lang.OutOfMemoryError: GC overhead limit exceeded</span><br><span class="line">	at java.lang.Integer.toString(Integer.java:403)</span><br><span class="line">	at java.lang.String.valueOf(String.java:3099)</span><br><span class="line">	at com.moxi.interview.study.oom.GCOverheadLimitDemo.main(GCOverheadLimitDemo.java:18)</span><br></pre></td></tr></table></figure>
+
+<p>我们能够看到 多次Full GC，并没有清理出空间，在多次执行GC操作后，就抛出异常 GC overhead limit</p>
+<h3 id="Direct-buffer-memory"><a href="#Direct-buffer-memory" class="headerlink" title="Direct buffer memory"></a>Direct buffer memory</h3><p>Netty + NIO：这是由于NIO引起的</p>
+<p>写NIO程序的时候经常会使用ByteBuffer来读取或写入数据，这是一种基于通道(Channel) 与 缓冲区(Buffer)的I/O方式，它可以使用Native 函数库直接分配堆外内存，然后通过一个存储在Java堆里面的DirectByteBuffer对象作为这块内存的引用进行操作。这样能在一些场景中显著提高性能，因为避免了在Java堆和Native堆中来回复制数据。</p>
+<p>ByteBuffer.allocate(capability)：第一种方式是分配JVM堆内存，属于GC管辖范围，由于需要拷贝所以速度相对较慢</p>
+<p>ByteBuffer.allocteDirect(capability)：第二种方式是分配OS本地内存，不属于GC管辖范围，由于不需要内存的拷贝，所以速度相对较快</p>
+<p>但如果不断分配本地内存，堆内存很少使用，那么JVM就不需要执行GC，DirectByteBuffer对象就不会被回收，这时候怼内存充足，但本地内存可能已经使用光了，再次尝试分配本地内存就会出现OutOfMemoryError，那么程序就奔溃了。</p>
+<p>一句话说：本地内存不足，但是堆内存充足的时候，就会出现这个问题</p>
+<p>我们使用 -XX:MaxDirectMemorySize=5m 配置能使用的堆外物理内存为5M</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-Xms10m -Xmx10m -XX:+PrintGCDetails -XX:MaxDirectMemorySize&#x3D;5m</span><br></pre></td></tr></table></figure>
+
+<p>然后我们申请一个6M的空间</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 只设置了5M的物理内存使用，但是却分配 6M的空间</span><br><span class="line">ByteBuffer bb &#x3D; ByteBuffer.allocateDirect(6 * 1024 * 1024);</span><br></pre></td></tr></table></figure>
+
+<p>这个时候，运行就会出现问题了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">配置的maxDirectMemory：5.0MB</span><br><span class="line">[GC (System.gc()) [PSYoungGen: 2030K-&gt;488K(2560K)] 2030K-&gt;796K(9728K), 0.0008326 secs] [Times: user&#x3D;0.00 sys&#x3D;0.00, real&#x3D;0.00 secs] </span><br><span class="line">[Full GC (System.gc()) [PSYoungGen: 488K-&gt;0K(2560K)] [ParOldGen: 308K-&gt;712K(7168K)] 796K-&gt;712K(9728K), [Metaspace: 3512K-&gt;3512K(1056768K)], 0.0052052 secs] [Times: user&#x3D;0.09 sys&#x3D;0.00, real&#x3D;0.00 secs] </span><br><span class="line">Exception in thread &quot;main&quot; java.lang.OutOfMemoryError: Direct buffer memory</span><br><span class="line">	at java.nio.Bits.reserveMemory(Bits.java:693)</span><br><span class="line">	at java.nio.DirectByteBuffer.&lt;init&gt;(DirectByteBuffer.java:123)</span><br><span class="line">	at java.nio.ByteBuffer.allocateDirect(ByteBuffer.java:311)</span><br><span class="line">	at com.moxi.interview.study.oom.DIrectBufferMemoryDemo.main(DIrectBufferMemoryDemo.java:19)</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="unable-to-create-new-native-thread"><a href="#unable-to-create-new-native-thread" class="headerlink" title="unable to create new native thread"></a>unable to create new native thread</h3><p>不能够创建更多的新的线程了，也就是说创建线程的上限达到了</p>
+<p>在高并发场景的时候，会应用到</p>
+<p>高并发请求服务器时，经常会出现如下异常<code>java.lang.OutOfMemoryError:unable to create new native thread</code>，准确说该native thread异常与对应的平台有关</p>
+<p>导致原因：</p>
+<ul>
+<li>应用创建了太多线程，一个应用进程创建多个线程，超过系统承载极限</li>
+<li>服务器并不允许你的应用程序创建这么多线程，linux系统默认运行单个进程可以创建的线程为1024个，如果应用创建超过这个数量，就会报 <code>java.lang.OutOfMemoryError:unable to create new native thread</code></li>
+</ul>
+<p>解决方法：</p>
+<ol>
+<li>想办法降低你应用程序创建线程的数量，分析应用是否真的需要创建这么多线程，如果不是，改代码将线程数降到最低</li>
+<li>对于有的应用，确实需要创建很多线程，远超过linux系统默认1024个线程限制，可以通过修改linux服务器配置，扩大linux默认限制</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * 无法创建更多的线程</span><br><span class="line"> *</span><br><span class="line"> * @author: ylyang</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class UnableCreateNewThreadDemo &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        for (int i &#x3D; 0; ; i++) &#123;</span><br><span class="line">            System.out.println(&quot;************** i &#x3D; &quot; + i);</span><br><span class="line">            new Thread(() -&gt; &#123;</span><br><span class="line">                try &#123;</span><br><span class="line">                    TimeUnit.SECONDS.sleep(Integer.MAX_VALUE);</span><br><span class="line">                &#125; catch (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;, String.valueOf(i)).start();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个时候，就会出现下列的错误，线程数大概在 900多个</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Exception in thread &quot;main&quot; java.lang.OutOfMemoryError: unable to cerate new native thread</span><br></pre></td></tr></table></figure>
+
+<p>如何查看线程数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ulimit -u</span><br></pre></td></tr></table></figure>
+
+<h3 id="Metaspace"><a href="#Metaspace" class="headerlink" title="Metaspace"></a>Metaspace</h3><p>元空间内存不足，Matespace元空间应用的是本地内存</p>
+<p><code>-XX:MetaspaceSize</code> 的处理化大小为20M</p>
+<h4 id="元空间是什么"><a href="#元空间是什么" class="headerlink" title="元空间是什么"></a>元空间是什么</h4><p>元空间就是我们的方法区，存放的是类模板，类信息，常量池等</p>
+<p>Metaspace是方法区HotSpot中的实现，它与持久代最大的区别在于：Metaspace并不在虚拟内存中，而是使用本地内存，也即在java8中，class metadata（the virtual machines internal presentation of Java class），被存储在叫做Matespace的native memory</p>
+<p>永久代（java8后背元空间Metaspace取代了）存放了以下信息：</p>
+<ul>
+<li>虚拟机加载的类信息</li>
+<li>常量池</li>
+<li>静态变量</li>
+<li>即时编译后的代码</li>
+</ul>
+<p>模拟Metaspace空间溢出，我们不断生成类 往元空间里灌输，类占据的空间总会超过Metaspace指定的空间大小</p>
+<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><p>在模拟异常生成时候，因为初始化的元空间为20M，因此我们使用JVM参数调整元空间的大小，为了更好的效果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-XX:MetaspaceSize&#x3D;8m -XX:MaxMetaspaceSize&#x3D;8m</span><br></pre></td></tr></table></figure>
+
+<p>代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * 元空间溢出</span><br><span class="line"> *</span><br><span class="line"> * @author: ylyang</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class MetaspaceOutOfMemoryDemo &#123;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; 静态类</span><br><span class="line">    static class OOMTest &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(final String[] args) &#123;</span><br><span class="line">        &#x2F;&#x2F; 模拟计数多少次以后发生异常</span><br><span class="line">        int i &#x3D;0;</span><br><span class="line">        try &#123;</span><br><span class="line">            while (true) &#123;</span><br><span class="line">                i++;</span><br><span class="line">                &#x2F;&#x2F; 使用Spring的动态字节码技术</span><br><span class="line">                Enhancer enhancer &#x3D; new Enhancer();</span><br><span class="line">                enhancer.setSuperclass(OOMTest.class);</span><br><span class="line">                enhancer.setUseCache(false);</span><br><span class="line">                enhancer.setCallback(new MethodInterceptor() &#123;</span><br><span class="line">                    @Override</span><br><span class="line">                    public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable &#123;</span><br><span class="line">                        return methodProxy.invokeSuper(o, args);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            System.out.println(&quot;发生异常的次数:&quot; + i);</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; finally &#123;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>会出现以下错误：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">发生异常的次数: 201</span><br><span class="line">java.lang.OutOfMemoryError:Metaspace</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"># Java</a>
+              <a href="/tags/OOM/" rel="tag"># OOM</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/10/10/Java%E4%B8%AD%E7%9A%84%E5%BC%BA%E5%BC%95%E7%94%A8%E3%80%81%E8%BD%AF%E5%BC%95%E7%94%A8%E3%80%81%E5%BC%B1%E5%BC%95%E7%94%A8%E3%80%81%E8%99%9A%E5%BC%95%E7%94%A8/" rel="prev" title="Java中的强引用、软引用、弱引用、虚引用">
+      <i class="fa fa-chevron-left"></i> Java中的强引用、软引用、弱引用、虚引用
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/10/11/JVM%E4%B9%8B%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/" rel="next" title="JVM之垃圾回收器">
+      JVM之垃圾回收器 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+        </div>
+        
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ylyang</span>
+</div>
+  <div class="powered-by">©️2018-2020 YLYANG | https://ylyang.xyz
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
