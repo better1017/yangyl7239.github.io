@@ -19,13 +19,13 @@
 
 <script class="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"ylyang999.gitee.io","root":"/","scheme":"Gemini","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}}};
+    var CONFIG = {"hostname":"www.ylyang.xyz","root":"/","scheme":"Gemini","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}}};
   </script>
 
   <meta name="description" content="1. 修改hdfs-site.xml执行命令： 1vi &#x2F;software&#x2F;hadoop&#x2F;etc&#x2F;hadoop&#x2F;hdfs-site.xml  在hdfs-site.xml中添加： 1234&lt;property&gt;  &lt;name&gt;dfs.namenode.secondary.http-address&lt;&#x2F;name&gt;  &lt;value&gt;s138:9868&lt;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="hadoop - 单独配置辅助名称节点(SecondaryNameNode)">
-<meta property="og:url" content="https://ylyang999.gitee.io/2019/09/27/hadoop-%E5%8D%95%E7%8B%AC%E9%85%8D%E7%BD%AE%E8%BE%85%E5%8A%A9%E5%90%8D%E7%A7%B0%E8%8A%82%E7%82%B9-SecondaryNameNode/index.html">
+<meta property="og:url" content="https://www.ylyang.xyz/2019/09/27/hadoop-%E5%8D%95%E7%8B%AC%E9%85%8D%E7%BD%AE%E8%BE%85%E5%8A%A9%E5%90%8D%E7%A7%B0%E8%8A%82%E7%82%B9-SecondaryNameNode/index.html">
 <meta property="og:site_name" content="杨远林的个人博客">
 <meta property="og:description" content="1. 修改hdfs-site.xml执行命令： 1vi &#x2F;software&#x2F;hadoop&#x2F;etc&#x2F;hadoop&#x2F;hdfs-site.xml  在hdfs-site.xml中添加： 1234&lt;property&gt;  &lt;name&gt;dfs.namenode.secondary.http-address&lt;&#x2F;name&gt;  &lt;value&gt;s138:9868&lt;">
 <meta property="og:locale" content="zh_CN">
@@ -38,7 +38,7 @@
 <meta property="article:tag" content="云计算">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://ylyang999.gitee.io/2019/09/27/hadoop-%E5%8D%95%E7%8B%AC%E9%85%8D%E7%BD%AE%E8%BE%85%E5%8A%A9%E5%90%8D%E7%A7%B0%E8%8A%82%E7%82%B9-SecondaryNameNode/">
+<link rel="canonical" href="https://www.ylyang.xyz/2019/09/27/hadoop-%E5%8D%95%E7%8B%AC%E9%85%8D%E7%BD%AE%E8%BE%85%E5%8A%A9%E5%90%8D%E7%A7%B0%E8%8A%82%E7%82%B9-SecondaryNameNode/">
 
 
 <script class="page-configurations">
@@ -199,7 +199,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">67</span>
+          <span class="site-state-item-count">68</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -249,7 +249,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://ylyang999.gitee.io/2019/09/27/hadoop-%E5%8D%95%E7%8B%AC%E9%85%8D%E7%BD%AE%E8%BE%85%E5%8A%A9%E5%90%8D%E7%A7%B0%E8%8A%82%E7%82%B9-SecondaryNameNode/">
+    <link itemprop="mainEntityOfPage" href="https://www.ylyang.xyz/2019/09/27/hadoop-%E5%8D%95%E7%8B%AC%E9%85%8D%E7%BD%AE%E8%BE%85%E5%8A%A9%E5%90%8D%E7%A7%B0%E8%8A%82%E7%82%B9-SecondaryNameNode/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
