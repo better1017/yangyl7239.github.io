@@ -30,7 +30,7 @@
 <meta property="og:description" content="类似问题：remove duplicates from sorted list（移除有序链表中的重复元素）  题目描述Follow up for “Remove Duplicates”:What if duplicates are allowed at most twice?For example,Given sorted array A &#x3D;[1,1,1,2,2,3],Your function">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2019-01-10T12:18:33.000Z">
-<meta property="article:modified_time" content="2019-01-10T12:20:14.000Z">
+<meta property="article:modified_time" content="2020-07-16T12:46:53.611Z">
 <meta property="article:author" content="ylyang">
 <meta property="article:tag" content="C&#x2F;C++">
 <meta property="article:tag" content="算法">
@@ -118,7 +118,7 @@
       <h1 class="site-title">杨远林的个人博客</h1>
       <i class="logo-line"></i>
     </a>
-      <p class="site-subtitle" itemprop="description">ylyang's blogs</p>
+      <p class="site-subtitle" itemprop="description">ylyang's blog</p>
   </div>
 
   <div class="site-nav-right">
@@ -199,14 +199,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">68</span>
+          <span class="site-state-item-count">67</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -271,10 +271,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2019-01-10 20:18:33 / 修改时间：20:20:14" itemprop="dateCreated datePublished" datetime="2019-01-10T20:18:33+08:00">2019-01-10</time>
+              <time title="创建时间：2019-01-10 20:18:33" itemprop="dateCreated datePublished" datetime="2019-01-10T20:18:33+08:00">2019-01-10</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-16 20:46:53" itemprop="dateModified" datetime="2020-07-16T20:46:53+08:00">2020-07-16</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -300,6 +306,8 @@
 <p>类似问题：<a href="https://yangyuanlin.club/2019/01/01/remove-duplicates-from-sorted-list%EF%BC%88%E7%A7%BB%E9%99%A4%E6%9C%89%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0%EF%BC%89/" target="_blank" rel="noopener">remove duplicates from sorted list（移除有序链表中的重复元素）</a></p>
 </blockquote>
 <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>Follow up for “Remove Duplicates”:<br>What if duplicates are allowed at most <em>twice</em>?<br>For example,<br>Given sorted array A =[1,1,1,2,2,3],<br>Your function should return length =5, and A is now[1,1,2,2,3].</p>
+<a id="more"></a>
+
 <h1 id="题目大意"><a href="#题目大意" class="headerlink" title="题目大意"></a>题目大意</h1><p>从重复数组中移除重复元素；<br>允许最多重复两次。</p>
 <h1 id="方法一"><a href="#方法一" class="headerlink" title="方法一"></a>方法一</h1><h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>常规版本。<br>设置index索引值，索引数组序号，然后对数组进行遍历；<br>当有前中后三个连续重复元素时，就执行continue；<br>否则就把当前值赋值给index下标，并且把index加一。</p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">removeDuplicates</span><span class="params">(<span class="keyword">int</span> A[], <span class="keyword">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(n&lt;=<span class="number">2</span>)<span class="keyword">return</span> n;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">int</span> index = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;n; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 当有三个连续相等的情况</span></span><br><span class="line">        <span class="keyword">if</span>(i&gt;<span class="number">0</span>&amp;&amp;i&lt;n<span class="number">-1</span> &amp;&amp; A[i]==A[i+<span class="number">1</span>] &amp;&amp; A[i]==A[i<span class="number">-1</span>])</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        A[index++] = A[i];</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> index;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a[] = &#123;<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">3</span>&#125;;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">int</span> n = removeDuplicates(a, <span class="number">8</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;n; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;a[i]&lt;&lt;<span class="string">' '</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>

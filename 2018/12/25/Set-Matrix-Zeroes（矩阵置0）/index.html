@@ -31,13 +31,13 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/15108298-8958d36d719282fc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="article:published_time" content="2018-12-25T09:22:47.000Z">
-<meta property="article:modified_time" content="2018-12-28T09:05:18.000Z">
+<meta property="article:modified_time" content="2020-07-16T12:49:09.000Z">
 <meta property="article:author" content="ylyang">
-<meta property="article:tag" content="vector">
 <meta property="article:tag" content="C&#x2F;C++">
 <meta property="article:tag" content="算法">
 <meta property="article:tag" content="leetcode">
 <meta property="article:tag" content="数据结构">
+<meta property="article:tag" content="vector">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/15108298-8958d36d719282fc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
@@ -121,7 +121,7 @@
       <h1 class="site-title">杨远林的个人博客</h1>
       <i class="logo-line"></i>
     </a>
-      <p class="site-subtitle" itemprop="description">ylyang's blogs</p>
+      <p class="site-subtitle" itemprop="description">ylyang's blog</p>
   </div>
 
   <div class="site-nav-right">
@@ -202,14 +202,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">68</span>
+          <span class="site-state-item-count">67</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -282,7 +282,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2018-12-28 17:05:18" itemprop="dateModified" datetime="2018-12-28T17:05:18+08:00">2018-12-28</time>
+                <time title="修改时间：2020-07-16 20:49:09" itemprop="dateModified" datetime="2020-07-16T20:49:09+08:00">2020-07-16</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -309,6 +309,8 @@
 <li>Set Matrix Zeroes</li>
 </ul>
 <p>Given a <em>m</em> x <em>n</em> matrix, if an element is 0, set its entire row and column to 0. Do it in place.<br><strong>Follow up:</strong><br>Did you use extra space?<br>A straight forward solution using O(<em>m</em> <em>n</em>) space is probably a bad idea.<br>A simple improvement uses O(<em>m</em> + <em>n</em>) space, but still not the best solution.<br>Could you devise a constant space solution?</p>
+<a id="more"></a>
+
 <h1 id="题目大意"><a href="#题目大意" class="headerlink" title="题目大意"></a>题目大意</h1><p>题目的意思就是，给定一个矩阵，如果矩阵中某个位置的数是0，就把该位置所在的行和列全部置为0。</p>
 <h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><p>使用第一行和第一列来记录行和列的置0情况（例如matrix[2][3]是0，就把matrix[0][3]和matrix[2][0]置为0）。</p>
 <p>首先，遍历第一行和第一列，看是否原先就有0，用两个bool变量来标识，如果原先就有0，最后要把有0的第一行或者第一列置为0。</p>
@@ -332,11 +334,11 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/vector/" rel="tag"># vector</a>
               <a href="/tags/C-C/" rel="tag"># C/C++</a>
               <a href="/tags/%E7%AE%97%E6%B3%95/" rel="tag"># 算法</a>
               <a href="/tags/leetcode/" rel="tag"># leetcode</a>
               <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag"># 数据结构</a>
+              <a href="/tags/vector/" rel="tag"># vector</a>
           </div>
 
         
