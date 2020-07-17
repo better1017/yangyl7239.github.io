@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/logo.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/logo.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/logo.ico">
+  <link rel="mask-icon" href="/images/logo.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  
+  <link rel="stylesheet" href="/lib/animate-css/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ylyang.xyz","root":"/","scheme":"Gemini","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}}};
+  </script>
+
+  <meta name="description" content="CAS底层原理概念CAS的全称是Compare-And-Swap，它是CPU并发原语 它的功能是判断内存某个位置的值是否为预期值，如果是则更改为新的值，这个过程是原子的 CAS并发原语体现在Java语言中就是sun.misc.Unsafe类的各个方法。调用UnSafe类中的CAS方法，JVM会帮我们实现出CAS汇编指令，这是一种完全依赖于硬件的功能，通过它实现了原子操作，再次强调，由于CAS是一种">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CAS底层原理分析">
+<meta property="og:url" content="ylyang.xyz/2019/10/01/CAS%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/index.html">
+<meta property="og:site_name" content="杨远林的个人博客">
+<meta property="og:description" content="CAS底层原理概念CAS的全称是Compare-And-Swap，它是CPU并发原语 它的功能是判断内存某个位置的值是否为预期值，如果是则更改为新的值，这个过程是原子的 CAS并发原语体现在Java语言中就是sun.misc.Unsafe类的各个方法。调用UnSafe类中的CAS方法，JVM会帮我们实现出CAS汇编指令，这是一种完全依赖于硬件的功能，通过它实现了原子操作，再次强调，由于CAS是一种">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="/01/CAS%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/image-20200310201327734.png">
+<meta property="og:image" content="/01/CAS%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/image-20200310201311367.png">
+<meta property="og:image" content="/01/CAS%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/image-20200310203030720.png">
+<meta property="og:image" content="/01/CAS%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/image-20200310203350122.png">
+<meta property="og:image" content="/01/CAS%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/image-20200310203030720.png">
+<meta property="og:image" content="/01/CAS%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/image-20200310210701761.png">
+<meta property="article:published_time" content="2019-10-01T03:23:52.000Z">
+<meta property="article:modified_time" content="2020-07-17T03:37:13.441Z">
+<meta property="article:author" content="ylyang">
+<meta property="article:tag" content="CAS">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="自旋锁">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="/01/CAS%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/image-20200310201327734.png">
+
+<link rel="canonical" href="ylyang.xyz/2019/10/01/CAS%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>CAS底层原理分析 | 杨远林的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <main class="main">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+        <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line toggle-line-first"></span>
+        <span class="toggle-line toggle-line-middle"></span>
+        <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">杨远林的个人博客</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">ylyang's blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#CAS底层原理"><span class="nav-number">1.</span> <span class="nav-text">CAS底层原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#概念"><span class="nav-number">1.1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码使用"><span class="nav-number">1.2.</span> <span class="nav-text">代码使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CAS底层原理-1"><span class="nav-number">1.3.</span> <span class="nav-text">CAS底层原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、unsafe类"><span class="nav-number">1.3.1.</span> <span class="nav-text">1、unsafe类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、变量valueOffset"><span class="nav-number">1.3.2.</span> <span class="nav-text">2、变量valueOffset</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3、变量value用volatile修饰"><span class="nav-number">1.3.3.</span> <span class="nav-text">3、变量value用volatile修饰</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#底层汇编"><span class="nav-number">1.4.</span> <span class="nav-text">底层汇编</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CAS缺点"><span class="nav-number">1.5.</span> <span class="nav-text">CAS缺点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ABA问题"><span class="nav-number">1.6.</span> <span class="nav-text">ABA问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">1.7.</span> <span class="nav-text">总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CAS"><span class="nav-number">1.7.1.</span> <span class="nav-text">CAS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CAS应用"><span class="nav-number">1.7.2.</span> <span class="nav-text">CAS应用</span></a></li></ol></li></ol></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ylyang</p>
+  <div class="site-description" itemprop="description">云山苍苍，江水泱泱；先生之风，山高水长。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">72</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">67</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </section>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </header>
+
+      
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div id="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+      <div class="main-inner">
+        
+
+        <div class="content post posts-expand">
+          
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/10/01/CAS%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ylyang">
+      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="杨远林的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CAS底层原理分析
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-10-01 11:23:52" itemprop="dateCreated datePublished" datetime="2019-10-01T11:23:52+08:00">2019-10-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-17 11:37:13" itemprop="dateModified" datetime="2020-07-17T11:37:13+08:00">2020-07-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="CAS底层原理"><a href="#CAS底层原理" class="headerlink" title="CAS底层原理"></a>CAS底层原理</h1><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>CAS的全称是Compare-And-Swap，它是CPU并发原语</p>
+<p>它的功能是判断内存某个位置的值是否为预期值，如果是则更改为新的值，这个过程是原子的</p>
+<p>CAS并发原语体现在Java语言中就是sun.misc.Unsafe类的各个方法。调用UnSafe类中的CAS方法，JVM会帮我们实现出CAS汇编指令，这是一种完全依赖于硬件的功能，通过它实现了原子操作，再次强调，由于CAS是一种系统原语，原语属于操作系统用于范畴，是由若干条指令组成，用于完成某个功能的一个过程，并且原语的执行必须是连续的，在执行过程中不允许被中断，也就是说CAS是一条CPU的原子指令，不会造成所谓的数据不一致的问题，也就是说CAS是线程安全的。</p>
+<a id="more"></a>
+
+<h2 id="代码使用"><a href="#代码使用" class="headerlink" title="代码使用"></a>代码使用</h2><p>首先调用AtomicInteger创建了一个实例， 并初始化为5</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 创建一个原子类</span><br><span class="line">AtomicInteger atomicInteger &#x3D; new AtomicInteger(5);</span><br></pre></td></tr></table></figure>
+
+<p>然后调用CAS方法，企图更新成2019，这里有两个参数，一个是5，表示期望值，第二个就是我们要更新的值</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">atomicInteger.compareAndSet(5, 2019)</span><br></pre></td></tr></table></figure>
+
+<p>然后再次使用了一个方法，同样将值改成1024</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">atomicInteger.compareAndSet(5, 1024)</span><br></pre></td></tr></table></figure>
+
+<p>完整代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * CASDemo</span><br><span class="line"> *</span><br><span class="line"> * 比较并交换：compareAndSet</span><br><span class="line"> *</span><br><span class="line"> * @author: 陌溪</span><br><span class="line"> * @create: 2020-03-10-19:46</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class CASDemo &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        &#x2F;&#x2F; 创建一个原子类</span><br><span class="line">        AtomicInteger atomicInteger &#x3D; new AtomicInteger(5);</span><br><span class="line"></span><br><span class="line">        &#x2F;**</span><br><span class="line">         * 一个是期望值，一个是更新值，但期望值和原来的值相同时，才能够更改</span><br><span class="line">         * 假设三秒前，我拿的是5，也就是expect为5，然后我需要更新成 2019</span><br><span class="line">         *&#x2F;</span><br><span class="line">        System.out.println(atomicInteger.compareAndSet(5, 2019) + &quot;\t current data: &quot; + atomicInteger.get());</span><br><span class="line"></span><br><span class="line">        System.out.println(atomicInteger.compareAndSet(5, 1024) + &quot;\t current data: &quot; + atomicInteger.get());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面代码的执行结果为</p>
+<p><img src="/01/CAS%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/image-20200310201327734.png" alt="image1"></p>
+<p>这是因为我们执行第一个的时候，期望值和原本值是满足的，因此修改成功，但是第二次后，主内存的值已经修改成了2019，不满足期望值，因此返回了false，本次写入失败</p>
+<p><img src="/01/CAS%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/image-20200310201311367.png" alt="image2"></p>
+<p>这个就类似于SVN或者Git的版本号，如果没有人更改过，就能够正常提交，否者需要先将代码pull下来，合并代码后，然后提交</p>
+<h2 id="CAS底层原理-1"><a href="#CAS底层原理-1" class="headerlink" title="CAS底层原理"></a>CAS底层原理</h2><p>首先我们先看看 atomicInteger.getAndIncrement()方法的源码</p>
+<p><img src="/01/CAS%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/image-20200310203030720.png" alt="image3"></p>
+<p>从这里能够看到，底层又调用了一个unsafe类的getAndAddInt方法</p>
+<h3 id="1、unsafe类"><a href="#1、unsafe类" class="headerlink" title="1、unsafe类"></a>1、unsafe类</h3><p><img src="/01/CAS%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/image-20200310203350122.png" alt="image4"></p>
+<p>Unsafe是CAS的核心类，由于Java方法无法直接访问底层系统，需要通过本地（Native）方法来访问，Unsafe相当于一个后门，基于该类可以直接操作特定的内存数据。Unsafe类存在sun.misc包中，其内部方法操作可以像C的指针一样直接操作内存，因为Java中的CAS操作的执行依赖于Unsafe类的方法。</p>
+<p><code>注意Unsafe类的所有方法都是native修饰的，也就是说unsafe类中的方法都直接调用操作系统底层资源执行相应的任务</code></p>
+<p>为什么Atomic修饰的包装类，能够保证原子性，依靠的就是底层的unsafe类</p>
+<h3 id="2、变量valueOffset"><a href="#2、变量valueOffset" class="headerlink" title="2、变量valueOffset"></a>2、变量valueOffset</h3><p>表示该变量值在内存中的偏移地址，因为Unsafe就是根据内存偏移地址获取数据的。</p>
+<p><img src="/01/CAS%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/image-20200310203030720.png" alt="image5"></p>
+<p>从这里我们能够看到，通过valueOffset，直接通过内存地址，获取到值，然后进行加1的操作</p>
+<h3 id="3、变量value用volatile修饰"><a href="#3、变量value用volatile修饰" class="headerlink" title="3、变量value用volatile修饰"></a>3、变量value用volatile修饰</h3><p>保证了多线程之间的内存可见性</p>
+<p><img src="/01/CAS%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/image-20200310210701761.png" alt="image6"></p>
+<p>var5：就是我们从主内存中拷贝到工作内存中的值</p>
+<p>那么操作的时候，需要比较工作内存中的值，和主内存中的值进行比较</p>
+<p>假设执行 compareAndSwapInt返回false，那么就一直执行 while方法，直到期望的值和真实值一样</p>
+<ul>
+<li>val1：AtomicInteger对象本身</li>
+<li>var2：该对象值得引用地址</li>
+<li>var4：需要变动的数量</li>
+<li>var5：用var1和var2找到的内存中的真实值<ul>
+<li>用该对象当前的值与var5比较</li>
+<li>如果相同，更新var5 + var4 并返回true</li>
+<li>如果不同，继续取值然后再比较，直到更新完成</li>
+</ul>
+</li>
+</ul>
+<p>这里没有用synchronized，而用CAS，这样提高了并发性，也能够实现一致性，是因为每个线程进来后，进入的do while循环，然后不断的获取内存中的值，判断是否为最新，然后在进行更新操作。</p>
+<p>假设线程A和线程B同时执行getAndInt操作（分别跑在不同的CPU上）</p>
+<ol>
+<li>AtomicInteger里面的value原始值为3，即主内存中AtomicInteger的 value 为3，根据JMM模型，线程A和线程B各自持有一份价值为3的副本，分别存储在各自的工作内存</li>
+<li>线程A通过getIntVolatile(var1 , var2) 拿到value值3，这是线程A被挂起（该线程失去CPU执行权）</li>
+<li>线程B也通过getIntVolatile(var1, var2)方法获取到value值也是3，此时刚好线程B没有被挂起，并执行了compareAndSwapInt方法，比较内存的值也是3，成功修改内存值为4，线程B打完收工，一切OK</li>
+<li>这是线程A恢复，执行CAS方法，比较发现自己手里的数字3和主内存中的数字4不一致，说明该值已经被其它线程抢先一步修改过了，那么A线程本次修改失败，只能够重新读取后在来一遍了，也就是在执行do while</li>
+<li>线程A重新获取value值，因为变量value被volatile修饰，所以其它线程对它的修改，线程A总能够看到，线程A继续执行compareAndSwapInt进行比较替换，直到成功。</li>
+</ol>
+<p>Unsafe类 + CAS思想： 也就是自旋，自我旋转</p>
+<h2 id="底层汇编"><a href="#底层汇编" class="headerlink" title="底层汇编"></a>底层汇编</h2><p>Unsafe类中的compareAndSwapInt是一个本地方法，该方法的实现位于unsafe.cpp中</p>
+<ul>
+<li>先想办法拿到变量value在内存中的地址</li>
+<li>通过Atomic::cmpxchg实现比较替换，其中参数X是即将更新的值，参数e是原内存的值</li>
+</ul>
+<h2 id="CAS缺点"><a href="#CAS缺点" class="headerlink" title="CAS缺点"></a>CAS缺点</h2><p>CAS不加锁，保证一次性，但是需要多次比较</p>
+<ul>
+<li>循环时间长，开销大（因为执行的是do while，如果比较不成功一直在循环，最差的情况，就是某个线程一直取到的值和预期值都不一样，这样就会无限循环）</li>
+<li>只能保证一个共享变量的原子操作<ul>
+<li>当对一个共享变量执行操作时，我们可以通过循环CAS的方式来保证原子操作</li>
+<li>但是对于多个共享变量操作时，循环CAS就无法保证操作的原子性，这个时候只能用锁来保证原子性</li>
+</ul>
+</li>
+<li>引出来ABA问题？</li>
+</ul>
+<h2 id="ABA问题"><a href="#ABA问题" class="headerlink" title="ABA问题"></a>ABA问题</h2><p>。。。。。。。。。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><h3 id="CAS"><a href="#CAS" class="headerlink" title="CAS"></a>CAS</h3><p>CAS是compareAndSwap，比较当前工作内存中的值和主物理内存中的值，如果相同则执行规定操作，否者继续比较直到主内存和工作内存的值一致为止</p>
+<h3 id="CAS应用"><a href="#CAS应用" class="headerlink" title="CAS应用"></a>CAS应用</h3><p>CAS有3个操作数，内存值V，旧的预期值A，要修改的更新值B。当且仅当预期值A和内存值V相同时，将内存值V修改为B，否者什么都不做</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CAS/" rel="tag"># CAS</a>
+              <a href="/tags/Java/" rel="tag"># Java</a>
+              <a href="/tags/%E8%87%AA%E6%97%8B%E9%94%81/" rel="tag"># 自旋锁</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/09/30/Volatile%E7%9A%84%E5%BA%94%E7%94%A8%EF%BC%88DCL%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%EF%BC%89/" rel="prev" title="Volatile的应用（DCL单例模式）">
+      <i class="fa fa-chevron-left"></i> Volatile的应用（DCL单例模式）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/10/01/%E5%8E%9F%E5%AD%90%E7%B1%BBAtomicInteger%E7%9A%84ABA%E9%97%AE%E9%A2%98/" rel="next" title="原子类AtomicInteger的ABA问题">
+      原子类AtomicInteger的ABA问题 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+        </div>
+        
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ylyang</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
