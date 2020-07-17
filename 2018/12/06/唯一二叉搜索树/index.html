@@ -19,7 +19,7 @@
 
 <script class="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"ylyang.xyz","root":"/","scheme":"Gemini","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}}};
+    var CONFIG = {"hostname":"ylyang.xyz","root":"/","scheme":"Gemini","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":{"enable":true,"onlypost":false},"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}}};
   </script>
 
   <meta name="description" content="Unique Binary Search TreesGiven n, how many structurally unique BST’s (binary search trees) that store values 1…n?For example,Given n &#x3D; 3, there are a total of 5 unique BST’s.">
@@ -303,7 +303,7 @@
 
       
         <ul>
-<li>Unique Binary Search Trees<br>Given n, how many structurally unique BST’s (binary search trees) that store values 1…n?<br>For example,<br>Given n = 3, there are a total of 5 unique BST’s.<br><img src="https://upload-images.jianshu.io/upload_images/15108298-5b3b1e06cc87c577.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></li>
+<li>Unique Binary Search Trees<br>Given n, how many structurally unique BST’s (binary search trees) that store values 1…n?<br>For example,<br>Given n = 3, there are a total of 5 unique BST’s.<br><img data-src="https://upload-images.jianshu.io/upload_images/15108298-5b3b1e06cc87c577.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></li>
 <li><a id="more"></a></li>
 <li>题目大意：给定一个数字<em>n</em>，有多少个结点值为<em>1~n</em>的唯一二叉搜索树？<br>例如：给定<em>n=3</em>，共有5个二叉搜索树。</li>
 <li>思路（递归）：二叉搜索树的性质，左边的数都比根小，右边的数都比根大。二叉树的节点是从1到n，所以能确定如果根为k，则根左边的数是1到k-1，根右边的数是k+1到n。<strong>对于一个根来说，唯一二叉树的数量是其左子树的数量乘以右子树的数量</strong>。也就是说，假如有n个结点，则唯一二叉搜索树的个数为f(n) = f(0)·f(n-1) + f(1)·f(n-2) + … + f(n-1)·f(0)，意思是，当根节点为1的时候，左子树有0个，右子树有n-1个，相乘即得此时的唯一二叉树个数；当根节点为2的时候，左子树有1个，右子树有n-2个，相乘即得此时的唯一二叉树个数；以此类推，当最后根节点为n时，左子树有n-1个，右子树有0个，相乘即得此时的唯一二叉树个数。</li>
@@ -414,6 +414,7 @@
 
   
   <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
 
 <script src="/js/utils.js"></script>
 

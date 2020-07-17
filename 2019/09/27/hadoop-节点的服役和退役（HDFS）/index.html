@@ -19,7 +19,7 @@
 
 <script class="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"ylyang.xyz","root":"/","scheme":"Gemini","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}}};
+    var CONFIG = {"hostname":"ylyang.xyz","root":"/","scheme":"Gemini","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":{"enable":true,"onlypost":false},"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}}};
   </script>
 
   <meta name="description" content="1. 首先需要克隆一台主机现在我这里已经有五台虚拟机，要克隆的目标主机为CentOS7-1810_04：">
@@ -328,36 +328,36 @@
         <h2 id="1-首先需要克隆一台主机"><a href="#1-首先需要克隆一台主机" class="headerlink" title="1. 首先需要克隆一台主机"></a>1. 首先需要克隆一台主机</h2><p>现在我这里已经有五台虚拟机，要克隆的目标主机为CentOS7-1810_04：</p>
 <a id="more"></a>
 
-<p><img src="https://upload-images.jianshu.io/upload_images/15108298-69633cdb6b6b3546.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="当前状态"></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/15108298-ff8b304683346a6f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<p><img data-src="https://upload-images.jianshu.io/upload_images/15108298-69633cdb6b6b3546.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="当前状态"></p>
+<p><img data-src="https://upload-images.jianshu.io/upload_images/15108298-ff8b304683346a6f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
 <p>启动集群后webUI如下：</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/15108298-35e43e0cc74216fb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/15108298-202a912e93e344ac.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<p><img data-src="https://upload-images.jianshu.io/upload_images/15108298-35e43e0cc74216fb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<p><img data-src="https://upload-images.jianshu.io/upload_images/15108298-202a912e93e344ac.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
 <p>把要克隆的目标虚拟机关机，在VMware上选中目标主机 -&gt; 右键 -&gt; 管理 -&gt; 克隆：</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/15108298-fc03f42105d46933.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="右键 -&gt; 管理 -&gt; 克隆"></p>
+<p><img data-src="https://upload-images.jianshu.io/upload_images/15108298-fc03f42105d46933.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="右键 -&gt; 管理 -&gt; 克隆"></p>
 <p>然后下一步，选择克隆自：虚拟机中的当前状态：</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/15108298-a4a0c9f159c56224.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="克隆自虚拟机中的当前状态"></p>
+<p><img data-src="https://upload-images.jianshu.io/upload_images/15108298-a4a0c9f159c56224.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="克隆自虚拟机中的当前状态"></p>
 <p>继续下一步，克隆方法选择：创建完整克隆：</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/15108298-da50bcf7d741e751.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="创建完整克隆"></p>
+<p><img data-src="https://upload-images.jianshu.io/upload_images/15108298-da50bcf7d741e751.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="创建完整克隆"></p>
 <p>继续下一步，修改虚拟机名称和位置：</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/15108298-8893efd52c0e8db2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="修改虚拟机名称和位置"></p>
+<p><img data-src="https://upload-images.jianshu.io/upload_images/15108298-8893efd52c0e8db2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="修改虚拟机名称和位置"></p>
 <p>然后选择完成，很快就克隆完了：</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/15108298-52efaffcb0c88935.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="克隆中"></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/15108298-398e66a74d055999.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="克隆完成"></p>
+<p><img data-src="https://upload-images.jianshu.io/upload_images/15108298-52efaffcb0c88935.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="克隆中"></p>
+<p><img data-src="https://upload-images.jianshu.io/upload_images/15108298-398e66a74d055999.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="克隆完成"></p>
 <p>可以看到，现在有六台虚拟机了：</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/15108298-395532d0b8272fcf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<p><img data-src="https://upload-images.jianshu.io/upload_images/15108298-395532d0b8272fcf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
 <h2 id="2-修改新主机的IP和主机名等信息"><a href="#2-修改新主机的IP和主机名等信息" class="headerlink" title="2.修改新主机的IP和主机名等信息"></a>2.修改新主机的IP和主机名等信息</h2><p>执行命令<code>sudo vi /etc/hostname</code><br>修改主机名为：s140</p>
 <p>执行命令<code>sudo vi /etc/sysconfig/network-scripts/ifcfg-ens33</code><br>修改主机IP为：192.168.11.140</p>
 <p>然后重启虚拟机<br>现在就可以用MobaXterm_Personal_11.1连接了。</p>
 <h2 id="3-复制完全分布式文件夹full为高可用文件夹ha"><a href="#3-复制完全分布式文件夹full为高可用文件夹ha" class="headerlink" title="3. 复制完全分布式文件夹full为高可用文件夹ha"></a>3. 复制完全分布式文件夹full为高可用文件夹ha</h2><p>其实这里之所以扩展到六台主机是为了给后边的高可用做铺垫，所以需要在<code>/software/hadoop/etc/</code>目录下建一个指向ha文件夹的hadoop软链接。当前<code>/software/hadoop/etc/</code>目录下是这样的：</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/15108298-413b0f77b718e628.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<p><img data-src="https://upload-images.jianshu.io/upload_images/15108298-413b0f77b718e628.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
 <p>依次执行如下命令：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">xcall.sh "cp -rf /software/hadoop/etc/full /software/hadoop/etc/ha"</span><br><span class="line">xcall.sh "rm /software/hadoop/etc/hadoop"</span><br><span class="line">xcall.sh "ln -s /software/hadoop/etc/ha /software/hadoop/etc/hadoop"</span><br><span class="line">xcall.sh "ls -al /software/hadoop/etc/"</span><br></pre></td></tr></table></figure>
 
 
 
 <p>现在/software/hadoop/etc目录下是这样的：</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/15108298-6c53da80d79b87ef.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="/software/hadoop/etc目录"><br><img src="https://upload-images.jianshu.io/upload_images/15108298-f007a0257a756049.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<p><img data-src="https://upload-images.jianshu.io/upload_images/15108298-6c53da80d79b87ef.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="/software/hadoop/etc目录"><br><img data-src="https://upload-images.jianshu.io/upload_images/15108298-f007a0257a756049.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
 <h2 id="4-新建服役节点"><a href="#4-新建服役节点" class="headerlink" title="4. 新建服役节点"></a>4. 新建服役节点</h2><p>连接建立成功了，现在开始把新节点服役到集群上，因为新主机是从以前的主机拷贝来的，所以能够进行绵密需要删除以前的信息，在s135上依次执行以下命令：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rm -rf /tmp/*</span><br><span class="line">rm -rf /software/hadoop/logs/*</span><br><span class="line">rm -rf ~/hadoop/*</span><br></pre></td></tr></table></figure>
 
@@ -375,17 +375,17 @@
 <p>在nn上刷新节点，执行命令：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hdfs dfsadmin -refreshNodes</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://upload-images.jianshu.io/upload_images/15108298-95b3a0e8005c74b1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<p><img data-src="https://upload-images.jianshu.io/upload_images/15108298-95b3a0e8005c74b1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
 <p>在/software/hadoop/etc/hadoop/works文件中添加新节点ip(主机名)</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">s135</span><br><span class="line">s136</span><br><span class="line">s137</span><br><span class="line">s138</span><br><span class="line">s139</span><br><span class="line">s140   //新添加的</span><br></pre></td></tr></table></figure>
 
 <p>分发一下hdfs-site.xml文件和works文件（保证每个主机上的配置文件一样）</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/15108298-41ed6d3e2d23e8ef.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<p><img data-src="https://upload-images.jianshu.io/upload_images/15108298-41ed6d3e2d23e8ef.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
 <p>单独启动新的节点s140中的datanode和rm</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hadoop-daemon.sh start datanode</span><br></pre></td></tr></table></figure>
-<p><img src="https://upload-images.jianshu.io/upload_images/15108298-1a01ecca17e297b4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<p><img data-src="https://upload-images.jianshu.io/upload_images/15108298-1a01ecca17e297b4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
 <p>刷新webUI，此时：</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/15108298-2fc07581e979effc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<p><img data-src="https://upload-images.jianshu.io/upload_images/15108298-2fc07581e979effc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
 <p>节点已经变成了五个，服役成功！</p>
 <h2 id="5-节点的退役"><a href="#5-节点的退役" class="headerlink" title="5. 节点的退役"></a>5. 节点的退役</h2><p>这里要把s139和s140都退役，<br>添加退役节点的ip到黑名单software/hadoop/etc/exclude.hosts，不要更新白名单：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">s139</span><br><span class="line">s140</span><br></pre></td></tr></table></figure>
@@ -396,17 +396,17 @@
 <p>刷新NN节点和NM节点</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hdfs dfsadmin -refreshNodes</span><br><span class="line">yarn rmadmin -refreshNodes</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://upload-images.jianshu.io/upload_images/15108298-fe14391298fc02c1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<p><img data-src="https://upload-images.jianshu.io/upload_images/15108298-fe14391298fc02c1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
 <p>查看webUI，节点状态在Decommisstioning</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/15108298-2cb3d2bcdc56bde9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<p><img data-src="https://upload-images.jianshu.io/upload_images/15108298-2cb3d2bcdc56bde9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
 <p>继续刷新webUI，当显示为如下：</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/15108298-741ede8a2b31c7b2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<p><img data-src="https://upload-images.jianshu.io/upload_images/15108298-741ede8a2b31c7b2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
 <p>说明s139和s140已经退役成功。<br>（此时如果想要他们重新服役，只需要在黑名单中删除并重新刷新hdfs和yarn即可）</p>
 <p>然后从白名单s135:/software/hadoop/etc/include.hosts删除已经退役的节点，并再次刷新节点：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hdfs dfsadmin -refreshNodes</span><br><span class="line">yarn rmadmin -refreshNodes</span><br></pre></td></tr></table></figure>
 
 <p>最后从works文件中删除退役节点。<br>再刷新webUI，显示如下：</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/15108298-f548f6d6ad8da0a5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<p><img data-src="https://upload-images.jianshu.io/upload_images/15108298-f548f6d6ad8da0a5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
 <p>退役成功。</p>
 
     </div>
@@ -507,6 +507,7 @@
 
   
   <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
 
 <script src="/js/utils.js"></script>
 

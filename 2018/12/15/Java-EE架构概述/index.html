@@ -19,7 +19,7 @@
 
 <script class="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"ylyang.xyz","root":"/","scheme":"Gemini","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}}};
+    var CONFIG = {"hostname":"ylyang.xyz","root":"/","scheme":"Gemini","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":{"enable":true,"onlypost":false},"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}}};
   </script>
 
   <meta name="description" content="主要内容 分布式多层应用 Java EE容器 Web Service支持 打包应用 开发角色 Java EE APIs">
@@ -335,7 +335,7 @@
 <li>软件厂商和客户都能自由地选择符合其需求的产品和组件<h1 id="分布式多层应用"><a href="#分布式多层应用" class="headerlink" title="分布式多层应用"></a>分布式多层应用</h1></li>
 </ul>
 </li>
-<li>应用逻辑按照功能分成若干组件，组成Java EE应用的各种应用组件按照多层Java EE环境中的层次结构，安装在不同的机器上。<br><img src="https://upload-images.jianshu.io/upload_images/15108298-37ecf42449e6059d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></li>
+<li>应用逻辑按照功能分成若干组件，组成Java EE应用的各种应用组件按照多层Java EE环境中的层次结构，安装在不同的机器上。<br><img data-src="https://upload-images.jianshu.io/upload_images/15108298-37ecf42449e6059d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></li>
 <li>安全<ul>
 <li>在每个应用中使用平台无关的安全策略</li>
 <li>允许在部署时定义安全约束</li>
@@ -371,7 +371,7 @@
 <li>瘦客户端可提升应用的可分布性、可部署性和可管理性，而富客户端可获得良好的用户体验。</li>
 </ul>
 </li>
-<li>服务器通信<br><img src="https://upload-images.jianshu.io/upload_images/15108298-1bfc26eb24a759c9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></li>
+<li>服务器通信<br><img data-src="https://upload-images.jianshu.io/upload_images/15108298-1bfc26eb24a759c9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></li>
 <li>Web组件<ul>
 <li>Servlet<ul>
 <li>Servlets are Java programming language classes that<br>dynamically process requests and construct responses.</li>
@@ -394,7 +394,7 @@
 </ul>
 </li>
 <li>Message-driven beans<ul>
-<li>A message-driven bean combines features of a session bean and a Java Message Service (JMS) message listener, allowing a business component to receive JMS messages asynchronously.<br><img src="https://upload-images.jianshu.io/upload_images/15108298-8709606188619ff9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></li>
+<li>A message-driven bean combines features of a session bean and a Java Message Service (JMS) message listener, allowing a business component to receive JMS messages asynchronously.<br><img data-src="https://upload-images.jianshu.io/upload_images/15108298-8709606188619ff9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></li>
 </ul>
 </li>
 </ul>
@@ -446,7 +446,7 @@
 </li>
 </ul>
 </li>
-<li>Java EE服务器和容器<br><img src="https://upload-images.jianshu.io/upload_images/15108298-b7c62b327f3b0df3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt><h1 id="对Web-services的支持"><a href="#对Web-services的支持" class="headerlink" title="对Web services的支持"></a>对Web services的支持</h1></li>
+<li>Java EE服务器和容器<br><img data-src="https://upload-images.jianshu.io/upload_images/15108298-b7c62b327f3b0df3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt><h1 id="对Web-services的支持"><a href="#对Web-services的支持" class="headerlink" title="对Web services的支持"></a>对Web services的支持</h1></li>
 <li>Web services是基于Web的企业应用，它使用开放的、基于XML的标准和传输协议与调用它的客户端进行数据交换</li>
 <li>XML: 跨平台、可扩展、基于文本的描述数据的标准。<ul>
 <li>自定义标签（tag）</li>
@@ -471,7 +471,7 @@
 <li>Java EE模块</li>
 <li>部署描述符: 描述应用、模块或组件的部署设置<ul>
 <li>Java EE部署描述符</li>
-<li>运行时部署描述符<br>——应用服务器特定<br><img src="https://upload-images.jianshu.io/upload_images/15108298-8b67802de7333e93.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></li>
+<li>运行时部署描述符<br>——应用服务器特定<br><img data-src="https://upload-images.jianshu.io/upload_images/15108298-8b67802de7333e93.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></li>
 </ul>
 </li>
 </ul>
@@ -490,7 +490,7 @@
 </ul>
 </li>
 <li>资源适配器模块<ul>
-<li>Java interface, class, native libraries, and other documentation + 资源适配器部署描述符 → .rar<br><img src="https://upload-images.jianshu.io/upload_images/15108298-b66c1249343a472f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt><h1 id="开发角色"><a href="#开发角色" class="headerlink" title="开发角色"></a>开发角色</h1></li>
+<li>Java interface, class, native libraries, and other documentation + 资源适配器部署描述符 → .rar<br><img data-src="https://upload-images.jianshu.io/upload_images/15108298-b66c1249343a472f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt><h1 id="开发角色"><a href="#开发角色" class="headerlink" title="开发角色"></a>开发角色</h1></li>
 </ul>
 </li>
 </ul>
@@ -621,7 +621,7 @@
 </ul>
 </li>
 <li>Java Authentication and Authorization Service (JAAS)<ul>
-<li>鉴别和授权特定用户或用户组运行Java EE应用<h1 id="Java-EE-APIs-Example"><a href="#Java-EE-APIs-Example" class="headerlink" title="Java EE APIs Example"></a>Java EE APIs Example</h1><img src="https://upload-images.jianshu.io/upload_images/15108298-bfa4611efdaba42a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></li>
+<li>鉴别和授权特定用户或用户组运行Java EE应用<h1 id="Java-EE-APIs-Example"><a href="#Java-EE-APIs-Example" class="headerlink" title="Java EE APIs Example"></a>Java EE APIs Example</h1><img data-src="https://upload-images.jianshu.io/upload_images/15108298-bfa4611efdaba42a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></li>
 </ul>
 </li>
 </ul>
@@ -723,6 +723,7 @@
 
   
   <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
 
 <script src="/js/utils.js"></script>
 

@@ -19,7 +19,7 @@
 
 <script class="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"ylyang.xyz","root":"/","scheme":"Gemini","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}}};
+    var CONFIG = {"hostname":"ylyang.xyz","root":"/","scheme":"Gemini","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":{"enable":true,"onlypost":false},"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}}};
   </script>
 
   <meta name="description" content="Volatile不保证原子性前言通过前面对JMM的介绍，我们知道，各个线程对主内存中共享变量的操作都是各个线程各自拷贝到自己的工作内存进行操作后在写回到主内存中的。 这就可能存在一个线程AAA修改了共享变量X的值，但是还未写入主内存时，另外一个线程BBB又对主内存中同一共享变量X进行操作，但此时A线程工作内存中共享变量X对线程B来说是不可见，这种工作内存与主内存同步延迟现象就造成了可见性问题。">
@@ -29,14 +29,14 @@
 <meta property="og:site_name" content="杨远林的个人博客">
 <meta property="og:description" content="Volatile不保证原子性前言通过前面对JMM的介绍，我们知道，各个线程对主内存中共享变量的操作都是各个线程各自拷贝到自己的工作内存进行操作后在写回到主内存中的。 这就可能存在一个线程AAA修改了共享变量X的值，但是还未写入主内存时，另外一个线程BBB又对主内存中同一共享变量X进行操作，但此时A线程工作内存中共享变量X对线程B来说是不可见，这种工作内存与主内存同步延迟现象就造成了可见性问题。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="/29/%E5%AF%B9Volatile%E4%B8%8D%E4%BF%9D%E8%AF%81%E5%8E%9F%E5%AD%90%E6%80%A7%E8%BF%9B%E8%A1%8C%E5%88%86%E6%9E%90/image-20200309172900462.png">
-<meta property="og:image" content="/29/%E5%AF%B9Volatile%E4%B8%8D%E4%BF%9D%E8%AF%81%E5%8E%9F%E5%AD%90%E6%80%A7%E8%BF%9B%E8%A1%8C%E5%88%86%E6%9E%90/image-20200309172919295.png">
-<meta property="og:image" content="/29/%E5%AF%B9Volatile%E4%B8%8D%E4%BF%9D%E8%AF%81%E5%8E%9F%E5%AD%90%E6%80%A7%E8%BF%9B%E8%A1%8C%E5%88%86%E6%9E%90/image-20200309172929820.png">
-<meta property="og:image" content="/29/%E5%AF%B9Volatile%E4%B8%8D%E4%BF%9D%E8%AF%81%E5%8E%9F%E5%AD%90%E6%80%A7%E8%BF%9B%E8%A1%8C%E5%88%86%E6%9E%90/image-20200309174220675.png">
-<meta property="og:image" content="/29/%E5%AF%B9Volatile%E4%B8%8D%E4%BF%9D%E8%AF%81%E5%8E%9F%E5%AD%90%E6%80%A7%E8%BF%9B%E8%A1%8C%E5%88%86%E6%9E%90/image-20200309183026329.png">
-<meta property="og:image" content="/29/%E5%AF%B9Volatile%E4%B8%8D%E4%BF%9D%E8%AF%81%E5%8E%9F%E5%AD%90%E6%80%A7%E8%BF%9B%E8%A1%8C%E5%88%86%E6%9E%90/image-20200309183115613.png">
-<meta property="og:image" content="/29/%E5%AF%B9Volatile%E4%B8%8D%E4%BF%9D%E8%AF%81%E5%8E%9F%E5%AD%90%E6%80%A7%E8%BF%9B%E8%A1%8C%E5%88%86%E6%9E%90/image-20200309173315294.png">
-<meta property="og:image" content="/29/%E5%AF%B9Volatile%E4%B8%8D%E4%BF%9D%E8%AF%81%E5%8E%9F%E5%AD%90%E6%80%A7%E8%BF%9B%E8%A1%8C%E5%88%86%E6%9E%90/image-20200309205242622.png">
+<meta property="og:image" content="ylyang.xyz/2019/09/29/%E5%AF%B9Volatile%E4%B8%8D%E4%BF%9D%E8%AF%81%E5%8E%9F%E5%AD%90%E6%80%A7%E8%BF%9B%E8%A1%8C%E5%88%86%E6%9E%90/image-20200309172900462.png">
+<meta property="og:image" content="ylyang.xyz/2019/09/29/%E5%AF%B9Volatile%E4%B8%8D%E4%BF%9D%E8%AF%81%E5%8E%9F%E5%AD%90%E6%80%A7%E8%BF%9B%E8%A1%8C%E5%88%86%E6%9E%90/image-20200309172919295.png">
+<meta property="og:image" content="ylyang.xyz/2019/09/29/%E5%AF%B9Volatile%E4%B8%8D%E4%BF%9D%E8%AF%81%E5%8E%9F%E5%AD%90%E6%80%A7%E8%BF%9B%E8%A1%8C%E5%88%86%E6%9E%90/image-20200309172929820.png">
+<meta property="og:image" content="ylyang.xyz/2019/09/29/%E5%AF%B9Volatile%E4%B8%8D%E4%BF%9D%E8%AF%81%E5%8E%9F%E5%AD%90%E6%80%A7%E8%BF%9B%E8%A1%8C%E5%88%86%E6%9E%90/image-20200309174220675.png">
+<meta property="og:image" content="ylyang.xyz/2019/09/29/%E5%AF%B9Volatile%E4%B8%8D%E4%BF%9D%E8%AF%81%E5%8E%9F%E5%AD%90%E6%80%A7%E8%BF%9B%E8%A1%8C%E5%88%86%E6%9E%90/image-20200309183026329.png">
+<meta property="og:image" content="ylyang.xyz/2019/09/29/%E5%AF%B9Volatile%E4%B8%8D%E4%BF%9D%E8%AF%81%E5%8E%9F%E5%AD%90%E6%80%A7%E8%BF%9B%E8%A1%8C%E5%88%86%E6%9E%90/image-20200309183115613.png">
+<meta property="og:image" content="ylyang.xyz/2019/09/29/%E5%AF%B9Volatile%E4%B8%8D%E4%BF%9D%E8%AF%81%E5%8E%9F%E5%AD%90%E6%80%A7%E8%BF%9B%E8%A1%8C%E5%88%86%E6%9E%90/image-20200309173315294.png">
+<meta property="og:image" content="ylyang.xyz/2019/09/29/%E5%AF%B9Volatile%E4%B8%8D%E4%BF%9D%E8%AF%81%E5%8E%9F%E5%AD%90%E6%80%A7%E8%BF%9B%E8%A1%8C%E5%88%86%E6%9E%90/image-20200309205242622.png">
 <meta property="article:published_time" content="2019-09-29T02:39:43.000Z">
 <meta property="article:modified_time" content="2020-07-17T03:09:23.216Z">
 <meta property="article:author" content="ylyang">
@@ -45,7 +45,7 @@
 <meta property="article:tag" content="JMM">
 <meta property="article:tag" content="Volatile">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="/29/%E5%AF%B9Volatile%E4%B8%8D%E4%BF%9D%E8%AF%81%E5%8E%9F%E5%AD%90%E6%80%A7%E8%BF%9B%E8%A1%8C%E5%88%86%E6%9E%90/image-20200309172900462.png">
+<meta name="twitter:image" content="ylyang.xyz/2019/09/29/%E5%AF%B9Volatile%E4%B8%8D%E4%BF%9D%E8%AF%81%E5%8E%9F%E5%AD%90%E6%80%A7%E8%BF%9B%E8%A1%8C%E5%88%86%E6%9E%90/image-20200309172900462.png">
 
 <link rel="canonical" href="ylyang.xyz/2019/09/29/%E5%AF%B9Volatile%E4%B8%8D%E4%BF%9D%E8%AF%81%E5%8E%9F%E5%AD%90%E6%80%A7%E8%BF%9B%E8%A1%8C%E5%88%86%E6%9E%90/">
 
@@ -330,12 +330,12 @@
 
 <p>最终结果我们会发现，number输出的值并没有20000，而且是每次运行的结果都不一致的，这说明了volatile修饰的变量不保证原子性</p>
 <p>第一次：</p>
-<p><img src="/29/%E5%AF%B9Volatile%E4%B8%8D%E4%BF%9D%E8%AF%81%E5%8E%9F%E5%AD%90%E6%80%A7%E8%BF%9B%E8%A1%8C%E5%88%86%E6%9E%90/image-20200309172900462.png" alt="image1"></p>
+<p><img data-src="image-20200309172900462.png" alt="image1"></p>
 <p>第二次：</p>
-<p><img src="/29/%E5%AF%B9Volatile%E4%B8%8D%E4%BF%9D%E8%AF%81%E5%8E%9F%E5%AD%90%E6%80%A7%E8%BF%9B%E8%A1%8C%E5%88%86%E6%9E%90/image-20200309172919295.png" alt="image2"></p>
+<p><img data-src="image-20200309172919295.png" alt="image2"></p>
 <p>第三次：</p>
-<p><img src="/29/%E5%AF%B9Volatile%E4%B8%8D%E4%BF%9D%E8%AF%81%E5%8E%9F%E5%AD%90%E6%80%A7%E8%BF%9B%E8%A1%8C%E5%88%86%E6%9E%90/image-20200309172929820.png" alt="image3"></p>
-<h2 id="为什么出现数值丢失"><a href="#为什么出现数值丢失" class="headerlink" title="为什么出现数值丢失"></a>为什么出现数值丢失</h2><p><img src="/29/%E5%AF%B9Volatile%E4%B8%8D%E4%BF%9D%E8%AF%81%E5%8E%9F%E5%AD%90%E6%80%A7%E8%BF%9B%E8%A1%8C%E5%88%86%E6%9E%90/image-20200309174220675.png" alt="image4"></p>
+<p><img data-src="image-20200309172929820.png" alt="image3"></p>
+<h2 id="为什么出现数值丢失"><a href="#为什么出现数值丢失" class="headerlink" title="为什么出现数值丢失"></a>为什么出现数值丢失</h2><p><img data-src="image-20200309174220675.png" alt="image4"></p>
 <p>各自线程在写入主内存的时候，出现了数据的丢失，而引起的数值缺失的问题</p>
 <p>下面我们将一个简单的number++操作，转换为字节码文件一探究竟</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public class T1 &#123;</span><br><span class="line">    volatile int n &#x3D; 0;</span><br><span class="line">    public void add() &#123;</span><br><span class="line">        n++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -345,9 +345,9 @@
 
 <p>这里查看字节码的操作，是用到了IDEA的javap命令</p>
 <p>我们首先，使用IDEA提供的External Tools，来扩展javap命令</p>
-<p><img src="/29/%E5%AF%B9Volatile%E4%B8%8D%E4%BF%9D%E8%AF%81%E5%8E%9F%E5%AD%90%E6%80%A7%E8%BF%9B%E8%A1%8C%E5%88%86%E6%9E%90/image-20200309183026329.png" alt="image5"></p>
+<p><img data-src="image-20200309183026329.png" alt="image5"></p>
 <p>完成上述操作后，我们在需要查看字节码的文件下，右键选择 External Tools即可</p>
-<p><img src="/29/%E5%AF%B9Volatile%E4%B8%8D%E4%BF%9D%E8%AF%81%E5%8E%9F%E5%AD%90%E6%80%A7%E8%BF%9B%E8%A1%8C%E5%88%86%E6%9E%90/image-20200309183115613.png" alt="image8"></p>
+<p><img data-src="image-20200309183115613.png" alt="image8"></p>
 <p>如果出现了找不到指定类，那是因为我们创建的是spring boot的maven项目，我们之前需要执行mvn package命令，进行打包操作，将其编译成class文件</p>
 <p>移动到底部，有一份字节码指令对照表，方便我们进行阅读</p>
 <p>下面我们就针对 add() 这个方法的字节码文件进行分析</p>
@@ -367,7 +367,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public synchronized void addPlusPlus() &#123;</span><br><span class="line">    number ++;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>运行结果：</p>
-<p><img src="/29/%E5%AF%B9Volatile%E4%B8%8D%E4%BF%9D%E8%AF%81%E5%8E%9F%E5%AD%90%E6%80%A7%E8%BF%9B%E8%A1%8C%E5%88%86%E6%9E%90/image-20200309173315294.png" alt="image6"></p>
+<p><img data-src="image-20200309173315294.png" alt="image6"></p>
 <p>我们能够发现引入synchronized关键字后，保证了该方法每次只能够一个线程进行访问和操作，最终输出的结果也就为20000</p>
 <h2 id="其它解决方法"><a href="#其它解决方法" class="headerlink" title="其它解决方法"></a>其它解决方法</h2><p>上面的方法引入synchronized，虽然能够保证原子性，但是为了解决number++，而引入重量级的同步机制，有种 杀鸡焉用牛刀</p>
 <p>除了引用synchronized关键字外，还可以使用JUC下面的原子包装类，即刚刚的int类型的number，可以使用AtomicInteger来代替</p>
@@ -380,7 +380,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 假设volatile保证原子性，那么输出的值应该为：  20 * 1000 &#x3D; 20000</span><br><span class="line">System.out.println(Thread.currentThread().getName() + &quot;\t finally number value: &quot; + myData.number);</span><br><span class="line">System.out.println(Thread.currentThread().getName() + &quot;\t finally atomicNumber value: &quot; + myData.atomicInteger);</span><br></pre></td></tr></table></figure>
 
 <p>下面的结果，一个是引入synchronized，一个是使用了原子包装类AtomicInteger</p>
-<p><img src="/29/%E5%AF%B9Volatile%E4%B8%8D%E4%BF%9D%E8%AF%81%E5%8E%9F%E5%AD%90%E6%80%A7%E8%BF%9B%E8%A1%8C%E5%88%86%E6%9E%90/image-20200309205242622.png" alt="image7"></p>
+<p><img data-src="image-20200309205242622.png" alt="image7"></p>
 <h2 id="字节码指令表"><a href="#字节码指令表" class="headerlink" title="字节码指令表"></a>字节码指令表</h2><p>为了方便阅读JVM字节码文件，我从网上找了一份字节码指令表</p>
 <p>引用：<a href="https://segmentfault.com/a/1190000008722128" target="_blank" rel="noopener">https://segmentfault.com/a/1190000008722128</a></p>
 <table>
@@ -1501,6 +1501,7 @@
 
   
   <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
 
 <script src="/js/utils.js"></script>
 

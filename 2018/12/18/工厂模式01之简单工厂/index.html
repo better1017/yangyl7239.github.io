@@ -19,7 +19,7 @@
 
 <script class="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"ylyang.xyz","root":"/","scheme":"Gemini","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}}};
+    var CONFIG = {"hostname":"ylyang.xyz","root":"/","scheme":"Gemini","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":{"enable":true,"onlypost":false},"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}}};
   </script>
 
   <meta name="description" content="概念简单工厂可以理解为，定义一个工厂类，根据传入的参数不同而返回不同的实例，这些实例通常有共同的父类。虽然简单工厂经常会被使用，但是并不能算作是一种设计模式，反而更像是一种编程习惯。">
@@ -310,14 +310,14 @@
 
 <h1 id="提出问题"><a href="#提出问题" class="headerlink" title="提出问题"></a>提出问题</h1><p>当我们创建产品类对象时，会使用到<code>new</code>操作符，但是代码绑着具体类的实例会导致代码更脆弱，更缺乏弹性。<br>实例化这个活动不应该总是公开的进行。<br>否则一旦有变化或扩展，就必须重新打开这段代码进行检查和修改。<br>我们的原则是：“找出会变化的方面，把他们从不变的部分分离出来”。<br>即让我们编写的代码符合<strong>开放-关闭原则</strong>。</p>
 <h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><p>创建一个<code>factory</code>类，将创建产品类对象的代码放在<code>factory</code>类中，由<code>factory</code>类的对象专职创建产品类的对象。</p>
-<h1 id="UML图"><a href="#UML图" class="headerlink" title="UML图"></a>UML图</h1><p><img src="https://upload-images.jianshu.io/upload_images/15108298-0815838574410c6a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<h1 id="UML图"><a href="#UML图" class="headerlink" title="UML图"></a>UML图</h1><p><img data-src="https://upload-images.jianshu.io/upload_images/15108298-0815838574410c6a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
 <ul>
 <li>工厂类 : Factory</li>
 <li>抽象产品类 : Product</li>
 <li>具体产品类 : ConcreteProductA 和 ConcreteProductB</li>
 </ul>
 <h1 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h1><p>假设有一个披萨店，如果有了披萨订单，运用简单工厂处理披萨订单。</p>
-<h2 id="类图"><a href="#类图" class="headerlink" title="类图"></a>类图</h2><p><img src="https://upload-images.jianshu.io/upload_images/15108298-743f1ac2e5e3ccff.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<h2 id="类图"><a href="#类图" class="headerlink" title="类图"></a>类图</h2><p><img data-src="https://upload-images.jianshu.io/upload_images/15108298-743f1ac2e5e3ccff.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
 <h2 id="代码："><a href="#代码：" class="headerlink" title="代码："></a>代码：</h2><ul>
 <li>抽象类<code>Pizza</code></li>
 </ul>
@@ -464,6 +464,7 @@
 
   
   <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
 
 <script src="/js/utils.js"></script>
 

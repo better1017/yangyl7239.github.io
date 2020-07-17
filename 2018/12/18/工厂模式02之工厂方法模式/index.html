@@ -19,7 +19,7 @@
 
 <script class="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"ylyang.xyz","root":"/","scheme":"Gemini","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}}};
+    var CONFIG = {"hostname":"ylyang.xyz","root":"/","scheme":"Gemini","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":{"enable":true,"onlypost":false},"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}}};
   </script>
 
   <meta name="description" content="概述 简单工厂模式实现了生成产品类的代码与客户端代码分离，在工厂类中可以添加生成产品的逻辑代码。  但是简单工厂模式不符合“开放-封闭”原则。例如要加一个 新产品类，就要修改 工厂类 生成产品的逻辑代码，增加if-else判断。对于这个问题，工厂方法模式可以解决。   定义工厂方法模式 定义了一个创建对象的接口，但由子类决定要实例化的类是哪一个。工厂方法模式 让类把实例化推迟到子类。">
@@ -315,7 +315,7 @@
 <h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><p><strong>工厂方法模式</strong> 定义了一个创建对象的接口，但由子类决定要实例化的类是哪一个。<strong>工厂方法模式</strong> 让类把实例化推迟到子类。</p>
 <a id="more"></a>
 
-<h1 id="类图"><a href="#类图" class="headerlink" title="类图"></a>类图</h1><p><img src="https://upload-images.jianshu.io/upload_images/15108298-dc60439d9ec3f88a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<h1 id="类图"><a href="#类图" class="headerlink" title="类图"></a>类图</h1><p><img data-src="https://upload-images.jianshu.io/upload_images/15108298-dc60439d9ec3f88a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
 <ul>
 <li>角色</li>
 </ul>
@@ -329,11 +329,11 @@
 <h2 id="类图-1"><a href="#类图-1" class="headerlink" title="类图"></a>类图</h2><ul>
 <li>创建者类（抽象工厂类 + 具体工厂实现类）</li>
 </ul>
-<p><img src="https://upload-images.jianshu.io/upload_images/15108298-3aa7269e8be86ce7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<p><img data-src="https://upload-images.jianshu.io/upload_images/15108298-3aa7269e8be86ce7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
 <ul>
 <li>产品类（抽象产品类 + 具体产品实现类）</li>
 </ul>
-<p><img src="https://upload-images.jianshu.io/upload_images/15108298-1f7fac7818b8be0e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<p><img data-src="https://upload-images.jianshu.io/upload_images/15108298-1f7fac7818b8be0e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
 <h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><ul>
 <li>抽象工厂类<code>PizzaStore</code></li>
 </ul>
@@ -518,6 +518,7 @@
 
   
   <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
 
 <script src="/js/utils.js"></script>
 

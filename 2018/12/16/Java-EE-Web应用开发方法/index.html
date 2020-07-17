@@ -19,7 +19,7 @@
 
 <script class="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"ylyang.xyz","root":"/","scheme":"Gemini","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}}};
+    var CONFIG = {"hostname":"ylyang.xyz","root":"/","scheme":"Gemini","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":{"enable":true,"onlypost":false},"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}}};
   </script>
 
   <meta name="description" content="主要内容 B&#x2F;S编程模式简介 HTML和HTTP 动态web编程 初识Servlet &amp; JSP MVC设计模式初步讨论">
@@ -334,12 +334,12 @@
 <h1 id="B-S编程模式简介"><a href="#B-S编程模式简介" class="headerlink" title="B/S编程模式简介"></a>B/S编程模式简介</h1><ul>
 <li>Web服务器<ul>
 <li>Web服务器接收客户端的请求并将结果返回客户端</li>
-<li>结果：HTML页面、图片、文件、……<br><img src="https://upload-images.jianshu.io/upload_images/15108298-24aea5f10f6df1c9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></li>
+<li>结果：HTML页面、图片、文件、……<br><img data-src="https://upload-images.jianshu.io/upload_images/15108298-24aea5f10f6df1c9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></li>
 </ul>
 </li>
 <li>Web客户端<ul>
 <li>Web客户端可以使用户向服务器提出请求，并向用户展现请求的结果</li>
-<li>浏览器知道如何与服务器通信，并能够解释HTML代码并展现Web页。<br><img src="https://upload-images.jianshu.io/upload_images/15108298-edb09b6f852d8223.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></li>
+<li>浏览器知道如何与服务器通信，并能够解释HTML代码并展现Web页。<br><img data-src="https://upload-images.jianshu.io/upload_images/15108298-edb09b6f852d8223.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></li>
 </ul>
 </li>
 </ul>
@@ -360,7 +360,7 @@
 <li>GET<ul>
 <li>是最简单的请求，它向服务器获取一个资源并将之发回</li>
 <li>可以用HTTP GET向服务器发送少量的数据</li>
-<li>一个GET例子<br><img src="https://upload-images.jianshu.io/upload_images/15108298-09e1d03e8e3fd0c2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></li>
+<li>一个GET例子<br><img data-src="https://upload-images.jianshu.io/upload_images/15108298-09e1d03e8e3fd0c2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></li>
 </ul>
 </li>
 </ul>
@@ -369,7 +369,7 @@
 </li>
 <li>POST<ul>
 <li>向服务器请求资源，同时可以发送一些表单数据</li>
-<li>一个POST例子<br><img src="https://upload-images.jianshu.io/upload_images/15108298-fcba17ea76032e35.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></li>
+<li>一个POST例子<br><img data-src="https://upload-images.jianshu.io/upload_images/15108298-fcba17ea76032e35.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></li>
 </ul>
 </li>
 <li>发送数据用POST不用GET的理由<ul>
@@ -377,7 +377,7 @@
 <li>安全性：用GET发送的数据被附加到URL后面，任何人可以看到。不适于发送敏感数据</li>
 </ul>
 </li>
-<li>HTTP响应包括：状态码（请求是否成功）、内容类型（text/picture/HTML,etc）、内容（实际的HTML, image, etc）<br><img src="https://upload-images.jianshu.io/upload_images/15108298-0ae52b99ca4d8299.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></li>
+<li>HTTP响应包括：状态码（请求是否成功）、内容类型（text/picture/HTML,etc）、内容（实际的HTML, image, etc）<br><img data-src="https://upload-images.jianshu.io/upload_images/15108298-0ae52b99ca4d8299.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></li>
 </ul>
 <h1 id="动态web编程"><a href="#动态web编程" class="headerlink" title="动态web编程"></a>动态web编程</h1><ul>
 <li>常见的两种动态Web需求<ul>
@@ -385,13 +385,13 @@
 <li>在服务器上储存数据</li>
 </ul>
 </li>
-<li>基本原理<br><img src="https://upload-images.jianshu.io/upload_images/15108298-7c4561d9de005916.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></li>
+<li>基本原理<br><img data-src="https://upload-images.jianshu.io/upload_images/15108298-7c4561d9de005916.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></li>
 </ul>
 <h1 id="初识Servlet-amp-JSP"><a href="#初识Servlet-amp-JSP" class="headerlink" title="初识Servlet &amp; JSP"></a>初识Servlet &amp; JSP</h1><ul>
 <li>First servlet, let’s do it！<ul>
-<li>建立文件目录结构<br><img src="https://upload-images.jianshu.io/upload_images/15108298-f77049f12608dfa6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></li>
-<li>编写FirstServlet.java代码，并放到src目录中<br><img src="https://upload-images.jianshu.io/upload_images/15108298-cdd737772c582f24.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></li>
-<li>编写部署描述符文件web.xml，放在etc目录中<br><img src="https://upload-images.jianshu.io/upload_images/15108298-5ce84a6b34d39b69.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt><ul>
+<li>建立文件目录结构<br><img data-src="https://upload-images.jianshu.io/upload_images/15108298-f77049f12608dfa6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></li>
+<li>编写FirstServlet.java代码，并放到src目录中<br><img data-src="https://upload-images.jianshu.io/upload_images/15108298-cdd737772c582f24.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></li>
+<li>编写部署描述符文件web.xml，放在etc目录中<br><img data-src="https://upload-images.jianshu.io/upload_images/15108298-5ce84a6b34d39b69.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt><ul>
 <li>每个web应用都有一个部署描述符文件（DD）</li>
 <li>一个DD可以定义多个servlets</li>
 <li><servlet-name>将<servlet>元素绑定到<servlet-mapping>元素</servlet-mapping></servlet></servlet-name></li>
@@ -400,14 +400,14 @@
 </ul>
 </li>
 <li>编写部署描述符文件web.xml，放在etc目录中</li>
-<li>在tomcat目录下建立目录树<br><img src="https://upload-images.jianshu.io/upload_images/15108298-bbc91cde5db25136.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></li>
-<li>在project1目录下，编译servlet<br><img src="https://upload-images.jianshu.io/upload_images/15108298-3ac1f053fd84598e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></li>
+<li>在tomcat目录下建立目录树<br><img data-src="https://upload-images.jianshu.io/upload_images/15108298-bbc91cde5db25136.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></li>
+<li>在project1目录下，编译servlet<br><img data-src="https://upload-images.jianshu.io/upload_images/15108298-3ac1f053fd84598e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></li>
 <li>拷贝FirstServlet.class至WEB-INF/classes拷贝web.xml至WEB-INF中</li>
 <li>启动Tomcat</li>
 <li>打开浏览器到如下网址：<a href="http://localhost:8080/ch1/Serv1" target="_blank" rel="noopener">http://localhost:8080/ch1/Serv1</a></li>
 </ul>
 </li>
-<li>How to… if JSP<br><img src="https://upload-images.jianshu.io/upload_images/15108298-9c282702ab73dbb7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt><br><img src="https://upload-images.jianshu.io/upload_images/15108298-029c0a124a246f92.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></li>
+<li>How to… if JSP<br><img data-src="https://upload-images.jianshu.io/upload_images/15108298-9c282702ab73dbb7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt><br><img data-src="https://upload-images.jianshu.io/upload_images/15108298-029c0a124a246f92.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></li>
 <li>Servlet container<ul>
 <li>servlet没有main()方法，被容器控制</li>
 <li>容器将HTTP请求和响应传给servlet，并调用servlet上的方法，如doPost()或doGet()</li>
@@ -432,14 +432,14 @@
 </ul>
 </li>
 <li>JSP支持<ul>
-<li>将JSP转化成Java代码<br><img src="https://upload-images.jianshu.io/upload_images/15108298-b186998b63d9dafb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt><br><img src="https://upload-images.jianshu.io/upload_images/15108298-15386d4964402a70.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></li>
+<li>将JSP转化成Java代码<br><img data-src="https://upload-images.jianshu.io/upload_images/15108298-b186998b63d9dafb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt><br><img data-src="https://upload-images.jianshu.io/upload_images/15108298-15386d4964402a70.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
 </li>
-<li>The Code<br><img src="https://upload-images.jianshu.io/upload_images/15108298-3e2baab3b63934d3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></li>
+<li>The Code<br><img data-src="https://upload-images.jianshu.io/upload_images/15108298-3e2baab3b63934d3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></li>
 <li>容器怎样找到servlet<ul>
 <li>Servlet——狡兔三窟<ul>
 <li>客户端名：URL<br>……/register/registerMe</li>
@@ -448,7 +448,7 @@
 </ul>
 </li>
 <li>Servlet映射机制提高了应用程序的柔性和安全性！</li>
-<li>The DD<br><img src="https://upload-images.jianshu.io/upload_images/15108298-30a0ab7eb8f92dfa.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></li>
+<li>The DD<br><img data-src="https://upload-images.jianshu.io/upload_images/15108298-30a0ab7eb8f92dfa.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></li>
 <li>DD的好处<ul>
 <li>基本不需要修改经过测试的代码</li>
 <li>可以利用DD优化应用程序性能，甚至不写任何代码</li>
@@ -461,7 +461,7 @@
 </li>
 </ul>
 <h1 id="MVC设计模式初步讨论"><a href="#MVC设计模式初步讨论" class="headerlink" title="MVC设计模式初步讨论"></a>MVC设计模式初步讨论</h1><ul>
-<li>模式说明<br><img src="https://upload-images.jianshu.io/upload_images/15108298-d9b5af8edd745902.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></li>
+<li>模式说明<br><img data-src="https://upload-images.jianshu.io/upload_images/15108298-d9b5af8edd745902.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></li>
 <li>特点<ul>
 <li>MVC将业务逻辑从servlet中分离，放到模型（Model）中。模型是可复用的POJO，是业务数据（如购物车状态）和操作这些数据的方法（规则）的组合。</li>
 <li>多个视图可共享一个模型</li>
@@ -570,6 +570,7 @@
 
   
   <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
 
 <script src="/js/utils.js"></script>
 
