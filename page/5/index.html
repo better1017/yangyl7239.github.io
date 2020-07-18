@@ -139,17 +139,17 @@
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">11</span></a>
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">15</span></a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">96</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">124</span></a>
 
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">102</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">114</span></a>
 
   </li>
         <li class="menu-item menu-item-about">
@@ -201,20 +201,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">96</span>
+          <span class="site-state-item-count">124</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-count">15</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">102</span>
+        <span class="site-state-item-count">114</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -271,7 +271,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/01/11/pascals-triangle%EF%BC%88%E6%9D%A8%E8%BE%89%E4%B8%89%E8%A7%92%E3%80%81%E5%B8%95%E6%96%AF%E5%8D%A1%E4%B8%89%E8%A7%92%EF%BC%89/">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/09/26/hadoop-%E5%8D%95%E7%8B%AC%E9%85%8D%E7%BD%AE%E8%BE%85%E5%8A%A9%E5%90%8D%E7%A7%B0%E8%8A%82%E7%82%B9-SecondaryNameNode/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/tou2.jpg">
@@ -285,7 +285,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2019/01/11/pascals-triangle%EF%BC%88%E6%9D%A8%E8%BE%89%E4%B8%89%E8%A7%92%E3%80%81%E5%B8%95%E6%96%AF%E5%8D%A1%E4%B8%89%E8%A7%92%EF%BC%89/" class="post-title-link" itemprop="url">pascals triangle（杨辉三角、帕斯卡三角）</a>
+            <a href="/2019/09/26/hadoop-%E5%8D%95%E7%8B%AC%E9%85%8D%E7%BD%AE%E8%BE%85%E5%8A%A9%E5%90%8D%E7%A7%B0%E8%8A%82%E7%82%B9-SecondaryNameNode/" class="post-title-link" itemprop="url">hadoop - 单独配置辅助名称节点(SecondaryNameNode)</a>
         </h2>
 
         <div class="post-meta">
@@ -295,7 +295,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="文章创建时间：2019-01-11 17:28:25" itemprop="dateCreated datePublished" datetime="2019-01-11T17:28:25+08:00">2019-01-11</time>
+              <time title="文章创建时间：2019-09-26 21:00:09" itemprop="dateCreated datePublished" datetime="2019-09-26T21:00:09+08:00">2019-09-26</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -303,7 +303,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+                  <a href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">大数据</span></a>
                 </span>
             </span>
 
@@ -318,13 +318,14 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>Given numRows, generate the first numRows of Pascal’s triangle.<br>For example, given numRows = 5,<br>Return：</p>
-<blockquote>
-<p>[<br>[1],<br>[1,1],<br>[1,2,1],<br>[1,3,3,1],<br>[1,4,6,4,1]<br>]</p>
-</blockquote>
+          <h2 id="1-修改hdfs-site-xml"><a href="#1-修改hdfs-site-xml" class="headerlink" title="1. 修改hdfs-site.xml"></a>1. 修改hdfs-site.xml</h2><p>执行命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /software/hadoop/etc/hadoop/hdfs-site.xml</span><br></pre></td></tr></table></figure>
+
+<p>在hdfs-site.xml中添加：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;dfs.namenode.secondary.http-address&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;s138:9868&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/01/11/pascals-triangle%EF%BC%88%E6%9D%A8%E8%BE%89%E4%B8%89%E8%A7%92%E3%80%81%E5%B8%95%E6%96%AF%E5%8D%A1%E4%B8%89%E8%A7%92%EF%BC%89/#more" rel="contents">
+              <a class="btn" href="/2019/09/26/hadoop-%E5%8D%95%E7%8B%AC%E9%85%8D%E7%BD%AE%E8%BE%85%E5%8A%A9%E5%90%8D%E7%A7%B0%E8%8A%82%E7%82%B9-SecondaryNameNode/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -348,7 +349,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/01/10/remove-duplicates-from-sorted-array-ii%EF%BC%88%E4%BB%8E%E9%87%8D%E5%A4%8D%E6%95%B0%E7%BB%84%E4%B8%AD%E7%A7%BB%E9%99%A4%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0%EF%BC%89/">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/09/25/hadoop-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/tou2.jpg">
@@ -362,7 +363,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2019/01/10/remove-duplicates-from-sorted-array-ii%EF%BC%88%E4%BB%8E%E9%87%8D%E5%A4%8D%E6%95%B0%E7%BB%84%E4%B8%AD%E7%A7%BB%E9%99%A4%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0%EF%BC%89/" class="post-title-link" itemprop="url">remove duplicates from sorted array ii（从重复数组中移除重复元素）</a>
+            <a href="/2019/09/25/hadoop-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" class="post-title-link" itemprop="url">hadoop - 常用命令</a>
         </h2>
 
         <div class="post-meta">
@@ -372,7 +373,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="文章创建时间：2019-01-10 20:18:33" itemprop="dateCreated datePublished" datetime="2019-01-10T20:18:33+08:00">2019-01-10</time>
+              <time title="文章创建时间：2019-09-25 20:59:52" itemprop="dateCreated datePublished" datetime="2019-09-25T20:59:52+08:00">2019-09-25</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -380,7 +381,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+                  <a href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">大数据</span></a>
                 </span>
             </span>
 
@@ -395,13 +396,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <blockquote>
-<p>类似问题：<a href="https://yangyuanlin.club/2019/01/01/remove-duplicates-from-sorted-list%EF%BC%88%E7%A7%BB%E9%99%A4%E6%9C%89%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0%EF%BC%89/" target="_blank" rel="noopener">remove duplicates from sorted list（移除有序链表中的重复元素）</a></p>
-</blockquote>
-<h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>Follow up for “Remove Duplicates”:<br>What if duplicates are allowed at most <em>twice</em>?<br>For example,<br>Given sorted array A =[1,1,1,2,2,3],<br>Your function should return length =5, and A is now[1,1,2,2,3].</p>
+          <p>启动NameNode<br>hadoop-daemon.sh start namenode<br>hdfs –daemon start namenode<br>关闭NameNode<br>hadoop-daemon.sh stop namenode<br>hdfs –daemon stop  namenode</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/01/10/remove-duplicates-from-sorted-array-ii%EF%BC%88%E4%BB%8E%E9%87%8D%E5%A4%8D%E6%95%B0%E7%BB%84%E4%B8%AD%E7%A7%BB%E9%99%A4%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0%EF%BC%89/#more" rel="contents">
+              <a class="btn" href="/2019/09/25/hadoop-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -425,7 +423,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/01/09/plus-one%EF%BC%88%E5%8A%A0%E4%B8%80%EF%BC%89/">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/09/23/hadoop-%E8%8A%82%E7%82%B9%E7%9A%84%E6%9C%8D%E5%BD%B9%E5%92%8C%E9%80%80%E5%BD%B9%EF%BC%88HDFS%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/tou2.jpg">
@@ -439,7 +437,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2019/01/09/plus-one%EF%BC%88%E5%8A%A0%E4%B8%80%EF%BC%89/" class="post-title-link" itemprop="url">plus-one（加一）</a>
+            <a href="/2019/09/23/hadoop-%E8%8A%82%E7%82%B9%E7%9A%84%E6%9C%8D%E5%BD%B9%E5%92%8C%E9%80%80%E5%BD%B9%EF%BC%88HDFS%EF%BC%89/" class="post-title-link" itemprop="url">hadoop - 节点的服役和退役（HDFS）</a>
         </h2>
 
         <div class="post-meta">
@@ -449,7 +447,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="文章创建时间：2019-01-09 11:51:31" itemprop="dateCreated datePublished" datetime="2019-01-09T11:51:31+08:00">2019-01-09</time>
+              <time title="文章创建时间：2019-09-23 14:53:17" itemprop="dateCreated datePublished" datetime="2019-09-23T14:53:17+08:00">2019-09-23</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -457,7 +455,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+                  <a href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">大数据</span></a>
                 </span>
             </span>
 
@@ -472,11 +470,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>Given a number represented as an array of digits, plus one to the number.</p>
-<h1 id="题目大意"><a href="#题目大意" class="headerlink" title="题目大意"></a>题目大意</h1><p>用一个数组表示一个数，把这个数做加一操作。</p>
+          <h2 id="1-首先需要克隆一台主机"><a href="#1-首先需要克隆一台主机" class="headerlink" title="1. 首先需要克隆一台主机"></a>1. 首先需要克隆一台主机</h2><p>现在我这里已经有五台虚拟机，要克隆的目标主机为CentOS7-1810_04：</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/01/09/plus-one%EF%BC%88%E5%8A%A0%E4%B8%80%EF%BC%89/#more" rel="contents">
+              <a class="btn" href="/2019/09/23/hadoop-%E8%8A%82%E7%82%B9%E7%9A%84%E6%9C%8D%E5%BD%B9%E5%92%8C%E9%80%80%E5%BD%B9%EF%BC%88HDFS%EF%BC%89/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -500,7 +497,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/01/08/merge-sorted-array%EF%BC%88%E5%90%88%E5%B9%B6%E5%B7%B2%E6%8E%92%E5%BA%8F%E7%9A%84%E6%95%B0%E7%BB%84%EF%BC%89/">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/09/20/hadoop-%E9%85%8D%E7%BD%AE%E5%AE%8C%E5%85%A8%E5%88%86%E5%B8%83%E5%BC%8F%E6%A8%A1%E5%BC%8F%E5%B9%B6%E8%BF%90%E8%A1%8CWordCount%E7%A8%8B%E5%BA%8F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/tou2.jpg">
@@ -514,7 +511,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2019/01/08/merge-sorted-array%EF%BC%88%E5%90%88%E5%B9%B6%E5%B7%B2%E6%8E%92%E5%BA%8F%E7%9A%84%E6%95%B0%E7%BB%84%EF%BC%89/" class="post-title-link" itemprop="url">merge-sorted-array（合并已排序的数组）</a>
+            <a href="/2019/09/20/hadoop-%E9%85%8D%E7%BD%AE%E5%AE%8C%E5%85%A8%E5%88%86%E5%B8%83%E5%BC%8F%E6%A8%A1%E5%BC%8F%E5%B9%B6%E8%BF%90%E8%A1%8CWordCount%E7%A8%8B%E5%BA%8F/" class="post-title-link" itemprop="url">hadoop - 配置完全分布式模式并运行WordCount程序</a>
         </h2>
 
         <div class="post-meta">
@@ -524,7 +521,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="文章创建时间：2019-01-08 15:59:25" itemprop="dateCreated datePublished" datetime="2019-01-08T15:59:25+08:00">2019-01-08</time>
+              <time title="文章创建时间：2019-09-20 11:20:32" itemprop="dateCreated datePublished" datetime="2019-09-20T11:20:32+08:00">2019-09-20</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -532,7 +529,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+                  <a href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">大数据</span></a>
                 </span>
             </span>
 
@@ -547,10 +544,12 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>Given two sorted integer arrays A and B, merge B into A as one sorted array.<br><strong>Note:</strong><br>You may assume that A has enough space to hold additional elements from B. The number of elements initialized in A and B are <em>m</em> and <em>n</em> respectively.</p>
+          <ul>
+<li><ol>
+<li>Hadoop三种模式便捷切换以及让命令行提示符显式完整路径<br> （1）Hadoop三种模式便捷切换<br> 首先执行如下命令：<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[yylin@big etc]$ cp -r hadoop local</span><br><span class="line">[yylin@big etc]$ cp -r hadoop pseudo</span><br><span class="line">[yylin@big etc]$ cp -r hadoop full</span><br><span class="line">[yylin@big etc]$ rm -rf hadoop</span><br><span class="line">[yylin@big etc]$ ln -s pseudo hadoop</span><br></pre></td></tr></table></figure></li></ol></li></ul>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/01/08/merge-sorted-array%EF%BC%88%E5%90%88%E5%B9%B6%E5%B7%B2%E6%8E%92%E5%BA%8F%E7%9A%84%E6%95%B0%E7%BB%84%EF%BC%89/#more" rel="contents">
+              <a class="btn" href="/2019/09/20/hadoop-%E9%85%8D%E7%BD%AE%E5%AE%8C%E5%85%A8%E5%88%86%E5%B8%83%E5%BC%8F%E6%A8%A1%E5%BC%8F%E5%B9%B6%E8%BF%90%E8%A1%8CWordCount%E7%A8%8B%E5%BA%8F/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -574,7 +573,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/01/06/count-and-say/">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/09/15/hadoop-%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%EF%BC%88%E5%AE%89%E8%A3%85JDK-%E5%AE%89%E8%A3%85hadoop-%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0%E6%A8%A1%E5%BC%8F%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/tou2.jpg">
@@ -588,7 +587,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2019/01/06/count-and-say/" class="post-title-link" itemprop="url">count-and-say</a>
+            <a href="/2019/09/15/hadoop-%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%EF%BC%88%E5%AE%89%E8%A3%85JDK-%E5%AE%89%E8%A3%85hadoop-%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0%E6%A8%A1%E5%BC%8F%EF%BC%89/" class="post-title-link" itemprop="url">hadoop - 环境搭建（安装JDK+安装hadoop+配置本地模式）</a>
         </h2>
 
         <div class="post-meta">
@@ -598,7 +597,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="文章创建时间：2019-01-06 20:59:09" itemprop="dateCreated datePublished" datetime="2019-01-06T20:59:09+08:00">2019-01-06</time>
+              <time title="文章创建时间：2019-09-15 11:13:41" itemprop="dateCreated datePublished" datetime="2019-09-15T11:13:41+08:00">2019-09-15</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -606,7 +605,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+                  <a href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">大数据</span></a>
                 </span>
             </span>
 
@@ -621,13 +620,107 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>The count-and-say sequence is the sequence of integers beginning as follows:<br>1, 11, 21, 1211, 111221, …</p>
-<p>1 is read off as”one 1”or11.<br>1 1is read off as”two 1s”or21.<br>2 1is read off as”one 2, thenone 1”or1211.</p>
-<p>Given an integer <em>n</em>, generate the <em>n</em> <sup>th</sup> sequence.</p>
-<p>Note: The sequence of integers will be represented as a string.</p>
+          <ul>
+<li><ol>
+<li><p>安装JDK<br> a) 下载jdk-8u65-linux-x64.tar.gz<br> b)上传并tar开</p>
+ <figure class="highlight plain"><figcaption><span>cd ~```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#96;&#96;&#96;$ mkdir downloads</span><br></pre></td></tr></table></figure>
+<p> c)利用FileZilla把<code>jdk-8u65-linux-x64.tar.gz</code>上传到~/downloads/目录下</p>
+ <figure class="highlight plain"><figcaption><span>cd ~/downloads/```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#96;&#96;&#96;$ cd ls</span><br></pre></td></tr></table></figure>
+<p> <img data-src="https://upload-images.jianshu.io/upload_images/15108298-720a949c4030a0b6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+ <figure class="highlight plain"><figcaption><span>tar -zxvf jdk-8u65-linux-x64.tar.gz```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">      ![](https:&#x2F;&#x2F;upload-images.jianshu.io&#x2F;upload_images&#x2F;15108298-a785cd1842531953.png?imageMogr2&#x2F;auto-orient&#x2F;strip%7CimageView2&#x2F;2&#x2F;w&#x2F;1240)</span><br><span class="line"></span><br><span class="line">&lt;!--more--&gt;</span><br><span class="line"></span><br><span class="line">1. d)创建&#x2F;soft文件夹</span><br><span class="line">   &#96;&#96;&#96;$ sudo mkdir &#x2F;soft</span><br></pre></td></tr></table></figure>
+<p><img data-src="https://upload-images.jianshu.io/upload_images/15108298-acd1c2b91be3e01a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<figure class="highlight plain"><figcaption><span>sudo chown yylin:yylin</span><a href="/soft```">link</a></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">  ![](https:&#x2F;&#x2F;upload-images.jianshu.io&#x2F;upload_images&#x2F;15108298-3affa1cf0d2e7557.png?imageMogr2&#x2F;auto-orient&#x2F;strip%7CimageView2&#x2F;2&#x2F;w&#x2F;1240)</span><br><span class="line">  e)移动tar开的文件到&#x2F;soft下</span><br><span class="line">&#96;&#96;&#96;$ mv ~&#x2F;downloads&#x2F;jdk1.8.0_65 &#x2F;soft&#x2F;</span><br></pre></td></tr></table></figure>
+<p><img data-src="https://upload-images.jianshu.io/upload_images/15108298-72e51ebd3bbcfe79.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt><br>f)创建符号连接</p>
+<figure class="highlight plain"><figcaption><span>ln -s</span><a href="/soft/jdk1.8.0_65">/soft/jdk```</a></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">  ![](https:&#x2F;&#x2F;upload-images.jianshu.io&#x2F;upload_images&#x2F;15108298-cf7c7d295e853364.png?imageMogr2&#x2F;auto-orient&#x2F;strip%7CimageView2&#x2F;2&#x2F;w&#x2F;1240)</span><br><span class="line">  g)验证jdk安装是否成功</span><br><span class="line">&#96;&#96;&#96;$ cd &#x2F;soft&#x2F;jdk&#x2F;bin</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><figcaption><span>./java -version```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">  ![](https:&#x2F;&#x2F;upload-images.jianshu.io&#x2F;upload_images&#x2F;15108298-124d0fc1c1aa25f3.png?imageMogr2&#x2F;auto-orient&#x2F;strip%7CimageView2&#x2F;2&#x2F;w&#x2F;1240)</span><br><span class="line">  出现java版本信息，说明安装成功，接下来配置环境变量。</span><br><span class="line">  h)配置java环境变量</span><br><span class="line">  （1）编辑&#x2F;etc&#x2F;profile</span><br><span class="line">&#96;&#96;&#96;$ sudo vi &#x2F;etc&#x2F;profile</span><br></pre></td></tr></table></figure>
+<p>在profile文件最后加上下面两行</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="keyword">export</span> JAVA_HOME=/soft/jdk</span><br><span class="line">exprot PATH=$PATH:$JAVA_HOME/bin</span><br></pre></td></tr></table></figure>
+<p>（2）使环境变量即刻生效</p>
+<figure class="highlight plain"><figcaption><span>source</span><a href="/etc/profile```">link</a></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">（3）进入任意目录下,测试是否ok</span><br><span class="line"> &#96;&#96;&#96;$ cd ~</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><figcaption><span>java -version```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">   ![](https:&#x2F;&#x2F;upload-images.jianshu.io&#x2F;upload_images&#x2F;15108298-537f42cc39035543.png?imageMogr2&#x2F;auto-orient&#x2F;strip%7CimageView2&#x2F;2&#x2F;w&#x2F;1240)</span><br><span class="line">     出现java版本信息，说明JDK环境变量配置成功。</span><br><span class="line"></span><br><span class="line">* 2. 安装Hadoop</span><br><span class="line">      （1）安装hadoop</span><br><span class="line">      a)下载 [hadoop-2.7.7.tar.gz](https:&#x2F;&#x2F;www-eu.apache.org&#x2F;dist&#x2F;hadoop&#x2F;common&#x2F;hadoop-2.7.7&#x2F;hadoop-2.7.7.tar.gz)</span><br><span class="line">      b)上传并tar开</span><br><span class="line">    &#96;&#96;&#96;c++</span><br><span class="line">      [yylin@big ~]$ cd ~&#x2F;downloads&#x2F;</span><br><span class="line">      [yylin@big downloads]$ ll</span><br><span class="line">      total 390612</span><br><span class="line">      -rw-rw-r--. 1 yylin yylin 218720521 May  7 17:36 hadoop-2.7.7.tar.gz</span><br><span class="line">      -rw-rw-r--. 1 yylin yylin 181260798 May  3 19:32 jdk-8u65-linux-x64.tar.gz</span><br><span class="line">      [yylin@big downloads]$ tar -zxvf hadoop-2.7.7</span><br><span class="line">      ......</span><br><span class="line">      [yylin@big downloads]$ ll</span><br><span class="line">      total 390612</span><br><span class="line">      drwxr-xr-x. 9 yylin yylin       149 Jul 19  2018 hadoop-2.7.7</span><br><span class="line">      -rw-rw-r--. 1 yylin yylin 218720521 May  7 17:36 hadoop-2.7.7.tar.gz</span><br><span class="line">      -rw-rw-r--. 1 yylin yylin 181260798 May  3 19:32 jdk-8u65-linux-x64.tar.gz</span><br></pre></td></tr></table></figure>
+<p>c)移动tar开的文件到/soft下，并创建符号连接</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[yylin@big downloads]$ mv ~/downloads/hadoop<span class="number">-2.7</span><span class="number">.7</span> /soft/</span><br><span class="line">[yylin@big downloads]$ cd /soft/</span><br><span class="line">[yylin@big soft]$ ll</span><br><span class="line">total <span class="number">0</span></span><br><span class="line">drwxr-xr-x. <span class="number">9</span> yylin yylin <span class="number">149</span> Jul <span class="number">19</span>  <span class="number">2018</span> hadoop<span class="number">-2.7</span><span class="number">.7</span></span><br><span class="line">lrwxrwxrwx. <span class="number">1</span> yylin yylin  <span class="number">18</span> May  <span class="number">6</span> <span class="number">21</span>:<span class="number">31</span> jdk -&gt; /soft/jdk1<span class="number">.8</span><span class="number">.0</span>_65/</span><br><span class="line">drwxr-xr-x. <span class="number">8</span> yylin yylin <span class="number">255</span> Oct  <span class="number">7</span>  <span class="number">2015</span> jdk1<span class="number">.8</span><span class="number">.0</span>_65</span><br><span class="line">[yylin@big soft]$ ln -s /soft/hadoop<span class="number">-2.7</span><span class="number">.7</span> /soft/hadoop</span><br><span class="line">[yylin@big soft]$ ll</span><br><span class="line">total <span class="number">0</span></span><br><span class="line">lrwxrwxrwx. <span class="number">1</span> yylin yylin  <span class="number">18</span> May  <span class="number">7</span> <span class="number">17</span>:<span class="number">45</span> hadoop -&gt; /soft/hadoop<span class="number">-2.7</span><span class="number">.7</span></span><br><span class="line">drwxr-xr-x. <span class="number">9</span> yylin yylin <span class="number">149</span> Jul <span class="number">19</span>  <span class="number">2018</span> hadoop<span class="number">-2.7</span><span class="number">.7</span></span><br><span class="line">lrwxrwxrwx. <span class="number">1</span> yylin yylin  <span class="number">18</span> May  <span class="number">6</span> <span class="number">21</span>:<span class="number">31</span> jdk -&gt; /soft/jdk1<span class="number">.8</span><span class="number">.0</span>_65/</span><br><span class="line">drwxr-xr-x. <span class="number">8</span> yylin yylin <span class="number">255</span> Oct  <span class="number">7</span>  <span class="number">2015</span> jdk1<span class="number">.8</span><span class="number">.0</span>_65</span><br></pre></td></tr></table></figure>
+<p>d)验证jdk安装是否成功（出现版本信息，说明安装成功）</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[yylin@big hadoop]$ cd /soft/hadoop/bin/</span><br><span class="line">[yylin@big bin]$ ls</span><br><span class="line">container-executor  hadoop.cmd  hdfs.cmd  mapred.cmd  test-container-executor  yarn.cmd hadoop hdfs mapred rcc yarn</span><br><span class="line">[yylin@big bin]$ ./hadoop version</span><br><span class="line">Hadoop <span class="number">2.7</span><span class="number">.7</span></span><br><span class="line">Subversion Unknown -r c1aad84bd27cd79c3d1a7dd58202a8c3ee1ed3ac</span><br><span class="line">Compiled by stevel on <span class="number">2018</span><span class="number">-07</span><span class="number">-18</span>T22:<span class="number">47</span>Z</span><br><span class="line">Compiled with protoc <span class="number">2.5</span><span class="number">.0</span></span><br><span class="line">From source with checksum <span class="number">792e15</span>d20b12c74bd6f19a1fb886490</span><br><span class="line">This command was <span class="built_in">run</span> <span class="keyword">using</span> /soft/hadoop<span class="number">-2.7</span><span class="number">.7</span>/share/hadoop/common/hadoop-common<span class="number">-2.7</span><span class="number">.7</span>.jar</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+</li>
+</ul>
+<p>（2）配置hadoop环境变量<br>编辑/etc/profile文件</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[yylin@big bin]$ sudo vi /etc/profile</span><br></pre></td></tr></table></figure>
+<p>在profile文件最后加上下面两行<br>  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="keyword">export</span> HADOOP_HOME=/soft/hadoop</span><br><span class="line"><span class="keyword">export</span> PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin</span><br></pre></td></tr></table></figure></p>
+<p>（3）生效并测试<br>  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[yylin@big bin]$ source /etc/profile</span><br><span class="line">[yylin@big bin]$ cd ~</span><br><span class="line">[yylin@big ~]$ hadoop version</span><br><span class="line">Hadoop <span class="number">2.7</span><span class="number">.7</span></span><br><span class="line">Subversion Unknown -r c1aad84bd27cd79c3d1a7dd58202a8c3ee1ed3ac</span><br><span class="line">Compiled by stevel on <span class="number">2018</span><span class="number">-07</span><span class="number">-18</span>T22:<span class="number">47</span>Z</span><br><span class="line">Compiled with protoc <span class="number">2.5</span><span class="number">.0</span></span><br><span class="line">From source with checksum <span class="number">792e15</span>d20b12c74bd6f19a1fb886490</span><br><span class="line">This command was <span class="built_in">run</span> <span class="keyword">using</span> /soft/hadoop<span class="number">-2.7</span><span class="number">.7</span>/share/hadoop/common/hadoop-common<span class="number">-2.7</span><span class="number">.7</span>.jar</span><br></pre></td></tr></table></figure><br>经过上述操作就搭建好了hadoop环境，到目前为止是本地模式（单机模式），接下来配置完全分布式模式。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/06/08/%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%AD1%E7%9A%84%E4%B8%AA%E6%95%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/tou2.jpg">
+      <meta itemprop="name" content="ylyang">
+      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="静水流深的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/06/08/%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%AD1%E7%9A%84%E4%B8%AA%E6%95%B0/" class="post-title-link" itemprop="url">二进制中1的个数</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="文章创建时间：2019-06-08 14:50:48" itemprop="dateCreated datePublished" datetime="2019-06-08T14:50:48+08:00">2019-06-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">数据结构</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="二进制中的1的个数"><a href="#二进制中的1的个数" class="headerlink" title="二进制中的1的个数"></a>二进制中的1的个数</h1><h2 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h2><p>输入一个整数，输出该数二进制表示中1的个数。其中负数用补码表示</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/01/06/count-and-say/#more" rel="contents">
+              <a class="btn" href="/2019/06/08/%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%AD1%E7%9A%84%E4%B8%AA%E6%95%B0/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -651,7 +744,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/01/05/swap-nodes-in-pairs%EF%BC%88%E6%88%90%E5%AF%B9%E7%9A%84%E4%BA%A4%E6%8D%A2%E9%93%BE%E8%A1%A8%E7%BB%93%E7%82%B9%EF%BC%89/">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/05/06/%E5%AD%A9%E5%AD%90%E4%BB%AC%E7%9A%84%E6%B8%B8%E6%88%8F-%E5%9C%86%E5%9C%88%E4%B8%AD%E6%9C%80%E5%90%8E%E5%89%A9%E4%B8%8B%E7%9A%84%E6%95%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/tou2.jpg">
@@ -665,7 +758,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2019/01/05/swap-nodes-in-pairs%EF%BC%88%E6%88%90%E5%AF%B9%E7%9A%84%E4%BA%A4%E6%8D%A2%E9%93%BE%E8%A1%A8%E7%BB%93%E7%82%B9%EF%BC%89/" class="post-title-link" itemprop="url">swap nodes in pairs（成对的交换链表结点）</a>
+            <a href="/2019/05/06/%E5%AD%A9%E5%AD%90%E4%BB%AC%E7%9A%84%E6%B8%B8%E6%88%8F-%E5%9C%86%E5%9C%88%E4%B8%AD%E6%9C%80%E5%90%8E%E5%89%A9%E4%B8%8B%E7%9A%84%E6%95%B0/" class="post-title-link" itemprop="url">孩子们的游戏-圆圈中最后剩下的数</a>
         </h2>
 
         <div class="post-meta">
@@ -675,7 +768,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="文章创建时间：2019-01-05 16:51:49" itemprop="dateCreated datePublished" datetime="2019-01-05T16:51:49+08:00">2019-01-05</time>
+              <time title="文章创建时间：2019-05-06 12:40:39" itemprop="dateCreated datePublished" datetime="2019-05-06T12:40:39+08:00">2019-05-06</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -683,7 +776,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">数据结构</span></a>
                 </span>
             </span>
 
@@ -698,10 +791,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>Given a linked list, swap every two adjacent nodes and return its head.<br>For example,<br>Given1-&gt;2-&gt;3-&gt;4, you should return the list as2-&gt;1-&gt;4-&gt;3.<br>Your algorithm should use only constant space. You may <strong>not</strong> modify the values in the list, only nodes itself can be changed.</p>
+          <h1 id="孩子们的游戏-圆圈中最后剩下的数"><a href="#孩子们的游戏-圆圈中最后剩下的数" class="headerlink" title="孩子们的游戏(圆圈中最后剩下的数)"></a>孩子们的游戏(圆圈中最后剩下的数)</h1><h2 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h2><p>有个游戏是这样的:首先，让小朋友们围成一个大圈。然后，随机指定一个数m，让编号为0的小朋友开始报数。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/01/05/swap-nodes-in-pairs%EF%BC%88%E6%88%90%E5%AF%B9%E7%9A%84%E4%BA%A4%E6%8D%A2%E9%93%BE%E8%A1%A8%E7%BB%93%E7%82%B9%EF%BC%89/#more" rel="contents">
+              <a class="btn" href="/2019/05/06/%E5%AD%A9%E5%AD%90%E4%BB%AC%E7%9A%84%E6%B8%B8%E6%88%8F-%E5%9C%86%E5%9C%88%E4%B8%AD%E6%9C%80%E5%90%8E%E5%89%A9%E4%B8%8B%E7%9A%84%E6%95%B0/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -725,7 +818,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/01/05/Symmetric-Tree%EF%BC%88%E5%AF%B9%E7%A7%B0%E6%A0%91%EF%BC%89/">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/05/05/%E6%A0%88%E7%9A%84%E5%8E%8B%E5%85%A5%E5%BC%B9%E5%87%BA%E5%BA%8F%E5%88%97/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/tou2.jpg">
@@ -739,7 +832,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2019/01/05/Symmetric-Tree%EF%BC%88%E5%AF%B9%E7%A7%B0%E6%A0%91%EF%BC%89/" class="post-title-link" itemprop="url">Symmetric Tree（对称树）</a>
+            <a href="/2019/05/05/%E6%A0%88%E7%9A%84%E5%8E%8B%E5%85%A5%E5%BC%B9%E5%87%BA%E5%BA%8F%E5%88%97/" class="post-title-link" itemprop="url">栈的压入弹出序列</a>
         </h2>
 
         <div class="post-meta">
@@ -749,7 +842,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="文章创建时间：2019-01-05 12:52:53" itemprop="dateCreated datePublished" datetime="2019-01-05T12:52:53+08:00">2019-01-05</time>
+              <time title="文章创建时间：2019-05-05 12:02:39" itemprop="dateCreated datePublished" datetime="2019-05-05T12:02:39+08:00">2019-05-05</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -757,7 +850,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">数据结构</span></a>
                 </span>
             </span>
 
@@ -772,11 +865,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>Given a binary tree, check whether it is a mirror of itself (ie, symmetric around its center).<br>For example, this binary tree is symmetric:</p>
-<p><img data-src="https://upload-images.jianshu.io/upload_images/15108298-d9b6796319d21653.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+          <h1 id="栈的压入弹出序列"><a href="#栈的压入弹出序列" class="headerlink" title="栈的压入弹出序列"></a>栈的压入弹出序列</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>输入两个整数序列，第一个序列表示栈的压入顺序，请判断第二个序列是否可能为该栈的弹出顺序。假设压入栈的所有数字均不相等。例如序列1,2,3,4,5是某栈的压入顺序，序列4,5,3,2,1是该压栈序列对应的一个弹出序列，但4,3,5,1,2就不可能是该压栈序列的弹出序列。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/01/05/Symmetric-Tree%EF%BC%88%E5%AF%B9%E7%A7%B0%E6%A0%91%EF%BC%89/#more" rel="contents">
+              <a class="btn" href="/2019/05/05/%E6%A0%88%E7%9A%84%E5%8E%8B%E5%85%A5%E5%BC%B9%E5%87%BA%E5%BA%8F%E5%88%97/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -800,7 +892,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/01/03/permutations%EF%BC%88%E5%85%A8%E6%8E%92%E5%88%97%EF%BC%89/">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/05/04/%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E6%9F%A5%E6%89%BE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/tou2.jpg">
@@ -814,7 +906,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2019/01/03/permutations%EF%BC%88%E5%85%A8%E6%8E%92%E5%88%97%EF%BC%89/" class="post-title-link" itemprop="url">permutations（全排列）</a>
+            <a href="/2019/05/04/%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E6%9F%A5%E6%89%BE/" class="post-title-link" itemprop="url">二维数组中的查找</a>
         </h2>
 
         <div class="post-meta">
@@ -824,7 +916,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="文章创建时间：2019-01-03 16:43:48" itemprop="dateCreated datePublished" datetime="2019-01-03T16:43:48+08:00">2019-01-03</time>
+              <time title="文章创建时间：2019-05-04 11:45:28" itemprop="dateCreated datePublished" datetime="2019-05-04T11:45:28+08:00">2019-05-04</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -832,7 +924,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">数据结构</span></a>
                 </span>
             </span>
 
@@ -847,10 +939,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>Given a collection of numbers, return all possible permutations.<br>For example,<br>[1,2,3]have the following permutations:<br>[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2], and[3,2,1].</p>
+          <h1 id="二维数组中的查找"><a href="#二维数组中的查找" class="headerlink" title="二维数组中的查找"></a>二维数组中的查找</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>在一个二维数组中（每个一维数组的长度相同），每一行都按照从左到右递增的顺序排序，每一列都按照从上到下递增的顺序排序。请完成一个函数，输入这样的一个二维数组和一个整数，判断数组中是否含有该整数。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/01/03/permutations%EF%BC%88%E5%85%A8%E6%8E%92%E5%88%97%EF%BC%89/#more" rel="contents">
+              <a class="btn" href="/2019/05/04/%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E6%9F%A5%E6%89%BE/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -874,7 +966,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/01/02/path-sum%EF%BC%88%E8%B7%AF%E5%BE%84%E5%92%8C%EF%BC%89/">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/05/03/%E4%B8%A4%E4%B8%AA%E9%93%BE%E8%A1%A8%E7%9A%84%E5%85%AC%E5%85%B1%E7%BB%93%E7%82%B9/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/tou2.jpg">
@@ -888,7 +980,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2019/01/02/path-sum%EF%BC%88%E8%B7%AF%E5%BE%84%E5%92%8C%EF%BC%89/" class="post-title-link" itemprop="url">path sum（路径和）</a>
+            <a href="/2019/05/03/%E4%B8%A4%E4%B8%AA%E9%93%BE%E8%A1%A8%E7%9A%84%E5%85%AC%E5%85%B1%E7%BB%93%E7%82%B9/" class="post-title-link" itemprop="url">两个链表的公共结点</a>
         </h2>
 
         <div class="post-meta">
@@ -898,7 +990,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="文章创建时间：2019-01-02 19:33:46" itemprop="dateCreated datePublished" datetime="2019-01-02T19:33:46+08:00">2019-01-02</time>
+              <time title="文章创建时间：2019-05-03 17:25:03" itemprop="dateCreated datePublished" datetime="2019-05-03T17:25:03+08:00">2019-05-03</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -906,7 +998,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">数据结构</span></a>
                 </span>
             </span>
 
@@ -921,86 +1013,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>Given a binary tree and a sum, determine if the tree has a root-to-leaf path such that adding up all the values along the path equals the given sum.<br>For example:<br>Given the below binary tree andsum = 22,</p>
-<p><img data-src="https://upload-images.jianshu.io/upload_images/15108298-2afa6162e511a6df.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+          <h1 id="两个链表的公共结点"><a href="#两个链表的公共结点" class="headerlink" title="两个链表的公共结点"></a>两个链表的公共结点</h1><h2 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h2><p>输入两个链表，找出它们的第一个公共结点。（注意因为传入数据是链表，所以错误测试数据的提示是用其他方式显示的，保证传入数据是正确的）</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/01/02/path-sum%EF%BC%88%E8%B7%AF%E5%BE%84%E5%92%8C%EF%BC%89/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/01/01/remove-duplicates-from-sorted-list%EF%BC%88%E7%A7%BB%E9%99%A4%E6%9C%89%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/tou2.jpg">
-      <meta itemprop="name" content="ylyang">
-      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="静水流深的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/01/01/remove-duplicates-from-sorted-list%EF%BC%88%E7%A7%BB%E9%99%A4%E6%9C%89%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0%EF%BC%89/" class="post-title-link" itemprop="url">remove duplicates from sorted list（移除有序链表中的重复元素）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="文章创建时间：2019-01-01 16:06:41" itemprop="dateCreated datePublished" datetime="2019-01-01T16:06:41+08:00">2019-01-01</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>Given a sorted linked list, delete all duplicates such that each element appear only <em>once</em>.</p>
-<p>For example,<br>Given1-&gt;1-&gt;2, return1-&gt;2.<br>Given1-&gt;1-&gt;2-&gt;3-&gt;3, return1-&gt;2-&gt;3.</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/01/01/remove-duplicates-from-sorted-list%EF%BC%88%E7%A7%BB%E9%99%A4%E6%9C%89%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0%EF%BC%89/#more" rel="contents">
+              <a class="btn" href="/2019/05/03/%E4%B8%A4%E4%B8%AA%E9%93%BE%E8%A1%A8%E7%9A%84%E5%85%AC%E5%85%B1%E7%BB%93%E7%82%B9/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1023,7 +1039,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 

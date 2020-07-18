@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/logo.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/logo.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/logo.ico">
+  <link rel="mask-icon" href="/images/logo.ico" color="#222">
+  <meta name="google-site-verification" content="QrRqAEoLHOBZnSt7mRkhAt6dCoj3nREdeG7IU9IKL1E">
+  <meta name="msvalidate.01" content="9A1D61A279FB6EF4CF3128BF57AFCBAC">
+  <meta name="baidu-site-verification" content="5Iz7ysEFLe">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  
+  <link rel="stylesheet" href="/lib/animate-css/animate.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1/themes/blue/pace-theme-flash.min.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1/pace.min.js"></script>
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ylyang.xyz","root":"/","scheme":"Gemini","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":{"enable":true,"onlypost":false,"loadingImg":null},"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}}};
+  </script>
+
+  <meta name="description" content="进程通信和线程通信概念进程就是正在运行的程序，它是系统资源调度的独立单位，并且一个进程可以执行多个任务，而线程是程序执行的任务，它是程序使用CPU的基本单位，因此也可以说线程是依赖进程的 进程进程就是正在运行的程序，它是系统资源调度的独立单位，各个进程之间不会相互影响，因为系统给它们分配了不同的空间和资源，它分为单进程和多进程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="进程通信和线程通信">
+<meta property="og:url" content="ylyang.xyz/2019/10/15/%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1%E5%92%8C%E7%BA%BF%E7%A8%8B%E9%80%9A%E4%BF%A1/index.html">
+<meta property="og:site_name" content="静水流深的博客">
+<meta property="og:description" content="进程通信和线程通信概念进程就是正在运行的程序，它是系统资源调度的独立单位，并且一个进程可以执行多个任务，而线程是程序执行的任务，它是程序使用CPU的基本单位，因此也可以说线程是依赖进程的 进程进程就是正在运行的程序，它是系统资源调度的独立单位，各个进程之间不会相互影响，因为系统给它们分配了不同的空间和资源，它分为单进程和多进程">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-10-15T02:18:42.000Z">
+<meta property="article:modified_time" content="2020-07-18T02:21:58.427Z">
+<meta property="article:author" content="ylyang">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="操作系统">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="ylyang.xyz/2019/10/15/%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1%E5%92%8C%E7%BA%BF%E7%A8%8B%E9%80%9A%E4%BF%A1/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>进程通信和线程通信 | 静水流深的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+   <script type="text/javascript" src="/js/myjs/clicklove.js"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <main class="main">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+        <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line toggle-line-first"></span>
+        <span class="toggle-line toggle-line-middle"></span>
+        <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">静水流深的博客</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">ylyang's blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">15</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">124</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">114</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#进程通信和线程通信"><span class="nav-number">1.</span> <span class="nav-text">进程通信和线程通信</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#概念"><span class="nav-number">1.1.</span> <span class="nav-text">概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#进程"><span class="nav-number">1.1.1.</span> <span class="nav-text">进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程"><span class="nav-number">1.1.2.</span> <span class="nav-text">线程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取线程的方式"><span class="nav-number">1.1.3.</span> <span class="nav-text">获取线程的方式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程通信方式"><span class="nav-number">1.2.</span> <span class="nav-text">进程通信方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线程间的通信方式"><span class="nav-number">1.3.</span> <span class="nav-text">线程间的通信方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线程如何按照自己指定的顺序执行"><span class="nav-number">1.4.</span> <span class="nav-text">线程如何按照自己指定的顺序执行</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用join"><span class="nav-number">1.4.1.</span> <span class="nav-text">使用join</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#利用Executors线程池"><span class="nav-number">1.4.2.</span> <span class="nav-text">利用Executors线程池</span></a></li></ol></li></ol></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ylyang"
+      src="/images/tou2.jpg">
+  <p class="site-author-name" itemprop="name">ylyang</p>
+  <div class="site-description" itemprop="description">云山苍苍，江水泱泱；先生之风，山高水长。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">124</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">114</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/yangyl7239" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;yangyl7239" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:yuanlin.young@gmail.com" title="E-Mail → mailto:yuanlin.young@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://ylyang.xyz/" title="https:&#x2F;&#x2F;ylyang.xyz">Home</a>
+        </li>
+    </ul>
+  </div>
+
+      </section>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </header>
+
+      
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/yangyl7239" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div id="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+      <div class="main-inner">
+        
+
+        <div class="content post posts-expand">
+          
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/10/15/%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1%E5%92%8C%E7%BA%BF%E7%A8%8B%E9%80%9A%E4%BF%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/tou2.jpg">
+      <meta itemprop="name" content="ylyang">
+      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="静水流深的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          进程通信和线程通信
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="文章创建时间：2019-10-15 10:18:42" itemprop="dateCreated datePublished" datetime="2019-10-15T10:18:42+08:00">2019-10-15</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="进程通信和线程通信"><a href="#进程通信和线程通信" class="headerlink" title="进程通信和线程通信"></a>进程通信和线程通信</h1><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>进程就是正在运行的程序，它是系统资源调度的独立单位，并且一个进程可以执行多个任务，而线程是程序执行的任务，它是程序使用CPU的基本单位，因此也可以说线程是依赖进程的</p>
+<h3 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h3><p>进程就是正在运行的程序，它是系统资源调度的独立单位，各个进程之间不会相互影响，因为系统给它们分配了不同的空间和资源，它分为单进程和多进程</p>
+<a id="more"></a>
+
+<p>单进程的计算机一次只能做一件事，而多个进程的计算机可以做到一次做不同的事情，一边听音乐，一边打游戏，这两件事虽然看起来在同时进行，但是其实是CPU在做成程序之间的高效切换，才让我们感觉是同时进行的。</p>
+<h3 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h3><p>线程是程序执行的任务，它是程序使用CPU的基本单位，同时单线程也就是做的事情很专一，不会分神去做别的 事，也就是程序只有一条执行路径，多线程就是可以分出多条路径去做同一件事情，也就是程序有多条执行路径。因为多线程的存在，不是提高了程序的执行速度，其实是为了提高应用程序的使用率，也可以说程序的执行其实都是抢CPU的资源，也就是抢CPU的执行权，而其中的某一个进程如果执行路径比较多，就会有更高的几率抢到CPU执行权，但是这一过程是随机的，不知道哪一个线程会在哪一个时刻占到这个资源，所以线程的执行有随机性。</p>
+<h3 id="获取线程的方式"><a href="#获取线程的方式" class="headerlink" title="获取线程的方式"></a>获取线程的方式</h3><p>目前获取线程有四种方式</p>
+<ul>
+<li>实现Runnable接口（无返回值）</li>
+<li>实现Callable接口（有返回值）</li>
+<li>实例化Thread类</li>
+<li>使用线程池获取</li>
+</ul>
+<h2 id="进程通信方式"><a href="#进程通信方式" class="headerlink" title="进程通信方式"></a>进程通信方式</h2><ul>
+<li>管道：管道是一种半双工的通信方式，数据只能单向流动，而且只能在具有血缘关系的进程间使用。进程的亲缘关系通常是指父子进程关系</li>
+<li>信号量：信号量是一个计数器，可以用来控制多线进程对共享资源的访问。它常作为一种锁机制，防止某个进程正在访问共享资源时，其它进程也访问该资源。因此，主要作为进程间以及同一进程内不同线程之间的同步手段。</li>
+<li>消息队列：消息队列是由消息的链表，存放在内核中并由消息队列标识符标识。消息队列克服了信息传递信息少，管道只能承载无格式字节流以及缓冲区大小受限等特点。</li>
+<li>共享内存：共享内存就是映射一段能够被其它进程所访问的内存，这段共享内存由一个进程创建，但多个进程可以访问。共享内存是最快的IPC方式，它是针对进程内通信方式运行效率而专门设计。它往往与其它通信机制，如信号量配合使用，来实现进程间的同步和通信。</li>
+<li>套接字：套接字也是一种进程通信机制，与其它通信机制不同的是，它可以用于不同设备间的进程通信</li>
+</ul>
+<h2 id="线程间的通信方式"><a href="#线程间的通信方式" class="headerlink" title="线程间的通信方式"></a>线程间的通信方式</h2><ul>
+<li>锁机制：包括互斥锁，条件变量，读写锁<ul>
+<li>互斥锁提供了以排他方式防止数据结构被并发修改的问题</li>
+<li>读写锁运行多线程同时读共享数据，而对写操作是互斥的</li>
+<li>条件变量可以以原子方式阻塞进程，知道某个特定条件为真为止。对条件的测试是在互斥锁的保护下进行的，条件变量始终与互斥锁一起使用。</li>
+</ul>
+</li>
+<li>信号量机制（Semaphore）：包括无名线程信号量和命名线程信号量</li>
+<li>信号机制（Signal）：类似进程间的信号处理，线程间的通信目的主要是用于线程同步，所以线程没有像进程通信中的用于数据交换的通信机制。</li>
+</ul>
+<h2 id="线程如何按照自己指定的顺序执行"><a href="#线程如何按照自己指定的顺序执行" class="headerlink" title="线程如何按照自己指定的顺序执行"></a>线程如何按照自己指定的顺序执行</h2><p>我们在日常的多线程开发中，可能有时会想让每个线程都按照我们指定的顺序来运行，而不是让CPU随机调度，这样可能会让我们在日常开发的工作中带来不必要的。</p>
+<p>如下代码所示，我们按照顺序写了一段多线程的代码，然后想让t1，t2，t3都能顺序的执行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * 没有顺序执行的示例</span><br><span class="line"> *&#x2F;</span><br><span class="line">public static void test() &#123;</span><br><span class="line">    Thread t1 &#x3D; new Thread(() -&gt; &#123;</span><br><span class="line">        System.out.println(&quot;1&quot;);</span><br><span class="line">    &#125;, &quot;t1&quot;);</span><br><span class="line"></span><br><span class="line">    Thread t2 &#x3D; new Thread(() -&gt; &#123;</span><br><span class="line">        System.out.println(&quot;2&quot;);</span><br><span class="line">    &#125;, &quot;t2&quot;);</span><br><span class="line"></span><br><span class="line">    Thread t3 &#x3D; new Thread(() -&gt; &#123;</span><br><span class="line">        System.out.println(&quot;3&quot;);</span><br><span class="line">    &#125;, &quot;t3&quot;);</span><br><span class="line"></span><br><span class="line">    t1.start();</span><br><span class="line">    t2.start();</span><br><span class="line">    t3.start();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>但是我们在运行后会发现，他们并没有按照我们的代码顺序执行的，那么有什么方法能够让他们按顺序执行？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1</span><br><span class="line">3</span><br><span class="line">2</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用join"><a href="#使用join" class="headerlink" title="使用join"></a>使用join</h3><p>jion的意思是加入线程，需要等待线程执行完毕以后，其它线程才能够继续执行</p>
+<p>实例代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">public static void test2() throws InterruptedException &#123;</span><br><span class="line">    Thread t1 &#x3D; new Thread(() -&gt; &#123;</span><br><span class="line">        System.out.println(&quot;1&quot;);</span><br><span class="line">    &#125;, &quot;t1&quot;);</span><br><span class="line"></span><br><span class="line">    Thread t2 &#x3D; new Thread(() -&gt; &#123;</span><br><span class="line">        System.out.println(&quot;2&quot;);</span><br><span class="line">    &#125;, &quot;t2&quot;);</span><br><span class="line"></span><br><span class="line">    Thread t3 &#x3D; new Thread(() -&gt; &#123;</span><br><span class="line">        System.out.println(&quot;3&quot;);</span><br><span class="line">    &#125;, &quot;t3&quot;);</span><br><span class="line"></span><br><span class="line">    t1.start();</span><br><span class="line">    t1.join();</span><br><span class="line"></span><br><span class="line">    t2.start();</span><br><span class="line">    t2.join();</span><br><span class="line"></span><br><span class="line">    t3.start();</span><br><span class="line">    t3.join();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最后运行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td></tr></table></figure>
+
+<p>这里主要利用了join的阻塞效果，来达到我们的使用目的，从上可知，程序已经按照我们指定的顺序执行结束了，并得到了我们想要的结果，我们进入join的源码页面</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">public final synchronized void join(long millis)</span><br><span class="line">throws InterruptedException &#123;</span><br><span class="line">    long base &#x3D; System.currentTimeMillis();</span><br><span class="line">    long now &#x3D; 0;</span><br><span class="line"></span><br><span class="line">    if (millis &lt; 0) &#123;</span><br><span class="line">        throw new IllegalArgumentException(&quot;timeout value is negative&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    if (millis &#x3D;&#x3D; 0) &#123;</span><br><span class="line">        while (isAlive()) &#123;</span><br><span class="line">            wait(0);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        while (isAlive()) &#123;</span><br><span class="line">            long delay &#x3D; millis - now;</span><br><span class="line">            if (delay &lt;&#x3D; 0) &#123;</span><br><span class="line">                break;</span><br><span class="line">            &#125;</span><br><span class="line">            wait(delay);</span><br><span class="line">            now &#x3D; System.currentTimeMillis() - base;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>首先我们可以看到，join方法是线程安全的，因为引入了 <code>Synchronized</code> 重量锁，同时我们可以看到，join方法默认是传递的参数为0</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public final void join() throws InterruptedException &#123;</span><br><span class="line">	join(0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>那么它就会进入这个方法，也就是while循环，isAlive()方法就是判断这个线程是否激活，但线程没有运行完成的时候，处于激活状态，也就是说当t1没有执行完成后，主线程会进入阻塞状态，也就是不断自旋的操作，直到线程执行完毕后，才跳出循环</p>
+<p>需要注意的是，这里的wait不是阻塞调用者，而是阻塞主线程，也就是说当t1线程没有执行完毕，主线程是无法继续往下执行的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">if (millis &#x3D;&#x3D; 0) &#123;</span><br><span class="line">    while (isAlive()) &#123;</span><br><span class="line">    	wait(0);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="利用Executors线程池"><a href="#利用Executors线程池" class="headerlink" title="利用Executors线程池"></a>利用Executors线程池</h3><p>Executors是JUC里面的操作类，可以方便的给我们提供线程池的操作，这里我们使用Executors中的newSingleThreadExecutor方法，创建一个单线程的线程池。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * 使用线程池</span><br><span class="line"> *&#x2F;</span><br><span class="line">public static void test3() &#123;</span><br><span class="line">    &#x2F;&#x2F; 创建一个单例线程</span><br><span class="line">    ExecutorService executorService &#x3D; Executors.newSingleThreadExecutor();</span><br><span class="line">    Thread t1 &#x3D; new Thread(() -&gt; &#123;</span><br><span class="line">        System.out.println(&quot;1&quot;);</span><br><span class="line">    &#125;, &quot;t1&quot;);</span><br><span class="line"></span><br><span class="line">    Thread t2 &#x3D; new Thread(() -&gt; &#123;</span><br><span class="line">        System.out.println(&quot;2&quot;);</span><br><span class="line">    &#125;, &quot;t2&quot;);</span><br><span class="line"></span><br><span class="line">    Thread t3 &#x3D; new Thread(() -&gt; &#123;</span><br><span class="line">        System.out.println(&quot;3&quot;);</span><br><span class="line">    &#125;, &quot;t3&quot;);</span><br><span class="line">    executorService.submit(t1);</span><br><span class="line">    executorService.submit(t2);</span><br><span class="line">    executorService.submit(t3);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td></tr></table></figure>
+
+<p>我们能够看到，线程也按照我们的顺序进行执行，这里主要就是利用了newSingleThreadExecutor()方法，其实原理很简单，因为单例线程池的内部是一个基于FIFO的队列，也就是说当我们依次将t1, t2, t3加入队列中，实际上就绪状态只有t1这个线程，t2，t3则会被添加到队列中，当t1执行完毕后，在从队列中获取一个放到就绪队列。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"><i class="fa fa-tag"></i> Java</a>
+              <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag"><i class="fa fa-tag"></i> 操作系统</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/10/14/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/" rel="prev" title="JVM类加载机制">
+      <i class="fa fa-chevron-left"></i> JVM类加载机制
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/10/16/MyBatis%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/" rel="next" title="MyBatis缓存机制">
+      MyBatis缓存机制 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+        </div>
+        
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ylyang</span>
+</div>
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="//cdn.jsdelivr.net/npm/ribbon.js@1/dist/ribbon.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

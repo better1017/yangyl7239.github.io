@@ -139,17 +139,17 @@
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">11</span></a>
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">15</span></a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">96</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">124</span></a>
 
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">102</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">114</span></a>
 
   </li>
         <li class="menu-item menu-item-about">
@@ -201,20 +201,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">96</span>
+          <span class="site-state-item-count">124</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-count">15</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">102</span>
+        <span class="site-state-item-count">114</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -271,7 +271,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2018/12/18/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F01%E4%B9%8B%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82/">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/03/03/%E6%89%BE%E5%87%BA%E4%B8%91%E6%95%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/tou2.jpg">
@@ -285,7 +285,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2018/12/18/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F01%E4%B9%8B%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82/" class="post-title-link" itemprop="url">工厂模式01之简单工厂</a>
+            <a href="/2019/03/03/%E6%89%BE%E5%87%BA%E4%B8%91%E6%95%B0/" class="post-title-link" itemprop="url">找出丑数</a>
         </h2>
 
         <div class="post-meta">
@@ -295,7 +295,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="文章创建时间：2018-12-18 00:02:30" itemprop="dateCreated datePublished" datetime="2018-12-18T00:02:30+08:00">2018-12-18</time>
+              <time title="文章创建时间：2019-03-03 11:41:18" itemprop="dateCreated datePublished" datetime="2019-03-03T11:41:18+08:00">2019-03-03</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -303,7 +303,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">设计模式</span></a>
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">数据结构</span></a>
                 </span>
             </span>
 
@@ -318,10 +318,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h1><p><strong>简单工厂</strong>可以理解为，定义一个工厂类，根据传入的参数不同而返回不同的实例，这些实例通常有共同的父类。<br>虽然简单工厂经常会被使用，但是并不能算作是一种设计模式，反而更像是一种编程习惯。</p>
+          <h1 id="找出丑数"><a href="#找出丑数" class="headerlink" title="找出丑数"></a>找出丑数</h1><h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>把只包含质因子2、3和5的数称作丑数（Ugly Number）。例如6、8都是丑数，但14不是，因为它包含质因子7。 习惯上我们把1当做是第一个丑数。求按从小到大的顺序的第N个丑数。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2018/12/18/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F01%E4%B9%8B%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82/#more" rel="contents">
+              <a class="btn" href="/2019/03/03/%E6%89%BE%E5%87%BA%E4%B8%91%E6%95%B0/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -345,7 +345,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2018/12/17/%E5%90%88%E5%B9%B6%E4%B8%A4%E4%B8%AA%E9%A1%BA%E5%BA%8F%E9%93%BE%E8%A1%A8/">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/02/28/%E9%9D%92%E8%9B%99%E8%B7%B3%E5%8F%B0%E9%98%B6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/tou2.jpg">
@@ -359,7 +359,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2018/12/17/%E5%90%88%E5%B9%B6%E4%B8%A4%E4%B8%AA%E9%A1%BA%E5%BA%8F%E9%93%BE%E8%A1%A8/" class="post-title-link" itemprop="url">合并两个顺序链表</a>
+            <a href="/2019/02/28/%E9%9D%92%E8%9B%99%E8%B7%B3%E5%8F%B0%E9%98%B6/" class="post-title-link" itemprop="url">青蛙跳台阶</a>
         </h2>
 
         <div class="post-meta">
@@ -369,7 +369,231 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="文章创建时间：2018-12-17 16:16:58" itemprop="dateCreated datePublished" datetime="2018-12-17T16:16:58+08:00">2018-12-17</time>
+              <time title="文章创建时间：2019-02-28 11:37:21" itemprop="dateCreated datePublished" datetime="2019-02-28T11:37:21+08:00">2019-02-28</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">数据结构</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="青蛙跳台阶"><a href="#青蛙跳台阶" class="headerlink" title="青蛙跳台阶"></a>青蛙跳台阶</h1><h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>一只青蛙一次可以跳上1级台阶，也可以跳上2级。求该青蛙跳上一个n级的台阶总共有多少种跳法（先后次序不同算不同的结果）</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/02/28/%E9%9D%92%E8%9B%99%E8%B7%B3%E5%8F%B0%E9%98%B6/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/02/25/%E6%96%90%E6%B3%A2%E9%82%A3%E5%A5%91%E6%95%B0%E5%88%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/tou2.jpg">
+      <meta itemprop="name" content="ylyang">
+      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="静水流深的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/02/25/%E6%96%90%E6%B3%A2%E9%82%A3%E5%A5%91%E6%95%B0%E5%88%97/" class="post-title-link" itemprop="url">斐波那契数列</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="文章创建时间：2019-02-25 11:33:36" itemprop="dateCreated datePublished" datetime="2019-02-25T11:33:36+08:00">2019-02-25</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">数据结构</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="斐波那契数列"><a href="#斐波那契数列" class="headerlink" title="斐波那契数列"></a>斐波那契数列</h1><h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>大家都知道斐波那契数列，现在要求输入一个整数n，请你输出斐波那契数列的第n项（从0开始，第0项为0）。</p>
+<p>n&lt;=39</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/02/25/%E6%96%90%E6%B3%A2%E9%82%A3%E5%A5%91%E6%95%B0%E5%88%97/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/01/19/Linux%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/tou2.jpg">
+      <meta itemprop="name" content="ylyang">
+      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="静水流深的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/01/19/Linux%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/" class="post-title-link" itemprop="url">Linux命令总结</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="文章创建时间：2019-01-19 20:21:15" itemprop="dateCreated datePublished" datetime="2019-01-19T20:21:15+08:00">2019-01-19</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>1.ls [选项] [目录名 | 列出相关目录下的所有目录和文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">-a  列出包括.a开头的隐藏文件的所有文件</span><br><span class="line">-A  通-a，但不列出&quot;.&quot;和&quot;..&quot;</span><br><span class="line">-l  列出文件的详细信息</span><br><span class="line">-c  根据ctime排序显示</span><br><span class="line">-t  根据文件修改时间排序</span><br><span class="line">---color[&#x3D;WHEN] 用色彩辨别文件类型 WHEN 可以是&#39;never&#39;、&#39;always&#39;或&#39;auto&#39;其中之一</span><br><span class="line">   白色：表示普通文件</span><br><span class="line">   蓝色：表示目录</span><br><span class="line">   绿色：表示可执行文件</span><br><span class="line">   红色：表示压缩文件</span><br><span class="line">   浅蓝色：链接文件</span><br><span class="line">   红色闪烁：表示链接的文件有问题</span><br><span class="line">   黄色：表示设备文件</span><br><span class="line">   灰色：表示其它文件</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/01/19/Linux%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/01/14/clone-graph%EF%BC%88%E5%85%8B%E9%9A%86%E4%B8%80%E4%B8%AA%E5%9B%BE%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/tou2.jpg">
+      <meta itemprop="name" content="ylyang">
+      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="静水流深的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/01/14/clone-graph%EF%BC%88%E5%85%8B%E9%9A%86%E4%B8%80%E4%B8%AA%E5%9B%BE%EF%BC%89/" class="post-title-link" itemprop="url">clone graph（克隆一个图）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="文章创建时间：2019-01-14 20:40:15" itemprop="dateCreated datePublished" datetime="2019-01-14T20:40:15+08:00">2019-01-14</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -392,14 +616,14 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><ul>
-<li>Merge Two Sorted Lists</li>
-</ul>
-<p>Merge two sorted linked lists and return it as a new list. The new list should be made by splicing together the nodes of the first two lists.</p>
-<h1 id="题目大意"><a href="#题目大意" class="headerlink" title="题目大意"></a>题目大意</h1><p>合并两个顺序排列的链表，并将新链表返回。新链表是把两个链表合并后的有序链表。</p>
+          <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>Clone an undirected graph. Each node in the graph contains a label and a list of its neighbors.</p>
+<p><strong>OJ’s undirected graph serialization:</strong></p>
+<p>Nodes are labeled uniquely.</p>
+<p>We use # as a separator for each node, and,as a separator for node label and each neighbor of the node.</p>
+<p>As an example, consider the serialized graph{0,1,2# 1,2# 2,2}.</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2018/12/17/%E5%90%88%E5%B9%B6%E4%B8%A4%E4%B8%AA%E9%A1%BA%E5%BA%8F%E9%93%BE%E8%A1%A8/#more" rel="contents">
+              <a class="btn" href="/2019/01/14/clone-graph%EF%BC%88%E5%85%8B%E9%9A%86%E4%B8%80%E4%B8%AA%E5%9B%BE%EF%BC%89/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -423,7 +647,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2018/12/16/%E4%BA%8C%E5%8F%89%E6%A0%91%E5%89%8D%E5%BA%8F%E9%81%8D%E5%8E%86/">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/01/13/binary-tree-level-order-traversal-ii-%EF%BC%88%E4%BA%8C%E5%8F%89%E6%A0%91%E8%87%AA%E4%B8%8B%E5%90%91%E4%B8%8A%E5%B1%82%E5%BA%8F%E9%81%8D%E5%8E%86%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/tou2.jpg">
@@ -437,7 +661,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2018/12/16/%E4%BA%8C%E5%8F%89%E6%A0%91%E5%89%8D%E5%BA%8F%E9%81%8D%E5%8E%86/" class="post-title-link" itemprop="url">二叉树前序遍历（递归 + 非递归）</a>
+            <a href="/2019/01/13/binary-tree-level-order-traversal-ii-%EF%BC%88%E4%BA%8C%E5%8F%89%E6%A0%91%E8%87%AA%E4%B8%8B%E5%90%91%E4%B8%8A%E5%B1%82%E5%BA%8F%E9%81%8D%E5%8E%86%EF%BC%89/" class="post-title-link" itemprop="url">binary tree level order traversal ii)（二叉树自下向上层序遍历）</a>
         </h2>
 
         <div class="post-meta">
@@ -447,7 +671,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="文章创建时间：2018-12-16 14:51:52" itemprop="dateCreated datePublished" datetime="2018-12-16T14:51:52+08:00">2018-12-16</time>
+              <time title="文章创建时间：2019-01-13 15:51:25" itemprop="dateCreated datePublished" datetime="2019-01-13T15:51:25+08:00">2019-01-13</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -470,15 +694,12 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><ul>
-<li>Binary Tree Preorder Traversal</li>
-</ul>
-<p>Given a binary tree, return the <em>preorder</em> traversal of its nodes’ values.<br>For example:<br>Given binary tree{1,#,2,3},</p>
-<p><img data-src="https://upload-images.jianshu.io/upload_images/15108298-34bbbf63f5fca08e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
-<p>return[1,2,3].<br><strong>Note:</strong> Recursive solution is trivial, could you do it iteratively?</p>
+          <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>Given a binary tree, return the <em>bottom-up level order</em> traversal of its nodes’ values. (ie, from left to right, level by level from leaf to root).</p>
+<p>For example:<br>Given binary tree{3,9,20,#,#,15,7},</p>
+<p><img data-src="https://upload-images.jianshu.io/upload_images/15108298-2995afdae0fa6828.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2018/12/16/%E4%BA%8C%E5%8F%89%E6%A0%91%E5%89%8D%E5%BA%8F%E9%81%8D%E5%8E%86/#more" rel="contents">
+              <a class="btn" href="/2019/01/13/binary-tree-level-order-traversal-ii-%EF%BC%88%E4%BA%8C%E5%8F%89%E6%A0%91%E8%87%AA%E4%B8%8B%E5%90%91%E4%B8%8A%E5%B1%82%E5%BA%8F%E9%81%8D%E5%8E%86%EF%BC%89/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -502,7 +723,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2018/12/16/Java-EE-Web%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91%E6%96%B9%E6%B3%95/">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/01/12/pascals-triangle-ii%EF%BC%88%E6%9D%A8%E8%BE%89%E4%B8%89%E8%A7%92%E3%80%81%E5%B8%95%E6%96%AF%E5%8D%A1%E4%B8%89%E8%A7%92%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/tou2.jpg">
@@ -516,7 +737,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2018/12/16/Java-EE-Web%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91%E6%96%B9%E6%B3%95/" class="post-title-link" itemprop="url">Java EE Web应用开发方法</a>
+            <a href="/2019/01/12/pascals-triangle-ii%EF%BC%88%E6%9D%A8%E8%BE%89%E4%B8%89%E8%A7%92%E3%80%81%E5%B8%95%E6%96%AF%E5%8D%A1%E4%B8%89%E8%A7%92%EF%BC%89/" class="post-title-link" itemprop="url">pascals triangle ii（杨辉三角、帕斯卡三角）</a>
         </h2>
 
         <div class="post-meta">
@@ -526,87 +747,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="文章创建时间：2018-12-16 00:05:41" itemprop="dateCreated datePublished" datetime="2018-12-16T00:05:41+08:00">2018-12-16</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java-EE%E6%9E%B6%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">Java EE架构</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="主要内容"><a href="#主要内容" class="headerlink" title="主要内容"></a>主要内容</h1><ul>
-<li>B/S编程模式简介</li>
-<li>HTML和HTTP</li>
-<li>动态web编程</li>
-<li>初识Servlet &amp; JSP</li>
-<li>MVC设计模式初步讨论</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2018/12/16/Java-EE-Web%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91%E6%96%B9%E6%B3%95/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2018/12/15/%E7%94%9F%E6%88%90%E6%8B%AC%E5%8F%B7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/tou2.jpg">
-      <meta itemprop="name" content="ylyang">
-      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="静水流深的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/12/15/%E7%94%9F%E6%88%90%E6%8B%AC%E5%8F%B7/" class="post-title-link" itemprop="url">生成括号</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="文章创建时间：2018-12-15 23:02:02" itemprop="dateCreated datePublished" datetime="2018-12-15T23:02:02+08:00">2018-12-15</time>
+              <time title="文章创建时间：2019-01-12 12:29:47" itemprop="dateCreated datePublished" datetime="2019-01-12T12:29:47+08:00">2019-01-12</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -629,13 +770,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><ul>
-<li>Generate Parentheses</li>
-</ul>
-<p>Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.<br>For example, given n = 3, a solution set is:<br>“((()))”, “(()())”, “(())()”, “()(())”, “()()()”</p>
+          <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>Given an index <em>k</em>, return the <em>k</em> <sup>th</sup> row of the Pascal’s triangle.<br>For example, given <em>k</em> = 3,<br>Return[1,3,3,1].<br><strong>Note:</strong><br>Could you optimize your algorithm to use only <em>O</em>(<em>k</em>) extra space?</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2018/12/15/%E7%94%9F%E6%88%90%E6%8B%AC%E5%8F%B7/#more" rel="contents">
+              <a class="btn" href="/2019/01/12/pascals-triangle-ii%EF%BC%88%E6%9D%A8%E8%BE%89%E4%B8%89%E8%A7%92%E3%80%81%E5%B8%95%E6%96%AF%E5%8D%A1%E4%B8%89%E8%A7%92%EF%BC%89/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -659,7 +797,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2018/12/15/Java-EE%E6%9E%B6%E6%9E%84%E6%A6%82%E8%BF%B0/">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/01/11/pascals-triangle%EF%BC%88%E6%9D%A8%E8%BE%89%E4%B8%89%E8%A7%92%E3%80%81%E5%B8%95%E6%96%AF%E5%8D%A1%E4%B8%89%E8%A7%92%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/tou2.jpg">
@@ -673,7 +811,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2018/12/15/Java-EE%E6%9E%B6%E6%9E%84%E6%A6%82%E8%BF%B0/" class="post-title-link" itemprop="url">Java EE架构概述</a>
+            <a href="/2019/01/11/pascals-triangle%EF%BC%88%E6%9D%A8%E8%BE%89%E4%B8%89%E8%A7%92%E3%80%81%E5%B8%95%E6%96%AF%E5%8D%A1%E4%B8%89%E8%A7%92%EF%BC%89/" class="post-title-link" itemprop="url">pascals triangle（杨辉三角、帕斯卡三角）</a>
         </h2>
 
         <div class="post-meta">
@@ -683,88 +821,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="文章创建时间：2018-12-15 00:08:20" itemprop="dateCreated datePublished" datetime="2018-12-15T00:08:20+08:00">2018-12-15</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java-EE%E6%9E%B6%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">Java EE架构</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="主要内容"><a href="#主要内容" class="headerlink" title="主要内容"></a>主要内容</h1><ul>
-<li>分布式多层应用</li>
-<li>Java EE容器</li>
-<li>Web Service支持</li>
-<li>打包应用</li>
-<li>开发角色</li>
-<li>Java EE APIs</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2018/12/15/Java-EE%E6%9E%B6%E6%9E%84%E6%A6%82%E8%BF%B0/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2018/12/14/%E4%BA%8C%E5%8F%89%E6%A0%91%E4%B8%AD%E5%BA%8F%E9%81%8D%E5%8E%86/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/tou2.jpg">
-      <meta itemprop="name" content="ylyang">
-      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="静水流深的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/12/14/%E4%BA%8C%E5%8F%89%E6%A0%91%E4%B8%AD%E5%BA%8F%E9%81%8D%E5%8E%86/" class="post-title-link" itemprop="url">二叉树中序遍历（递归+非递归）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="文章创建时间：2018-12-14 23:08:11" itemprop="dateCreated datePublished" datetime="2018-12-14T23:08:11+08:00">2018-12-14</time>
+              <time title="文章创建时间：2019-01-11 17:28:25" itemprop="dateCreated datePublished" datetime="2019-01-11T17:28:25+08:00">2019-01-11</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -787,91 +844,13 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="Binary-Tree-Inorder-Traversal（二叉树中序遍历）"><a href="#Binary-Tree-Inorder-Traversal（二叉树中序遍历）" class="headerlink" title="Binary Tree Inorder Traversal（二叉树中序遍历）"></a>Binary Tree Inorder Traversal（二叉树中序遍历）</h1><p>Given a binary tree, return the <em>inorder</em> traversal of its nodes’ values.<br>For example:<br>Given binary tree{1,#,2,3},</p>
-<p><img data-src="https://upload-images.jianshu.io/upload_images/15108298-2a63a01569a2e932.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
-<p>return[1,3,2].<br><strong>Note:</strong> Recursive solution is trivial, could you do it iteratively?<br>confused what”{1,#,2,3}”means? <a href="https://www.nowcoder.com/practice/1b25a41f25f241228abd7eb9b768ab9b?tpId=46&tqId=29084&tPage=2&rp=2&ru=/ta/leetcode&qru=/ta/leetcode/question-ranking#" target="_blank" rel="noopener">&gt; read more on how binary tree is serialized on OJ.</a><br><strong>OJ’s Binary Tree Serialization:</strong><br>The serialization of a binary tree follows a level order traversal, where ‘#’ signifies a path terminator where no node exists below.<br>Here’s an example:</p>
-<p><img data-src="https://upload-images.jianshu.io/upload_images/15108298-3bf41161cb720979.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
-<p>The above binary tree is serialized as”{1,2,3,#,#,4,#,#,5}”.</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2018/12/14/%E4%BA%8C%E5%8F%89%E6%A0%91%E4%B8%AD%E5%BA%8F%E9%81%8D%E5%8E%86/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2018/12/14/%E6%90%9C%E7%B4%A2%E4%B8%80%E4%B8%AA2D%E7%9F%A9%E9%98%B5/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/tou2.jpg">
-      <meta itemprop="name" content="ylyang">
-      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="静水流深的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/12/14/%E6%90%9C%E7%B4%A2%E4%B8%80%E4%B8%AA2D%E7%9F%A9%E9%98%B5/" class="post-title-link" itemprop="url">搜索一个2D矩阵</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="文章创建时间：2018-12-14 16:35:49" itemprop="dateCreated datePublished" datetime="2018-12-14T16:35:49+08:00">2018-12-14</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Search-A-2D-Matrix（搜索一个2D矩阵）"><a href="#Search-A-2D-Matrix（搜索一个2D矩阵）" class="headerlink" title="Search A 2D Matrix（搜索一个2D矩阵）"></a>Search A 2D Matrix（搜索一个2D矩阵）</h1><p>Write an efficient algorithm that searches for a value in an m x n matrix. This matrix has the following properties:<br>Integers in each row are sorted from left to right.<br>The first integer of each row is greater than the last integer of the previous row.<br>For example,<br>Consider the following matrix:</p>
+          <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>Given numRows, generate the first numRows of Pascal’s triangle.<br>For example, given numRows = 5,<br>Return：</p>
 <blockquote>
-<p>[1,  3,  5,  7],<br>[10, 11, 16, 20],<br>[23, 30, 34, 50]</p>
+<p>[<br>[1],<br>[1,1],<br>[1,2,1],<br>[1,3,3,1],<br>[1,4,6,4,1]<br>]</p>
 </blockquote>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2018/12/14/%E6%90%9C%E7%B4%A2%E4%B8%80%E4%B8%AA2D%E7%9F%A9%E9%98%B5/#more" rel="contents">
+              <a class="btn" href="/2019/01/11/pascals-triangle%EF%BC%88%E6%9D%A8%E8%BE%89%E4%B8%89%E8%A7%92%E3%80%81%E5%B8%95%E6%96%AF%E5%8D%A1%E4%B8%89%E8%A7%92%EF%BC%89/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -895,7 +874,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2018/12/13/%E5%94%AF%E4%B8%80%E8%B7%AF%E5%BE%84/">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/01/10/remove-duplicates-from-sorted-array-ii%EF%BC%88%E4%BB%8E%E9%87%8D%E5%A4%8D%E6%95%B0%E7%BB%84%E4%B8%AD%E7%A7%BB%E9%99%A4%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/tou2.jpg">
@@ -909,7 +888,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2018/12/13/%E5%94%AF%E4%B8%80%E8%B7%AF%E5%BE%84/" class="post-title-link" itemprop="url">唯一路径</a>
+            <a href="/2019/01/10/remove-duplicates-from-sorted-array-ii%EF%BC%88%E4%BB%8E%E9%87%8D%E5%A4%8D%E6%95%B0%E7%BB%84%E4%B8%AD%E7%A7%BB%E9%99%A4%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0%EF%BC%89/" class="post-title-link" itemprop="url">remove duplicates from sorted array ii（从重复数组中移除重复元素）</a>
         </h2>
 
         <div class="post-meta">
@@ -919,7 +898,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="文章创建时间：2018-12-13 17:06:12" itemprop="dateCreated datePublished" datetime="2018-12-13T17:06:12+08:00">2018-12-13</time>
+              <time title="文章创建时间：2019-01-10 20:18:33" itemprop="dateCreated datePublished" datetime="2019-01-10T20:18:33+08:00">2019-01-10</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -942,10 +921,13 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="Unique-Paths"><a href="#Unique-Paths" class="headerlink" title="Unique Paths"></a>Unique Paths</h1><p>A robot is located at the top-left corner of a m x n grid (marked ‘Start’ in the diagram below).<br>The robot can only move either down or right at any point in time. The robot is trying to reach the bottom-right corner of the grid (marked ‘Finish’ in the diagram below).<br>How many possible unique paths are there?<br><img data-src="https://upload-images.jianshu.io/upload_images/15108298-b7a195c19079b7e1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt><br>Above is a 3 x 7 grid. How many possible unique paths are there?<br><strong>Note</strong>: m and n will be at most 100.</p>
+          <blockquote>
+<p>类似问题：<a href="https://yangyuanlin.club/2019/01/01/remove-duplicates-from-sorted-list%EF%BC%88%E7%A7%BB%E9%99%A4%E6%9C%89%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0%EF%BC%89/" target="_blank" rel="noopener">remove duplicates from sorted list（移除有序链表中的重复元素）</a></p>
+</blockquote>
+<h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>Follow up for “Remove Duplicates”:<br>What if duplicates are allowed at most <em>twice</em>?<br>For example,<br>Given sorted array A =[1,1,1,2,2,3],<br>Your function should return length =5, and A is now[1,1,2,2,3].</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2018/12/13/%E5%94%AF%E4%B8%80%E8%B7%AF%E5%BE%84/#more" rel="contents">
+              <a class="btn" href="/2019/01/10/remove-duplicates-from-sorted-array-ii%EF%BC%88%E4%BB%8E%E9%87%8D%E5%A4%8D%E6%95%B0%E7%BB%84%E4%B8%AD%E7%A7%BB%E9%99%A4%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0%EF%BC%89/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -969,7 +951,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2018/12/12/%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%8F%89%E6%A0%91/">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/01/09/plus-one%EF%BC%88%E5%8A%A0%E4%B8%80%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/tou2.jpg">
@@ -983,7 +965,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2018/12/12/%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%8F%89%E6%A0%91/" class="post-title-link" itemprop="url">平衡二叉树</a>
+            <a href="/2019/01/09/plus-one%EF%BC%88%E5%8A%A0%E4%B8%80%EF%BC%89/" class="post-title-link" itemprop="url">plus-one（加一）</a>
         </h2>
 
         <div class="post-meta">
@@ -993,7 +975,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="文章创建时间：2018-12-12 19:32:13" itemprop="dateCreated datePublished" datetime="2018-12-12T19:32:13+08:00">2018-12-12</time>
+              <time title="文章创建时间：2019-01-09 11:51:31" itemprop="dateCreated datePublished" datetime="2019-01-09T11:51:31+08:00">2019-01-09</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1016,10 +998,11 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="Balanced-Binary-Tree"><a href="#Balanced-Binary-Tree" class="headerlink" title="Balanced Binary Tree"></a>Balanced Binary Tree</h1><p>Given a binary tree, determine if it is height-balanced.<br>For this problem, a height-balanced binary tree is defined as a binary tree in which the depth of the two subtrees of every node never differ by more than 1.</p>
+          <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>Given a number represented as an array of digits, plus one to the number.</p>
+<h1 id="题目大意"><a href="#题目大意" class="headerlink" title="题目大意"></a>题目大意</h1><p>用一个数组表示一个数，把这个数做加一操作。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2018/12/12/%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%8F%89%E6%A0%91/#more" rel="contents">
+              <a class="btn" href="/2019/01/09/plus-one%EF%BC%88%E5%8A%A0%E4%B8%80%EF%BC%89/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1042,7 +1025,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/6/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/8/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/6/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/8/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
