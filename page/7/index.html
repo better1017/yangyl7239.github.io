@@ -139,17 +139,17 @@
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">15</span></a>
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">16</span></a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">140</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">144</span></a>
 
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">111</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">115</span></a>
 
   </li>
         <li class="menu-item menu-item-about">
@@ -201,20 +201,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">140</span>
+          <span class="site-state-item-count">144</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">16</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">111</span>
+        <span class="site-state-item-count">115</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -267,6 +267,337 @@
 
         <div class="content index posts-expand">
           
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/06/25/%E6%A0%91%E7%9A%84%E9%81%8D%E5%8E%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/tou2.jpg">
+      <meta itemprop="name" content="ylyang">
+      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="静水流深的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/06/25/%E6%A0%91%E7%9A%84%E9%81%8D%E5%8E%86/" class="post-title-link" itemprop="url">树的遍历</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="文章创建时间：2019-06-25 14:26:15" itemprop="dateCreated datePublished" datetime="2019-06-25T14:26:15+08:00">2019-06-25</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">数据结构</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="树的遍历"><a href="#树的遍历" class="headerlink" title="树的遍历"></a>树的遍历</h1><h2 id="什么叫做树？"><a href="#什么叫做树？" class="headerlink" title="什么叫做树？"></a>什么叫做树？</h2><p><strong>树状图</strong>是一种<a href="https://baike.baidu.com/item/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/1450" target="_blank" rel="noopener">数据结构</a>，它是由n（n&gt;=0）个有限结点组成一个具有层次关系的<a href="https://baike.baidu.com/item/%E9%9B%86%E5%90%88" target="_blank" rel="noopener">集合</a>。把它叫做“树”是因为它看起来像一棵倒挂的树，也就是说它是根朝上，而叶朝下的。它具有以下的特点：</p>
+<p>每个结点有零个或多个子结点；没有父结点的结点称为根结点；每一个非根结点有且只有一个父结点；除了根结点外，每个子结点可以分为多个不相交的子树；</p>
+<p>叶节点没有子节点，根节点没有父节点。</p>
+<h2 id="什么是二叉树？"><a href="#什么是二叉树？" class="headerlink" title="什么是二叉树？"></a>什么是二叉树？</h2><p>每个节点最多含有两个子树的树称为二叉树。下图就是一个二叉树。</p>
+<p>在计算机科学中，二叉树是每个结点最多有两个子树的树结构。通常子树被称作“左子树”（left subtree）和“右子树”（right subtree）。二叉树常被用于实现二叉查找树和二叉堆。</p>
+<p>一棵深度为k，且有2^k-1个节点的二叉树，称为满二叉树。这种树的特点是每一层上的节点数都是最大节点数。而在一棵二叉树中，除最后一层外，若其余层都是满的，并且最后一层或者是满的，或者是在右边缺少连续若干节点，则此二叉树为完全二叉树。具有n个节点的完全二叉树的深度为floor(log2n)+1。深度为k的完全二叉树，至少有2k-1个节点，至多有2k-1个节点</p>
+<h2 id="构建一个二叉树"><a href="#构建一个二叉树" class="headerlink" title="构建一个二叉树"></a>构建一个二叉树</h2><p>如图所示，我们如果要构建下面的二叉树，应该是怎么定义的</p>
+<p><img data-src="image-20200528223617759.png" alt="image"></p>
+<p>代码如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">class TreeNode(object):</span><br><span class="line">    def __init__(self, x):</span><br><span class="line">        self.val &#x3D; x</span><br><span class="line">        self.left &#x3D; None</span><br><span class="line">        self.right &#x3D; None</span><br><span class="line"></span><br><span class="line">if __name__ &#x3D;&#x3D; &#39;__main__&#39;:</span><br><span class="line">    t1 &#x3D; TreeNode(1)</span><br><span class="line">    t2 &#x3D; TreeNode(2)</span><br><span class="line">    t3 &#x3D; TreeNode(3)</span><br><span class="line">    t4 &#x3D; TreeNode(4)</span><br><span class="line">    t5 &#x3D; TreeNode(5)</span><br><span class="line">    t6 &#x3D; TreeNode(6)</span><br><span class="line">    t7 &#x3D; TreeNode(7)</span><br><span class="line">    t8 &#x3D; TreeNode(8)</span><br><span class="line">    t1.left &#x3D; t2</span><br><span class="line">    t1.right &#x3D; t3</span><br><span class="line">    t2.left &#x3D; t4</span><br><span class="line">    t2.right &#x3D; t5</span><br><span class="line">    t3.left &#x3D; t6</span><br><span class="line">    t3.right &#x3D; t7</span><br><span class="line">    t6.right &#x3D; t8</span><br></pre></td></tr></table></figure>
+
+<h2 id="二叉树的遍历："><a href="#二叉树的遍历：" class="headerlink" title="二叉树的遍历："></a>二叉树的遍历：</h2><p>遍历是对树的一种最基本的运算，所谓遍历二叉树，就是按一定的规则和顺序走遍二叉树的所有结点，使每一个结点都被访问一次，而且只被访问一次。由于二叉树是非线性结构，因此，<a href="https://baike.baidu.com/item/%E6%A0%91%E7%9A%84%E9%81%8D%E5%8E%86" target="_blank" rel="noopener">树的遍历</a>实质上是将二叉树的各个结点转换成为一个线性序列来表示。</p>
+<p>设L、D、R分别表示遍历左子树、访问根结点和遍历右子树， 则对一棵二叉树的遍历有三种情况：DLR（称为先根次序遍历），LDR（称为中根次序遍历），LRD （称为后根次序遍历）。</p>
+<blockquote>
+<p>针对上图，我们看看先序、中序、后序遍历</p>
+<p>先序遍历：1 2 4 5 3 6 8 7</p>
+<p>中序遍历：4 2 5 1 6 8 3 7</p>
+<p>后序遍历：4 5 2 8 6 7 3 1 </p>
+</blockquote>
+<h2 id="递归遍历"><a href="#递归遍历" class="headerlink" title="递归遍历"></a>递归遍历</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TreeNode</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, x)</span>:</span></span><br><span class="line">        self.val = x</span><br><span class="line">        self.left = <span class="literal">None</span></span><br><span class="line">        self.right = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 递归先序遍历</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">preOrderRecusive</span><span class="params">(root)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> root == <span class="literal">None</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">    print(root.val, end=<span class="string">" "</span>)</span><br><span class="line">    preOrderRecusive(root.left)</span><br><span class="line">    preOrderRecusive(root.right)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 递归中序遍历</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">midOrderRecusive</span><span class="params">(root)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> root == <span class="literal">None</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">    midOrderRecusive(root.left)</span><br><span class="line">    print(root.val, end=<span class="string">" "</span>)</span><br><span class="line">    midOrderRecusive(root.right)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 递归后序遍历</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">latOrderRecusive</span><span class="params">(root)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> root == <span class="literal">None</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">    latOrderRecusive(root.left)</span><br><span class="line">    latOrderRecusive(root.right)</span><br><span class="line">    print(root.val, end=<span class="string">" "</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    t1 = TreeNode(<span class="number">1</span>)</span><br><span class="line">    t2 = TreeNode(<span class="number">2</span>)</span><br><span class="line">    t3 = TreeNode(<span class="number">3</span>)</span><br><span class="line">    t4 = TreeNode(<span class="number">4</span>)</span><br><span class="line">    t5 = TreeNode(<span class="number">5</span>)</span><br><span class="line">    t6 = TreeNode(<span class="number">6</span>)</span><br><span class="line">    t7 = TreeNode(<span class="number">7</span>)</span><br><span class="line">    t8 = TreeNode(<span class="number">8</span>)</span><br><span class="line">    t1.left = t2</span><br><span class="line">    t1.right = t3</span><br><span class="line">    t2.left = t4</span><br><span class="line">    t2.right = t5</span><br><span class="line">    t3.left = t6</span><br><span class="line">    t3.right = t7</span><br><span class="line">    t6.right = t8</span><br><span class="line"></span><br><span class="line">    preOrderRecusive(t1)</span><br><span class="line">    print()</span><br><span class="line">    midOrderRecusive(t1)</span><br><span class="line">    print()</span><br><span class="line">    latOrderRecusive(t1)</span><br></pre></td></tr></table></figure>
+
+
+
+<p>运行结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1 2 4 5 3 6 8 7 </span><br><span class="line">4 2 5 1 8 6 3 7 </span><br><span class="line">4 5 2 8 6 7 3 1</span><br></pre></td></tr></table></figure>
+
+<h2 id="非递归遍历"><a href="#非递归遍历" class="headerlink" title="非递归遍历"></a>非递归遍历</h2><p>递归和循环是可以互相转换的，下面是非递归先序遍历，使用一个stack用于存储经过的节点，并且输出，但没有指针指向为空的时候，我们需要将stack中保存的节点，进行pop出栈，并把它的右节点，重新赋值给tempNode指针，直到所有节点都遍历完成为止。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># 非递归先序遍历</span><br><span class="line">def preOrder(root):</span><br><span class="line">    if root &#x3D;&#x3D; None:</span><br><span class="line">        return None</span><br><span class="line">    stack &#x3D; []</span><br><span class="line">    tempNode &#x3D; root</span><br><span class="line">    while tempNode !&#x3D; None or stack:</span><br><span class="line">        print(tempNode.val, end&#x3D;&quot; &quot;)</span><br><span class="line">        stack.append(tempNode)</span><br><span class="line">        tempNode &#x3D; tempNode.left</span><br><span class="line">        while tempNode &#x3D;&#x3D; None and stack !&#x3D; None:</span><br><span class="line">            tempNode &#x3D; stack.pop()</span><br><span class="line">            tempNode &#x3D; tempNode.right</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># 非递归中序遍历</span><br><span class="line">def midOrder(root):</span><br><span class="line">    if root &#x3D;&#x3D; None:</span><br><span class="line">        return None</span><br><span class="line">    stack &#x3D; []</span><br><span class="line">    tempNode &#x3D; root</span><br><span class="line">    while tempNode !&#x3D; None or stack:</span><br><span class="line">        stack.append(tempNode)</span><br><span class="line">        tempNode &#x3D; tempNode.left</span><br><span class="line">        while tempNode &#x3D;&#x3D; None and stack !&#x3D; []:</span><br><span class="line">            tempNode &#x3D; stack.pop()</span><br><span class="line">            print(tempNode.val, end&#x3D;&quot; &quot;)</span><br><span class="line">            tempNode &#x3D; tempNode.right</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"># 非递归后序遍历</span><br><span class="line">def latOrder(root):</span><br><span class="line">    if root &#x3D;&#x3D; None:</span><br><span class="line">        return None</span><br><span class="line">    stack &#x3D; []</span><br><span class="line">    tempNode &#x3D; root</span><br><span class="line">    while tempNode !&#x3D; None or stack:</span><br><span class="line">        stack.append(tempNode)</span><br><span class="line">        tempNode &#x3D; tempNode.left</span><br><span class="line">        while tempNode &#x3D;&#x3D; None and stack !&#x3D; []:</span><br><span class="line">            # 后序遍历，pop的方式有变化，不能在右子树不为空的时候pop</span><br><span class="line">            node &#x3D; stack[-1] # 因此这里不出列</span><br><span class="line">            tempNode &#x3D; node.right</span><br><span class="line">            # 当右节点没有的时候，才能够pop</span><br><span class="line">            if node.right &#x3D;&#x3D; None:</span><br><span class="line">                print(node.val, end&#x3D;&quot; &quot;)</span><br><span class="line">                node &#x3D; stack.pop()</span><br><span class="line">                # 判断pop的节点，是否是上一个节点</span><br><span class="line">                while stack and node &#x3D;&#x3D; stack[-1].right:</span><br><span class="line">                    node &#x3D; stack.pop()</span><br><span class="line">                    print(node.val, end&#x3D;&quot; &quot;)</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/06/21/%E6%95%B0%E7%BB%84%E4%B8%AD%E5%8F%AA%E5%87%BA%E7%8E%B0%E4%B8%80%E6%AC%A1%E7%9A%84%E6%95%B0%E5%AD%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/tou2.jpg">
+      <meta itemprop="name" content="ylyang">
+      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="静水流深的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/06/21/%E6%95%B0%E7%BB%84%E4%B8%AD%E5%8F%AA%E5%87%BA%E7%8E%B0%E4%B8%80%E6%AC%A1%E7%9A%84%E6%95%B0%E5%AD%97/" class="post-title-link" itemprop="url">数组中只出现一次的数字</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="文章创建时间：2019-06-21 20:24:18" itemprop="dateCreated datePublished" datetime="2019-06-21T20:24:18+08:00">2019-06-21</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">数据结构</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="数组中只出现一次的数字"><a href="#数组中只出现一次的数字" class="headerlink" title="数组中只出现一次的数字"></a>数组中只出现一次的数字</h1><h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>一个整型数组里除了两个数字之外，其他的数字都出现了两次。请写程序找出这两个只出现一次的数字。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/06/21/%E6%95%B0%E7%BB%84%E4%B8%AD%E5%8F%AA%E5%87%BA%E7%8E%B0%E4%B8%80%E6%AC%A1%E7%9A%84%E6%95%B0%E5%AD%97/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/06/19/%E6%95%B4%E6%95%B0%E4%B8%AD1%E5%87%BA%E7%8E%B0%E7%9A%84%E4%B8%AA%E6%95%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/tou2.jpg">
+      <meta itemprop="name" content="ylyang">
+      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="静水流深的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/06/19/%E6%95%B4%E6%95%B0%E4%B8%AD1%E5%87%BA%E7%8E%B0%E7%9A%84%E4%B8%AA%E6%95%B0/" class="post-title-link" itemprop="url">整数中1出现的个数</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="文章创建时间：2019-06-19 14:21:43" itemprop="dateCreated datePublished" datetime="2019-06-19T14:21:43+08:00">2019-06-19</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">数据结构</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="整数中1出现的个数"><a href="#整数中1出现的个数" class="headerlink" title="整数中1出现的个数"></a>整数中1出现的个数</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>求出1<del>13的整数中1出现的次数,并算出100</del>1300的整数中1出现的次数？为此他特别数了一下1~13中包含1的数字有1、10、11、12、13因此共出现6次,但是对于后面问题他就没辙了。ACMer希望你们帮帮他,并把问题更加普遍化,可以很快的求出任意非负整数区间中1出现的次数（从1 到 n 中1出现的次数）</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/06/19/%E6%95%B4%E6%95%B0%E4%B8%AD1%E5%87%BA%E7%8E%B0%E7%9A%84%E4%B8%AA%E6%95%B0/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/06/18/%E6%95%B0%E7%BB%84%E4%B8%AD%E5%87%BA%E7%8E%B0%E6%AC%A1%E6%95%B0%E8%B6%85%E8%BF%87%E4%B8%80%E5%8D%8A%E7%9A%84%E6%95%B0%E5%AD%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/tou2.jpg">
+      <meta itemprop="name" content="ylyang">
+      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="静水流深的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/06/18/%E6%95%B0%E7%BB%84%E4%B8%AD%E5%87%BA%E7%8E%B0%E6%AC%A1%E6%95%B0%E8%B6%85%E8%BF%87%E4%B8%80%E5%8D%8A%E7%9A%84%E6%95%B0%E5%AD%97/" class="post-title-link" itemprop="url">数组中出现次数超过一半的数字</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="文章创建时间：2019-06-18 17:19:52" itemprop="dateCreated datePublished" datetime="2019-06-18T17:19:52+08:00">2019-06-18</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">数据结构</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="数组中出现次数超过一半的数字"><a href="#数组中出现次数超过一半的数字" class="headerlink" title="数组中出现次数超过一半的数字"></a>数组中出现次数超过一半的数字</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>数组中有一个数字出现的次数超过数组长度的一半，请找出这个数字。例如输入一个长度为9的数组{1,2,3,2,2,2,5,4,2}。由于数字2在数组中出现了5次，超过数组长度的一半，因此输出2。如果不存在则输出0。</p>
+<h2 id="常规代码"><a href="#常规代码" class="headerlink" title="常规代码"></a>常规代码</h2><p>使用一个字典，来记录每个数出现的次数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">#  数组中出现次数超过一半的数字</span><br><span class="line"># 数组中有一个数字出现的次数超过数组长度的一半，请找出这个数字。例如输入一个长度为9的数组&#123;1,2,3,2,2,2,5,4,2&#125;。由于数字2在数组中出现了5次，超过数组长度的一半，因此输出2。如果不存在则输出0。</span><br><span class="line"># -*- coding:utf-8 -*-</span><br><span class="line">class Solution:</span><br><span class="line">    def MoreThanHalfNum_Solution(self, numbers):</span><br><span class="line">        numsCount &#x3D; &#123;&#125;</span><br><span class="line">        numLen &#x3D; len(numbers)</span><br><span class="line">        for num in numbers:</span><br><span class="line">            if num in numsCount:</span><br><span class="line">                numsCount[num] +&#x3D; 1</span><br><span class="line">            else:</span><br><span class="line">                numsCount[num] &#x3D; 1</span><br><span class="line">            # 找出超过一半的数</span><br><span class="line">            if numsCount[num] &gt; numLen &gt;&gt; 1:</span><br><span class="line">                return num</span><br><span class="line">        return 0</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>上述代码的空间和时间复杂度都是：O(n) </p>
+<p>如果我们要做到，空间复杂度为：O(1)，时间复杂O(n)</p>
+</blockquote>
+<h2 id="升级代码"><a href="#升级代码" class="headerlink" title="升级代码"></a>升级代码</h2><blockquote>
+<p> 思路：抵消掉  遇到不相同的数字就相互抵消掉，最终剩下的数字就可能是出现次数大于数组长度一半的数字。首先我们来遍历数字，遍历的时候需要记录上次出现的数字是什么，进而判断 下次出现的数字是否与现在这个数字相等，如果不相等的话，那么就把两个数字抵消掉，到最后没有抵消掉的数字，就可能是出现的次数大于数组长度的一半。</p>
+<p> 我们可以考虑在遍历数组的时候保存两个值：一个是数组中的一个数字，另一个是次数；当我们遍历到下一个数字的时候，如果下一个数字和我们之前保存的数字相同，则次数加1，如果下一个数字和我们之前保存的数字不同，则凑数减1.如果次数为0 ，我们需要保存下一次出现的次数，然后把次数设置为1.</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">class Solution:</span><br><span class="line">    def MoreThanHalfNum_Solution(self, numbers):</span><br><span class="line">        #定义变量 上次出现的数字为0</span><br><span class="line">        last &#x3D; 0</span><br><span class="line">        #上次出现的数字的数量为0 </span><br><span class="line">        lastCount &#x3D; 0</span><br><span class="line">		#遍历数组中的数字</span><br><span class="line">        for num in numbers:</span><br><span class="line">            #如果说这个数字出现的次数为0了。</span><br><span class="line">            if lastCount &#x3D;&#x3D; 0:</span><br><span class="line">                #那么就把上次出现的数字，变为需要保存的那个数字。</span><br><span class="line">                last &#x3D; num</span><br><span class="line">                #并把次数设置为1 次，出现了这一次。</span><br><span class="line">                lastCount &#x3D; 1</span><br><span class="line">            else:</span><br><span class="line">                #否则就判断，这个数字是不是与上次出现的次数相同，如果相同的话，那么我们这个数字出现的次数就加1.</span><br><span class="line">                if num &#x3D;&#x3D; last:</span><br><span class="line">                    lastCount +&#x3D; 1</span><br><span class="line">                #如果不同的话，那么我们就让这两个数字抵消掉，那么这个数字出现的次数需要减 1；</span><br><span class="line">                else:</span><br><span class="line">                    lastCount -&#x3D; 1</span><br><span class="line">		#如果最后遍历完事之后 这个记录数字出现次数的 值为0 的话，那么就说明我们的这个数组里面的数刚好可以两两抵消掉</span><br><span class="line">        if lastCount &#x3D;&#x3D; 0:</span><br><span class="line">            return 0</span><br><span class="line">        #否则的话，就说明 数组里面 留下了没有抵消掉的数</span><br><span class="line">        else:</span><br><span class="line">            #这种情况是last可能是大于一半的数字</span><br><span class="line">            #这个时候把 记录数字次数的变量 计数 为0 </span><br><span class="line">            lastCount &#x3D; 0</span><br><span class="line">            #遍历数组中的数</span><br><span class="line">            for num in numbers:</span><br><span class="line">                #如果这个数与我们记录的数相等的话</span><br><span class="line">                if num &#x3D;&#x3D; last:</span><br><span class="line">                    #让这个计数加1</span><br><span class="line">                    lastCount +&#x3D; 1</span><br><span class="line">			#最后判断一下，这个数的计数次数，是不是大于 我们数组长度的一半，如果是的话，就返回这个数，如果不是就返回0.</span><br><span class="line">            if lastCount &gt; (len(numbers)&gt;&gt; 1):</span><br><span class="line">                return last</span><br><span class="line">        return 0</span><br></pre></td></tr></table></figure>
+
+
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -711,306 +1042,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/05/02/%E5%A4%8D%E6%9D%82%E9%93%BE%E8%A1%A8%E7%9A%84%E5%A4%8D%E5%88%B6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/tou2.jpg">
-      <meta itemprop="name" content="ylyang">
-      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="静水流深的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/05/02/%E5%A4%8D%E6%9D%82%E9%93%BE%E8%A1%A8%E7%9A%84%E5%A4%8D%E5%88%B6/" class="post-title-link" itemprop="url">复杂链表的复制</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="文章创建时间：2019-05-02 12:22:38" itemprop="dateCreated datePublished" datetime="2019-05-02T12:22:38+08:00">2019-05-02</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">数据结构</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="复杂链表的复制"><a href="#复杂链表的复制" class="headerlink" title="复杂链表的复制"></a>复杂链表的复制</h1><h2 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h2><p>输入一个复杂链表（每个节点中有节点值，以及两个指针，一个指向下一个节点，另一个特殊指针random指向一个随机节点），请对此链表进行深拷贝，并返回拷贝后的头结点。（注意，输出结果中请不要返回参数中的节点引用，否则判题程序会直接返回空）</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/05/02/%E5%A4%8D%E6%9D%82%E9%93%BE%E8%A1%A8%E7%9A%84%E5%A4%8D%E5%88%B6/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/04/29/%E5%90%88%E5%B9%B6%E4%B8%A4%E4%B8%AA%E6%8E%92%E5%BA%8F%E7%9A%84%E9%93%BE%E8%A1%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/tou2.jpg">
-      <meta itemprop="name" content="ylyang">
-      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="静水流深的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/04/29/%E5%90%88%E5%B9%B6%E4%B8%A4%E4%B8%AA%E6%8E%92%E5%BA%8F%E7%9A%84%E9%93%BE%E8%A1%A8/" class="post-title-link" itemprop="url">合并两个排序的链表</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="文章创建时间：2019-04-29 12:20:32" itemprop="dateCreated datePublished" datetime="2019-04-29T12:20:32+08:00">2019-04-29</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">数据结构</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="合并两个排序的链表"><a href="#合并两个排序的链表" class="headerlink" title="合并两个排序的链表"></a>合并两个排序的链表</h1><h2 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h2><p>输入两个单调递增的链表，输出两个链表合成后的链表，当然我们需要合成后的链表满足单调不减规则。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/04/29/%E5%90%88%E5%B9%B6%E4%B8%A4%E4%B8%AA%E6%8E%92%E5%BA%8F%E7%9A%84%E9%93%BE%E8%A1%A8/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/04/21/%E9%93%BE%E8%A1%A8%E4%B8%AD%E5%80%92%E6%95%B0%E7%AC%ACK%E4%B8%AA%E8%8A%82%E7%82%B9/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/tou2.jpg">
-      <meta itemprop="name" content="ylyang">
-      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="静水流深的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/04/21/%E9%93%BE%E8%A1%A8%E4%B8%AD%E5%80%92%E6%95%B0%E7%AC%ACK%E4%B8%AA%E8%8A%82%E7%82%B9/" class="post-title-link" itemprop="url">链表中倒数第K个节点</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="文章创建时间：2019-04-21 12:09:29" itemprop="dateCreated datePublished" datetime="2019-04-21T12:09:29+08:00">2019-04-21</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">数据结构</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="链表中倒数第K个节点"><a href="#链表中倒数第K个节点" class="headerlink" title="链表中倒数第K个节点"></a>链表中倒数第K个节点</h1><h2 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h2><p>输入一个链表，输出该链表中倒数第k个结点。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/04/21/%E9%93%BE%E8%A1%A8%E4%B8%AD%E5%80%92%E6%95%B0%E7%AC%ACK%E4%B8%AA%E8%8A%82%E7%82%B9/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/04/15/%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/tou2.jpg">
-      <meta itemprop="name" content="ylyang">
-      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="静水流深的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/04/15/%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8/" class="post-title-link" itemprop="url">反转链表</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="文章创建时间：2019-04-15 12:14:01" itemprop="dateCreated datePublished" datetime="2019-04-15T12:14:01+08:00">2019-04-15</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">数据结构</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="反转链表"><a href="#反转链表" class="headerlink" title="反转链表"></a>反转链表</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>输入一个链表，反转链表后，输出新链表的表头。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/04/15/%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/6/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/8/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/6/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/8/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 

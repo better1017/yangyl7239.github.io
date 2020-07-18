@@ -27,12 +27,12 @@
     var CONFIG = {"hostname":"ylyang.xyz","root":"/","scheme":"Gemini","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":{"enable":true,"onlypost":false,"loadingImg":null},"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}}};
   </script>
 
-  <meta name="description" content="Mysql默认搜索引擎Mysql5.5以后默认使用InnoDB为搜索引擎 MyISAM是表锁，不支持事务和主外键  InnoDB默认可以创建16个索引  InnoDB支持事务，MyIsam不支持事务，对于InnoDB每一条SQL语言都默认封装成事务，自动提交，这样会影响速度，所以最好把多条SQL语言放到begin 和 commit之间，组成一个事务； InnoDB支持外键，而MyIsam不支持，对">
+  <meta name="description" content="Mysql默认搜索引擎Mysql5.5以后默认使用InnoDB为搜索引擎 MyISAM是表锁，不支持事务和主外键">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL搜索引擎">
 <meta property="og:url" content="ylyang.xyz/2020/03/15/MySQL%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/index.html">
 <meta property="og:site_name" content="静水流深的博客">
-<meta property="og:description" content="Mysql默认搜索引擎Mysql5.5以后默认使用InnoDB为搜索引擎 MyISAM是表锁，不支持事务和主外键  InnoDB默认可以创建16个索引  InnoDB支持事务，MyIsam不支持事务，对于InnoDB每一条SQL语言都默认封装成事务，自动提交，这样会影响速度，所以最好把多条SQL语言放到begin 和 commit之间，组成一个事务； InnoDB支持外键，而MyIsam不支持，对">
+<meta property="og:description" content="Mysql默认搜索引擎Mysql5.5以后默认使用InnoDB为搜索引擎 MyISAM是表锁，不支持事务和主外键">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="ylyang.xyz/2020/03/15/MySQL%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/image-20200404084731063.png">
 <meta property="og:image" content="ylyang.xyz/2020/03/15/MySQL%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/image-20200404085422944.png">
@@ -46,7 +46,7 @@
 <meta property="og:image" content="ylyang.xyz/2020/03/15/MySQL%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/image-20200404155456211.png">
 <meta property="og:image" content="ylyang.xyz/2020/03/15/MySQL%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/image-20200404161422032.png">
 <meta property="article:published_time" content="2020-03-15T07:54:00.000Z">
-<meta property="article:modified_time" content="2020-07-18T07:58:29.112Z">
+<meta property="article:modified_time" content="2020-07-18T08:09:24.427Z">
 <meta property="article:author" content="ylyang">
 <meta property="article:tag" content="MySQL">
 <meta property="article:tag" content="数据库">
@@ -154,17 +154,17 @@
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">15</span></a>
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">16</span></a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">140</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">144</span></a>
 
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">111</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">115</span></a>
 
   </li>
         <li class="menu-item menu-item-about">
@@ -217,20 +217,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">140</span>
+          <span class="site-state-item-count">144</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">16</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">111</span>
+        <span class="site-state-item-count">115</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -343,6 +343,8 @@
       
         <h2 id="Mysql默认搜索引擎"><a href="#Mysql默认搜索引擎" class="headerlink" title="Mysql默认搜索引擎"></a>Mysql默认搜索引擎</h2><p>Mysql5.5以后默认使用InnoDB为搜索引擎</p>
 <p>MyISAM是表锁，不支持事务和主外键</p>
+<a id="more"></a>
+
 <p><img data-src="image-20200404084731063.png" alt="image"></p>
 <p>InnoDB默认可以创建16个索引</p>
 <ul>
@@ -489,10 +491,13 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2019/11/05/Http%E5%92%8CHttps/" rel="prev" title="计算机网络之Http和Https">
-      <i class="fa fa-chevron-left"></i> 计算机网络之Http和Https
+    <a href="/2020/03/09/Java%E4%B8%A4%E7%A7%8D%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86JDK%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E5%92%8CCGLIB%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/" rel="prev" title="Java两种动态代理JDK动态代理和CGLIB动态代理">
+      <i class="fa fa-chevron-left"></i> Java两种动态代理JDK动态代理和CGLIB动态代理
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2020/03/18/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" rel="next" title="Zookeeper实现分布式锁">
+      Zookeeper实现分布式锁 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     

@@ -29,8 +29,8 @@
 
   <meta name="description" content="1）说说常见的集合有哪些吧？答：Map接口和Collection接口是所有集合框架的父接口：  Collection接口的子接口包括：Set接口和List接口  Map接口的实现类主要有：HashMap、TreeMap、Hashtable、ConcurrentHashMap以及Properties等">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Java集合面试题">
-<meta property="og:url" content="ylyang.xyz/2019/10/17/Java%E9%9B%86%E5%90%88%E9%9D%A2%E8%AF%95%E9%A2%98/index.html">
+<meta property="og:title" content="Java集合框架总结">
+<meta property="og:url" content="ylyang.xyz/2019/10/17/Java%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6%E6%80%BB%E7%BB%93/index.html">
 <meta property="og:site_name" content="静水流深的博客">
 <meta property="og:description" content="1）说说常见的集合有哪些吧？答：Map接口和Collection接口是所有集合框架的父接口：  Collection接口的子接口包括：Set接口和List接口  Map接口的实现类主要有：HashMap、TreeMap、Hashtable、ConcurrentHashMap以及Properties等">
 <meta property="og:locale" content="zh_CN">
@@ -40,15 +40,15 @@
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7896890-645836e722c2a9f9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/767/format/webp">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7896890-ec8560395e25547a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/768/format/webp">
 <meta property="article:published_time" content="2019-10-17T02:35:59.000Z">
-<meta property="article:modified_time" content="2020-07-18T02:41:20.314Z">
+<meta property="article:modified_time" content="2020-07-18T08:08:11.397Z">
 <meta property="article:author" content="ylyang">
 <meta property="article:tag" content="Java">
-<meta property="article:tag" content="Java集合">
 <meta property="article:tag" content="面试">
+<meta property="article:tag" content="Java集合">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/7896890-cf5aa3b08dd9684f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
 
-<link rel="canonical" href="ylyang.xyz/2019/10/17/Java%E9%9B%86%E5%90%88%E9%9D%A2%E8%AF%95%E9%A2%98/">
+<link rel="canonical" href="ylyang.xyz/2019/10/17/Java%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6%E6%80%BB%E7%BB%93/">
 
 
 <script class="page-configurations">
@@ -61,7 +61,7 @@
   };
 </script>
 
-  <title>Java集合面试题 | 静水流深的博客</title>
+  <title>Java集合框架总结 | 静水流深的博客</title>
   
 
 
@@ -149,17 +149,17 @@
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">15</span></a>
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">16</span></a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">140</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">144</span></a>
 
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">111</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">115</span></a>
 
   </li>
         <li class="menu-item menu-item-about">
@@ -212,20 +212,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">140</span>
+          <span class="site-state-item-count">144</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">16</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">111</span>
+        <span class="site-state-item-count">115</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -283,7 +283,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/10/17/Java%E9%9B%86%E5%90%88%E9%9D%A2%E8%AF%95%E9%A2%98/">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/10/17/Java%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6%E6%80%BB%E7%BB%93/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/tou2.jpg">
@@ -296,7 +296,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Java集合面试题
+          Java集合框架总结
         </h1>
 
         <div class="post-meta">
@@ -517,8 +517,8 @@
       <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/Java/" rel="tag"><i class="fa fa-tag"></i> Java</a>
-              <a href="/tags/Java%E9%9B%86%E5%90%88/" rel="tag"><i class="fa fa-tag"></i> Java集合</a>
               <a href="/tags/%E9%9D%A2%E8%AF%95/" rel="tag"><i class="fa fa-tag"></i> 面试</a>
+              <a href="/tags/Java%E9%9B%86%E5%90%88/" rel="tag"><i class="fa fa-tag"></i> Java集合</a>
           </div>
 
         

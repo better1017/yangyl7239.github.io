@@ -139,17 +139,17 @@
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">15</span></a>
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">16</span></a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">140</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">144</span></a>
 
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">111</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">115</span></a>
 
   </li>
         <li class="menu-item menu-item-about">
@@ -201,20 +201,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">140</span>
+          <span class="site-state-item-count">144</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">16</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">111</span>
+        <span class="site-state-item-count">115</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -271,6 +271,291 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2020/07/18/Java%E4%B8%AD%E7%9A%84%E4%BB%A3%E7%A0%81%E5%9D%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/tou2.jpg">
+      <meta itemprop="name" content="ylyang">
+      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="静水流深的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/07/18/Java%E4%B8%AD%E7%9A%84%E4%BB%A3%E7%A0%81%E5%9D%97/" class="post-title-link" itemprop="url">Java中的代码块</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="文章创建时间：2020-07-18 16:31:35" itemprop="dateCreated datePublished" datetime="2020-07-18T16:31:35+08:00">2020-07-18</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="代码块"><a href="#代码块" class="headerlink" title="代码块"></a>代码块</h1><p>普通代码块：在方法或语句中出现的{}，就被称为代码块</p>
+<p>静态代码块：静态代码块有且仅加载一次，也就是在这个类被加载至内存的时候</p>
+<p>普通代码块和一般语句执行顺序由他们在代码中出现的次序决定，先出现先执行</p>
+<h2 id="代码一"><a href="#代码一" class="headerlink" title="代码一"></a>代码一</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * 代码块</span><br><span class="line"> * 普通代码块：在方法或语句中出现的&#123;&#125;，就被称为代码块</span><br><span class="line"> * 普通代码块和一般语句执行顺序由他们在代码中出现的次序决定，先出现先执行</span><br><span class="line"> *</span><br><span class="line"> * @author: ylyang</span><br><span class="line"> * @create: 2020-04-06-9:51</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class CodeBlock &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        &#123;</span><br><span class="line">            int x &#x3D; 11;</span><br><span class="line">            System.out.println(&quot;普通代码块中的变量X&#x3D;&quot; + x);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        &#123;</span><br><span class="line">            int y &#x3D; 13;</span><br><span class="line">            System.out.println(&quot;普通代码块中的变量y&#x3D;&quot; + y);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        int x &#x3D; 12;</span><br><span class="line">        System.out.println(&quot;主方法中的变量x&#x3D;&quot; + x);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对于上述方法，我们一下就能看出它的输出结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">普通代码块中的变量X&#x3D;11</span><br><span class="line">普通代码块中的变量y&#x3D;13</span><br><span class="line">主方法中的变量x&#x3D;12</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="代码二"><a href="#代码二" class="headerlink" title="代码二"></a>代码二</h2><p>而对于下面的代码，我们调用了类的初始化，同时在类里也写了两个代码块</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * 代码块</span><br><span class="line"> * @author: ylyang</span><br><span class="line"> * @create: 2020-04-06-9:51</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class CodeBlock02 &#123;</span><br><span class="line">    &#123;</span><br><span class="line">        System.out.println(&quot;第二构造块33333&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public  CodeBlock02() &#123;</span><br><span class="line">        System.out.println(&quot;构造方法2222&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#123;</span><br><span class="line">        System.out.println(&quot;第一构造块33333&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        new CodeBlock02();</span><br><span class="line">        System.out.println(&quot;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&quot;);</span><br><span class="line">        new CodeBlock02();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行结果如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">第二构造块33333</span><br><span class="line">第一构造块33333</span><br><span class="line">构造方法2222</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">第二构造块33333</span><br><span class="line">第一构造块33333</span><br><span class="line">构造方法2222</span><br></pre></td></tr></table></figure>
+
+<p>这里需要谈的就是，类加载机制了，因为我们都知道，当我们实例化一个类的时候</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">new CodeBlock02();</span><br></pre></td></tr></table></figure>
+
+<p>启动调用的就是这个类的构造方法，但是比构造方法更上一级的是跟本构造方法在同一个类的代码块，因此</p>
+<blockquote>
+<p>代码块的优先级比构造方法高</p>
+<p>构造代码块在每次创建对象的时候都会被调用，并且构造代码块的执行次序优先于构造方法</p>
+</blockquote>
+<h2 id="代码三"><a href="#代码三" class="headerlink" title="代码三"></a>代码三</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * 代码块</span><br><span class="line"> *</span><br><span class="line"> * @author: ylyang</span><br><span class="line"> * @create: 2020-04-06-9:51</span><br><span class="line"> *&#x2F;</span><br><span class="line"></span><br><span class="line">&#x2F;**</span><br><span class="line"> * 随从类</span><br><span class="line"> *&#x2F;</span><br><span class="line">class Code &#123;</span><br><span class="line">    public Code() &#123;</span><br><span class="line">        System.out.println(&quot;Code的构造方法1111&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#123;</span><br><span class="line">        System.out.println(&quot;Code的构造代码块22222&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    static &#123;</span><br><span class="line">        System.out.println(&quot;Code的静态代码块33333&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">public class CodeBlock03 &#123;</span><br><span class="line"></span><br><span class="line">    &#123;</span><br><span class="line">        System.out.println(&quot;CodeBlock03的构造代码块22222&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    static &#123;</span><br><span class="line">        System.out.println(&quot;CodeBlock03的静态代码块33333&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public CodeBlock03() &#123;</span><br><span class="line">        System.out.println(&quot;CodeBlock03的构造方法33333&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line"></span><br><span class="line">        System.out.println(&quot;我是主类&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&quot;);</span><br><span class="line">        new Code();</span><br><span class="line">        System.out.println(&quot;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&quot;);</span><br><span class="line">        new Code();</span><br><span class="line">        System.out.println(&quot;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&quot;);</span><br><span class="line">        new CodeBlock03();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">CodeBlock03的静态代码块33333</span><br><span class="line">我是主类&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">Code的静态代码块33333</span><br><span class="line">Code的构造代码块22222</span><br><span class="line">Code的构造方法1111</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">Code的构造代码块22222</span><br><span class="line">Code的构造方法1111</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">CodeBlock03的构造代码块22222</span><br><span class="line">CodeBlock03的构造方法33333</span><br></pre></td></tr></table></figure>
+
+<p>从上面的结果可以看出，但这个类被加载到内存的时候，首先需要执行的是静态方法，也就是static方法在类被实例化之前，就已经完成了，和以后的实例化都没有关系了，因此我们能够看到，被第一个输出，同时静态代码块有且仅加载一次，但我们需要运行main方法的时候，就需要等CodeBlock03加载好，因此能够看到下面的输出了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CodeBlock03的静态代码块33333</span><br></pre></td></tr></table></figure>
+
+<p>同时但我们实例化 Code类的时候，这个类也会首先被加载到内存中，然后也是首先运行静态代码块</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Code的静态代码块33333</span><br><span class="line">Code的构造代码块22222</span><br><span class="line">Code的构造方法1111</span><br></pre></td></tr></table></figure>
+
+<p>再次实例化的时候，因此该类已经在内存中，所以不再运行静态代码块了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Code的构造代码块22222</span><br><span class="line">Code的构造方法1111</span><br></pre></td></tr></table></figure>
+
+<p>最后在实例化CodeBlock03，因为CodeBlock03也已经被加载内存中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CodeBlock03的构造代码块22222</span><br><span class="line">CodeBlock03的构造方法33333</span><br></pre></td></tr></table></figure>
+
+<h2 id="代码四"><a href="#代码四" class="headerlink" title="代码四"></a>代码四</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * 代码块</span><br><span class="line"> *</span><br><span class="line"> * @author: ylyang</span><br><span class="line"> * @create: 2020-04-06-9:51</span><br><span class="line"> *&#x2F;</span><br><span class="line">class Father &#123;</span><br><span class="line">    &#123;</span><br><span class="line">        System.out.println(&quot;我是父亲代码块&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    public Father() &#123;</span><br><span class="line">        System.out.println(&quot;我是父亲构造&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    static &#123;</span><br><span class="line">        System.out.println(&quot;我是父亲静态代码块&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">class Son extends Father&#123;</span><br><span class="line">    public Son() &#123;</span><br><span class="line">        System.out.println(&quot;我是儿子构造&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    &#123;</span><br><span class="line">        System.out.println(&quot;我是儿子代码块&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    static &#123;</span><br><span class="line">        System.out.println(&quot;我是儿子静态代码块&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">public class CodeBlock04 &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line"></span><br><span class="line">        System.out.println(&quot;我是主类&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&quot;);</span><br><span class="line">        new Son();</span><br><span class="line">        System.out.println(&quot;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&quot;);</span><br><span class="line">        new Son();</span><br><span class="line">        System.out.println(&quot;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&quot;);</span><br><span class="line">        new Father();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">我是主类&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">我是父亲静态代码块</span><br><span class="line">我是儿子静态代码块</span><br><span class="line">我是父亲代码块</span><br><span class="line">我是父亲构造</span><br><span class="line">我是儿子代码块</span><br><span class="line">我是儿子构造</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">我是父亲代码块</span><br><span class="line">我是父亲构造</span><br><span class="line">我是儿子代码块</span><br><span class="line">我是儿子构造</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">我是父亲代码块</span><br><span class="line">我是父亲构造</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>任何一个类被加载，必须加载这个类的静态代码块</p>
+<p>同时如果存在父子关系的时候，调用子类的构造方法，同时子类的构造方法，在最顶部会调用super()也就是父类的构造方法，一般这个是被省略的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public Son() &#123;</span><br><span class="line">     super();</span><br><span class="line">     System.out.println(&quot;我是儿子构造&quot;);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<p>所以在子类初始化之前，还需要调用父类构造，所以父类需要加载进内存，也就是从父到子，静态执行，并且只加载一次</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">我是父亲静态代码块</span><br><span class="line">我是儿子静态代码块</span><br></pre></td></tr></table></figure>
+
+<p>然后父类在进行实例化，在调用构造方法之前，需要调用本类的代码块</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">我是父亲代码块</span><br><span class="line">我是父亲构造</span><br></pre></td></tr></table></figure>
+
+<p>最后父类初始化成功后，在调用子类的</p>
+</blockquote>
+<blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">我是儿子代码块</span><br><span class="line">我是儿子构造</span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<p>在执行第二次的 new Son()的时候，因为该类已经被装载在内存中了，因此静态代码块不需要执行，我们只需要从父到子执行即可</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt;我是父亲代码块</span><br><span class="line">&gt;我是父亲构造</span><br><span class="line">&gt;我是儿子代码块</span><br><span class="line">&gt;我是儿子构造</span><br></pre></td></tr></table></figure>
+
+<p>同理在执行new Father()的时候也是一样的，只需要执行Father的实例化</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;我是父亲代码块</span><br><span class="line">&gt;我是父亲构造</span><br></pre></td></tr></table></figure>
+
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2020/04/03/equals%E4%B8%8E%E5%8F%8C%E7%AD%89%E4%BA%8E%E5%8F%B7%E7%9A%84%E5%8C%BA%E5%88%AB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/tou2.jpg">
+      <meta itemprop="name" content="ylyang">
+      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="静水流深的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/04/03/equals%E4%B8%8E%E5%8F%8C%E7%AD%89%E4%BA%8E%E5%8F%B7%E7%9A%84%E5%8C%BA%E5%88%AB/" class="post-title-link" itemprop="url">equals与==的区别</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="文章创建时间：2020-04-03 16:26:51" itemprop="dateCreated datePublished" datetime="2020-04-03T16:26:51+08:00">2020-04-03</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="等等与equals的区别"><a href="#等等与equals的区别" class="headerlink" title="等等与equals的区别"></a>等等与equals的区别</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>我们都知道， == 是比较内存地址，equals是比较值</p>
+<p>但是这种非常错误的一种观点</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/04/03/equals%E4%B8%8E%E5%8F%8C%E7%AD%89%E4%BA%8E%E5%8F%B7%E7%9A%84%E5%8C%BA%E5%88%AB/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2020/03/18/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/tou2.jpg">
+      <meta itemprop="name" content="ylyang">
+      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="静水流深的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/18/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" class="post-title-link" itemprop="url">Zookeeper实现分布式锁</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="文章创建时间：2020-03-18 16:17:06" itemprop="dateCreated datePublished" datetime="2020-03-18T16:17:06+08:00">2020-03-18</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">分布式架构</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="分布式锁"><a href="#分布式锁" class="headerlink" title="分布式锁"></a>分布式锁</h1><h2 id="集群环境下保证ID不重复"><a href="#集群环境下保证ID不重复" class="headerlink" title="集群环境下保证ID不重复"></a>集群环境下保证ID不重复</h2><p>原来的Synchronized + Lock只能锁单机，也就是只能在一个JVM环境下</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/03/18/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="ylyang.xyz/2020/03/15/MySQL%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -320,134 +605,88 @@
       
           <h2 id="Mysql默认搜索引擎"><a href="#Mysql默认搜索引擎" class="headerlink" title="Mysql默认搜索引擎"></a>Mysql默认搜索引擎</h2><p>Mysql5.5以后默认使用InnoDB为搜索引擎</p>
 <p>MyISAM是表锁，不支持事务和主外键</p>
-<p><img data-src="image-20200404084731063.png" alt="image"></p>
-<p>InnoDB默认可以创建16个索引</p>
-<ul>
-<li>InnoDB支持事务，MyIsam不支持事务，对于InnoDB每一条SQL语言都默认封装成事务，自动提交，这样会影响速度，所以最好把多条SQL语言放到begin 和 commit之间，组成一个事务；</li>
-<li>InnoDB支持外键，而MyIsam不支持，对一个包含外键的InnoDB表转成MyIsam表会失败</li>
-<li>InnoDB是聚集索引，数据文件和索引绑定在一块，必须要有主键，通过主键索引效率很高，但是辅助索引需要两次查询，先查询到主键，然后在通过主键查询到数据。因此主键不应该过大。主键过大的时候，其它索引也会很大。而MyIsam是非聚集索引，数据和文件是分离的，索引保存的是数据文件的指针，主键索引和辅助索引是独立的。</li>
-<li>InnoDB不支持全文检索，而MyIsam支持全文检索，查询效率上MyIsam要高</li>
-</ul>
-<h2 id="硬盘"><a href="#硬盘" class="headerlink" title="硬盘"></a>硬盘</h2><p><img data-src="image-20200404085422944.png" alt="image"></p>
-<p>Mysql是存储在硬盘上，因此Redis比Mysql快</p>
-<h2 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h2><p>Mysql官方对索引的定位为：索引是帮助Mysql高效获取数据的数据结构，可以得到索引的本质就是，索引是数据结构。</p>
-<p>可以简单的理解为：排好序的快速查找B+树数据结构，B+树中的B代表平衡(balance) 而不是 二叉（binary）</p>
-<h2 id="检索原理"><a href="#检索原理" class="headerlink" title="检索原理"></a>检索原理</h2><p>在数据之外，数据库系统还维护着满足特定查找算法的数据结构，这些数据结构以某种方式引用（指向）数据，这样就可以在这些数据上实现高级查找算法，这种数据结构，就是索引。下图就是一种可能的索引方式示例：</p>
-<p><img data-src="image-20200404090022629.png" alt="image"></p>
-<p>为了加快Col2的查找，可以维护一个左边所示的二叉树，每个节点分别包含索引键值和一个指向对应数据记录的物理地址的指针，这样就可以运用二叉树在一定的复杂度内获取相应数据，从而快速的检索出符合条件的记录。</p>
-<h2 id="B-树"><a href="#B-树" class="headerlink" title="B+树"></a>B+树</h2><p>B树：Balance Tree，多路平衡查找树</p>
-<p>B+树：加强版多路平衡查找树</p>
-<p>tip：没有B-树，B-树就是B树，中间不是减号而是横线</p>
-<h2 id="Mysql搜索引擎的发展之路"><a href="#Mysql搜索引擎的发展之路" class="headerlink" title="Mysql搜索引擎的发展之路"></a>Mysql搜索引擎的发展之路</h2><p>Mysql InnoDB的搜索引擎 的 底层也不是一来就是 B+树的，而是经过了不断的迭代过程</p>
-<ul>
-<li>全部遍历</li>
-<li>Hash</li>
-<li>二叉树</li>
-<li>平衡二叉树（AVL）</li>
-<li>B树</li>
-<li>B+树</li>
-</ul>
-<h3 id="全部遍历"><a href="#全部遍历" class="headerlink" title="全部遍历"></a>全部遍历</h3><p>相当于全表查询，把每条数据都查找一遍</p>
-<h3 id="Hash"><a href="#Hash" class="headerlink" title="Hash"></a>Hash</h3><p>加速查找速度的数据结构，常见的有两类</p>
-<ul>
-<li>哈希，例如HashMap，查询、插入、修改、删除的平均时间复杂度都是O(1)</li>
-<li>树：例如平衡二叉搜索树，查询、插入、修改、删除的平均事件复杂度都是O(log<sub>2</sub> (n))</li>
-</ul>
-<p>可以看到，不管是读请求，还是写请求，哈希类型的索引，都要比树型的索引更快一些，为什么不用Hash做索引呢，而要设计成树型结构呢？</p>
-<p>假设SQL语句为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from student where age &#x3D; 15</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/03/15/MySQL%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
 
-<p>我们能够通过Hash就可以很好的用Hash进行解决</p>
-<p>但是随着SQL的复杂化，对于以下范围查找，Hash就搞不定了，也就是说Hash就只能解决查1的问题</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from student where age &gt; 15 and age &lt; 20</span><br></pre></td></tr></table></figure>
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
 
-<p>想想范围/排序等其它SQL条件：</p>
-<p>哈希型的索引，时间复杂度会退化O(n) 而树型的“有序” 特性，依然能够保持 O(log<sub>2</sub>(n) )</p>
-<p>InnoDB：并不支持Hash索引</p>
-<h3 id="二叉树"><a href="#二叉树" class="headerlink" title="二叉树"></a>二叉树</h3><p>二叉树的特点</p>
-<ul>
-<li>一个节点只能有两个子节点，也就是一个节点的度不能超过2</li>
-<li>左子节点小于本节点，右子节点大于等于本节点，比我大的向右，比我小的向做</li>
-</ul>
-<p><img data-src="image-20200404093846645.png" alt="image"></p>
-<p>对该二叉树的节点查找发现：</p>
-<p>深度为1的节点查找次数为：1</p>
-<p>深度为2的节点查找次数为：2</p>
-<p>深度为N的节点查找次数为：N</p>
-<p>结论：因此其平均查找长度为：(1+2+2+3+3+3) / 6 = 2.3次</p>
-<h4 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h4><ul>
-<li>如果ID是持续递增的话，会出现什么样的结构？</li>
-</ul>
-<p><img data-src="image-20200404094336765.png" alt="image"></p>
-<p>这样树型结构，又会退化到 O(n) 的时间复杂度</p>
-<h3 id="平衡二叉树（AVL）"><a href="#平衡二叉树（AVL）" class="headerlink" title="平衡二叉树（AVL）"></a>平衡二叉树（AVL）</h3><h4 id="结构图"><a href="#结构图" class="headerlink" title="结构图"></a>结构图</h4><p><img data-src="image-20200404094719626.png" alt="image"></p>
-<h4 id="问题-1"><a href="#问题-1" class="headerlink" title="问题"></a>问题</h4><p>可以看出平衡二叉树的缺点就是</p>
-<ul>
-<li>维护平衡过程的成本代价很高，因为每次删除一个节点或者增加一个节点的话，需要一次或多次的左旋和右旋去维护平衡状态</li>
-<li>查询的效率不稳定，还要看运气的成分在里面</li>
-<li>如果节点很多的话，那么这个AVL树的高度还是会很高的，查询效率会很低。</li>
-</ul>
-<p>从算法的数学逻辑来讲，二叉树的查找速度和比较次数都是最小的，那为什么我们选择BTree?因为AVL还有一个问题，那就是 磁盘IO的问题</p>
-<ul>
-<li>磁盘IO的次数，就是由树高来决定的，也即磁盘的IO次数最坏的情况下就等于树的高度。</li>
-</ul>
-<p>因为节点存储的数据太少，没有很好的利用操作系统和磁盘数据交换的特性，也没有利用好磁盘IO的预读能力。因为操作系统和磁盘之间一次数据交换是以页为单位的，一页 = 4K，即每次IO操作系统会将4K数据加载镜像内存。但是在二叉树每个节点的结构只保存一个关键字 和 数据区，两个子节点的引用，并不能填满4K的内容，辛辛苦苦的做了一次IO操作，却只加载了一个关键字，在树的高度很高，恰好要搜索的关键字位于叶子节点或支节点的时候，取一个关键字要做很多次的IO。因此平衡二叉树不太适合MySQL的查询结构。</p>
-<h4 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h4><p>我们需要解决的就是树的高度问题，导致磁盘IO过多</p>
-<p>那么就需要将树进行压缩，也就是将原来的瘦高 -&gt; 矮胖，通过降低树的高度达到减少IO的次数</p>
-<h3 id="B树"><a href="#B树" class="headerlink" title="B树"></a>B树</h3><p>B树，又被称为 2-3树，也就是B树上的节点，可能是2，也可能是3</p>
-<h4 id="结构图："><a href="#结构图：" class="headerlink" title="结构图："></a>结构图：</h4><p><img data-src="image-20200404100139814.png" alt="image"></p>
-<h4 id="底层原理"><a href="#底层原理" class="headerlink" title="底层原理"></a>底层原理</h4><p>数据库索引是存储在磁盘上的，如果数据很大，必然导致索引的大小也会很大，超过几个G（好比新华字典字数多必然导致目录厚）</p>
-<p>当我们利用索引查询时，是不可能将全部几个G的索引都加载进内存的，我们能做的只能是：</p>
-<p>逐一加载每一个磁盘页，因为磁盘页对应着索引树的节点。</p>
-<p>InnoDB的 page_size</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SHOW GLOBAL STATUS LIKE &#39;Innodb_page_size&#39;;</span><br></pre></td></tr></table></figure>
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2020/03/09/Java%E4%B8%A4%E7%A7%8D%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86JDK%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E5%92%8CCGLIB%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/">
 
-<p><img data-src="image-20200404151334993.png" alt="image"></p>
-<p>系统从磁盘读取数据到内存时是以磁盘块（block）为单位的，位于同一磁盘块中的数据会被一次性读取出来，而不是需要什么取什么</p>
-<p>InnoDB存储引擎中有页(Page)的概念，页是其磁盘管理的最小单位。</p>
-<p>系统一个磁盘块的存储空间往往没有这么大，因此InnoDB每次申请磁盘空间时都会是若干地址连续磁盘块来达到页的大小16KB。InnoDB在把磁盘数据读入到磁盘时会以页为基本单位，在查询数据时如果一个页中每条数据都有助于定位数据记录的位置，这将会减少磁盘I/O次数，提高效率。</p>
-<p>一句话说：就是多个块填充到一页大小</p>
-<h4 id="检索原理-1"><a href="#检索原理-1" class="headerlink" title="检索原理"></a>检索原理</h4><p>B树比平衡二叉树减少了一次IO操作</p>
-<p><img data-src="image-20200404152149658.png" alt="image"></p>
-<p>每个节点占用一个盘块的磁盘空间，一个节点上有两个升序排序的关键字和三个指向子树根节点的指针，指针存储的是子节点所在磁盘块的地址。</p>
-<p>模拟查找关键字29的过程</p>
-<ul>
-<li>根据根节点找到磁盘块1，读入内存【磁盘IO操作1次】</li>
-<li>比较关键字29在区间(17, 35)，找到磁盘块1的指针P2。</li>
-<li>根据P2指针找到磁盘块3，读入内存。【磁盘IO操作第2次】</li>
-<li>比较关键字29在区间(26, 30)，找到磁盘块3的指针P2。</li>
-<li>根据P2指针找到磁盘块8，读入内存。【磁盘IO操作3次】</li>
-<li>在磁盘块8中的关键字列表，找到关键字29</li>
-</ul>
-<p>分析上述过程，发现需要3次IO操作，和3次内存查找操作，由于内存中的关键字是一个有序表结构，可以利用二分法查找提高效率。而3次磁盘IO操作是影响整个BTree查找效率的决定性因素。BTree相对于AVLTree缩减了节点个数，使每次磁盘IO取到内存的数据都发挥了作用，从而提高了查找效率。</p>
-<h3 id="B-树-1"><a href="#B-树-1" class="headerlink" title="B+树"></a>B+树</h3><p>B+树把所有数据放在叶子节点，形成了链表，我们查找数据更方便</p>
-<p>好查，好排序，好划定范围</p>
-<h4 id="B-树结构图"><a href="#B-树结构图" class="headerlink" title="B+树结构图"></a>B+树结构图</h4><p><img data-src="image-20200404155456211.png" alt="image"></p>
-<p>把两种数据结构集成在一块了：树 + 链表</p>
-<p>图中可以看出所有的data信息都移动叶子节点中，而且子节点和子节点之间会有指针指向，这个也是B+树的核心点，这样可以大大提升范围查找效率，也方便遍历整个树。</p>
-<ul>
-<li>非叶子节点不在存储数据，数据只存储在同一层的叶子节点上</li>
-<li>叶子之间，增加链表，获取所有节点，不再需要中序遍历</li>
-<li>这也说明了，B+树的检索性能比B树强</li>
-</ul>
-<h4 id="检索原理-2"><a href="#检索原理-2" class="headerlink" title="检索原理"></a>检索原理</h4><p>由于B+树的非叶子只存储键值信息，假设每个磁盘块能存储4个键值及指针信息，那就变成如下结构</p>
-<p><img data-src="image-20200404161422032.png" alt="image"></p>
-<p>B树结构图中可以看出每个节点不仅包含数据的key值，还有data值，而每一页的存储空间是有限的，如果data数据较大时将会导致每个节点（即一个页）能存储的key的数量很小，当存储数量很大时同样会导致B树的深度较大，增大查询时的磁盘IO次数进而影响查询效率。</p>
-<h2 id="Mysql为什么是B-树"><a href="#Mysql为什么是B-树" class="headerlink" title="Mysql为什么是B+树"></a>Mysql为什么是B+树</h2><p>B+树中，所有数据记录节点都是按照键值大小顺序存放在同一层叶子节点上，而非叶子节点上只存储key值信息，这样可以大大加大每个节点存储的key值数量，降低B+树的高度。</p>
-<ul>
-<li>InnoDB存储引擎的最小存储单元是页，页可以用于存放数据，也可以用于存放键值+指针，在B+树中叶子节点存放数据，而非叶子节点存放键值+指针</li>
-<li>索引组织表通过非叶子节点的二分查找法以及指针确定数据在哪个页中，首先找到根页进而去数据页查找到需要的数据</li>
-</ul>
-<p>B+树算法：通过集成B树的特征，B+树相比B树，新增叶子节点与非叶子节点关系，叶子节点包含了键值和数据，非叶子节点只是包含键值和子节点引用，不包含数据。</p>
-<p>通过非叶子节点查询叶子节点获取相应的数据，所有相邻的叶子节点包含非叶子节点使用链表进行结合，叶子节点是顺序并且相邻节点有顺序引用关系。</p>
-<h4 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h4><p>从B树到B+树，B+树在B树的基础上的一种优化使其更适合实现外存储索引结构，InnoDB存储引擎就是用B+树实现的索引结构</p>
-<p>B树和B+树的不同之处</p>
-<ul>
-<li>非叶子节点只存储键值信息</li>
-<li>所有叶子节点之间都有一个链指针</li>
-<li>数据记录都存放在叶子节点中</li>
-</ul>
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/tou2.jpg">
+      <meta itemprop="name" content="ylyang">
+      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
+    </span>
 
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="静水流深的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/09/Java%E4%B8%A4%E7%A7%8D%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86JDK%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E5%92%8CCGLIB%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/" class="post-title-link" itemprop="url">Java两种动态代理JDK动态代理和CGLIB动态代理</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="文章创建时间：2020-03-09 16:14:08" itemprop="dateCreated datePublished" datetime="2020-03-09T16:14:08+08:00">2020-03-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">设计模式</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Java两种动态代理JDK动态代理和CGLIB动态代理"><a href="#Java两种动态代理JDK动态代理和CGLIB动态代理" class="headerlink" title="Java两种动态代理JDK动态代理和CGLIB动态代理"></a>Java两种动态代理JDK动态代理和CGLIB动态代理</h1><h2 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h2><p>代理模式是23种设计模式的一种，他是指一个对象A通过持有另一个对象B，可以具有B同样的行为的模式。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/03/09/Java%E4%B8%A4%E7%A7%8D%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86JDK%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E5%92%8CCGLIB%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -838,313 +1077,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/10/17/Java%E9%9B%86%E5%90%88%E9%9D%A2%E8%AF%95%E9%A2%98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/tou2.jpg">
-      <meta itemprop="name" content="ylyang">
-      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="静水流深的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/10/17/Java%E9%9B%86%E5%90%88%E9%9D%A2%E8%AF%95%E9%A2%98/" class="post-title-link" itemprop="url">Java集合面试题</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="文章创建时间：2019-10-17 10:35:59" itemprop="dateCreated datePublished" datetime="2019-10-17T10:35:59+08:00">2019-10-17</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="1）说说常见的集合有哪些吧？"><a href="#1）说说常见的集合有哪些吧？" class="headerlink" title="1）说说常见的集合有哪些吧？"></a><strong>1）说说常见的集合有哪些吧？</strong></h2><p>答：Map接口和Collection接口是所有集合框架的父接口：</p>
-<ol>
-<li><p>Collection接口的子接口包括：Set接口和List接口</p>
-</li>
-<li><p>Map接口的实现类主要有：HashMap、TreeMap、Hashtable、ConcurrentHashMap以及Properties等</p>
-</li>
-</ol>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/10/17/Java%E9%9B%86%E5%90%88%E9%9D%A2%E8%AF%95%E9%A2%98/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/10/16/MyBatis%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E9%A2%98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/tou2.jpg">
-      <meta itemprop="name" content="ylyang">
-      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="静水流深的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/10/16/MyBatis%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E9%A2%98/" class="post-title-link" itemprop="url">MyBatis常见面试题</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="文章创建时间：2019-10-16 15:31:32" itemprop="dateCreated datePublished" datetime="2019-10-16T15:31:32+08:00">2019-10-16</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="1、-和-的区别是什么？"><a href="#1、-和-的区别是什么？" class="headerlink" title="1、#{}和${}的区别是什么？"></a>1、#{}和${}的区别是什么？</h4><p>答：${}是Properties文件中的变量占位符，它可以用于标签属性值和sql内部，属于静态文本替换，比如${driver}会被静态替换为com.mysql.jdbc.Driver。#{}是sql的参数占位符，Mybatis会将sql中的#{}替换为?号，在sql执行前会使用PreparedStatement的参数设置方法，按序给sql的?号占位符设置参数值，比如ps.setInt(0, parameterValue)，#{item.name}的取值方式为使用反射从参数对象中获取item对象的name属性值，相当于param.getItem().getName()。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/10/16/MyBatis%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E9%A2%98/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/10/16/MyBatis%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/tou2.jpg">
-      <meta itemprop="name" content="ylyang">
-      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="静水流深的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/10/16/MyBatis%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/" class="post-title-link" itemprop="url">MyBatis缓存机制</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="文章创建时间：2019-10-16 10:24:01" itemprop="dateCreated datePublished" datetime="2019-10-16T10:24:01+08:00">2019-10-16</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="MyBatis-缓存机制"><a href="#MyBatis-缓存机制" class="headerlink" title="MyBatis 缓存机制"></a>MyBatis 缓存机制</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>　　缓存是一般的ORM 框架都会提供的功能，目的就是提升查询的效率和减少数据库的压力。跟Hibernate 一样，MyBatis 也有一级缓存和二级缓存，并且预留了集成第三方缓存的接口。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/10/16/MyBatis%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/10/15/%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1%E5%92%8C%E7%BA%BF%E7%A8%8B%E9%80%9A%E4%BF%A1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/tou2.jpg">
-      <meta itemprop="name" content="ylyang">
-      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="静水流深的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/10/15/%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1%E5%92%8C%E7%BA%BF%E7%A8%8B%E9%80%9A%E4%BF%A1/" class="post-title-link" itemprop="url">进程通信和线程通信</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="文章创建时间：2019-10-15 10:18:42" itemprop="dateCreated datePublished" datetime="2019-10-15T10:18:42+08:00">2019-10-15</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="进程通信和线程通信"><a href="#进程通信和线程通信" class="headerlink" title="进程通信和线程通信"></a>进程通信和线程通信</h1><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>进程就是正在运行的程序，它是系统资源调度的独立单位，并且一个进程可以执行多个任务，而线程是程序执行的任务，它是程序使用CPU的基本单位，因此也可以说线程是依赖进程的</p>
-<h3 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h3><p>进程就是正在运行的程序，它是系统资源调度的独立单位，各个进程之间不会相互影响，因为系统给它们分配了不同的空间和资源，它分为单进程和多进程</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/10/15/%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1%E5%92%8C%E7%BA%BF%E7%A8%8B%E9%80%9A%E4%BF%A1/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
