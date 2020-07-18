@@ -27,23 +27,34 @@
     var CONFIG = {"hostname":"ylyang.xyz","root":"/","scheme":"Gemini","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":{"enable":true,"onlypost":false,"loadingImg":null},"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}}};
   </script>
 
-  <meta name="description" content="链表中环的入口结点描述给一个链表，若其中包含环，请找出该链表的环的入口结点，否则，输出null">
+  <meta name="description" content="微服务谈谈对微服务的理解微服务架构下的一整套解决方案  服务注册与发现 服务调用 服务熔断 负载均衡 服务降级">
 <meta property="og:type" content="article">
-<meta property="og:title" content="链表中环的入口结点">
-<meta property="og:url" content="ylyang.xyz/2010/05/18/%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%8E%AF%E7%9A%84%E5%85%A5%E5%8F%A3%E7%BB%93%E7%82%B9/index.html">
+<meta property="og:title" content="SpringCloud之微服务简介">
+<meta property="og:url" content="ylyang.xyz/2020/05/30/SpringCloud%E4%B9%8B%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%AE%80%E4%BB%8B/index.html">
 <meta property="og:site_name" content="静水流深的博客">
-<meta property="og:description" content="链表中环的入口结点描述给一个链表，若其中包含环，请找出该链表的环的入口结点，否则，输出null">
+<meta property="og:description" content="微服务谈谈对微服务的理解微服务架构下的一整套解决方案  服务注册与发现 服务调用 服务熔断 负载均衡 服务降级">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="ylyang.xyz/2010/05/18/%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%8E%AF%E7%9A%84%E5%85%A5%E5%8F%A3%E7%BB%93%E7%82%B9/image-20200426105846170.png">
-<meta property="article:published_time" content="2010-05-18T09:46:16.000Z">
-<meta property="article:modified_time" content="2020-07-18T04:50:03.232Z">
+<meta property="og:image" content="ylyang.xyz/2020/05/30/SpringCloud%E4%B9%8B%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%AE%80%E4%BB%8B/image-20200327091144073.png">
+<meta property="og:image" content="ylyang.xyz/2020/05/30/SpringCloud%E4%B9%8B%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%AE%80%E4%BB%8B/image-20200327091044516.png">
+<meta property="og:image" content="ylyang.xyz/2020/05/30/SpringCloud%E4%B9%8B%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%AE%80%E4%BB%8B/image-20200327091209496.png">
+<meta property="og:image" content="ylyang.xyz/2020/05/30/SpringCloud%E4%B9%8B%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%AE%80%E4%BB%8B/image-20200327091226696.png">
+<meta property="og:image" content="ylyang.xyz/2020/05/30/SpringCloud%E4%B9%8B%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%AE%80%E4%BB%8B/image-20200327091359549.png">
+<meta property="og:image" content="ylyang.xyz/2020/05/30/SpringCloud%E4%B9%8B%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%AE%80%E4%BB%8B/image-20200327091441550.png">
+<meta property="og:image" content="ylyang.xyz/2020/05/30/SpringCloud%E4%B9%8B%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%AE%80%E4%BB%8B/image-20200327091724535.png">
+<meta property="og:image" content="ylyang.xyz/2020/05/30/SpringCloud%E4%B9%8B%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%AE%80%E4%BB%8B/image-20200327093143960.png">
+<meta property="og:image" content="ylyang.xyz/2020/05/30/SpringCloud%E4%B9%8B%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%AE%80%E4%BB%8B/image-20200327093337563.png">
+<meta property="article:published_time" content="2020-05-30T12:42:10.000Z">
+<meta property="article:modified_time" content="2020-07-18T13:26:14.222Z">
 <meta property="article:author" content="ylyang">
-<meta property="article:tag" content="数据结构">
-<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="云计算">
+<meta property="article:tag" content="SpringCloud">
+<meta property="article:tag" content="微服务">
+<meta property="article:tag" content="分布式">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="ylyang.xyz/2010/05/18/%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%8E%AF%E7%9A%84%E5%85%A5%E5%8F%A3%E7%BB%93%E7%82%B9/image-20200426105846170.png">
+<meta name="twitter:image" content="ylyang.xyz/2020/05/30/SpringCloud%E4%B9%8B%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%AE%80%E4%BB%8B/image-20200327091144073.png">
 
-<link rel="canonical" href="ylyang.xyz/2010/05/18/%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%8E%AF%E7%9A%84%E5%85%A5%E5%8F%A3%E7%BB%93%E7%82%B9/">
+<link rel="canonical" href="ylyang.xyz/2020/05/30/SpringCloud%E4%B9%8B%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%AE%80%E4%BB%8B/">
 
 
 <script class="page-configurations">
@@ -56,7 +67,7 @@
   };
 </script>
 
-  <title>链表中环的入口结点 | 静水流深的博客</title>
+  <title>SpringCloud之微服务简介 | 静水流深的博客</title>
   
 
 
@@ -144,17 +155,17 @@
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">16</span></a>
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">17</span></a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">144</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">149</span></a>
 
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">115</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">121</span></a>
 
   </li>
         <li class="menu-item menu-item-about">
@@ -191,7 +202,7 @@
 
       <!--noindex-->
       <section class="post-toc-wrap sidebar-panel">
-          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#链表中环的入口结点"><span class="nav-number">1.</span> <span class="nav-text">链表中环的入口结点</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#描述"><span class="nav-number">1.1.</span> <span class="nav-text">描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#思考"><span class="nav-number">1.2.</span> <span class="nav-text">思考</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#完整代码"><span class="nav-number">1.3.</span> <span class="nav-text">完整代码</span></a></li></ol></li></ol></div>
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#微服务"><span class="nav-number">1.</span> <span class="nav-text">微服务</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#谈谈对微服务的理解"><span class="nav-number">1.1.</span> <span class="nav-text">谈谈对微服务的理解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-Cloud"><span class="nav-number">1.2.</span> <span class="nav-text">Spring Cloud</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-Cloud技术栈"><span class="nav-number">1.3.</span> <span class="nav-text">Spring Cloud技术栈</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-Cloud版本选型"><span class="nav-number">1.4.</span> <span class="nav-text">Spring Cloud版本选型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SpringBoot2-X版-和-SpringCloud-H版"><span class="nav-number">1.4.1.</span> <span class="nav-text">SpringBoot2.X版 和 SpringCloud H版</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringBoot和SpringCloud版本约束"><span class="nav-number">1.5.</span> <span class="nav-text">SpringBoot和SpringCloud版本约束</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于Cloud各种组件的停更-升级-替换"><span class="nav-number">1.6.</span> <span class="nav-text">关于Cloud各种组件的停更&#x2F;升级&#x2F;替换</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#停更引发的升级惨案"><span class="nav-number">1.6.1.</span> <span class="nav-text">停更引发的升级惨案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#明细条目"><span class="nav-number">1.6.2.</span> <span class="nav-text">明细条目</span></a></li></ol></li></ol></li></ol></div>
       </section>
       <!--/noindex-->
 
@@ -207,20 +218,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">144</span>
+          <span class="site-state-item-count">149</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">17</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">115</span>
+        <span class="site-state-item-count">121</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -278,7 +289,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2010/05/18/%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%8E%AF%E7%9A%84%E5%85%A5%E5%8F%A3%E7%BB%93%E7%82%B9/">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2020/05/30/SpringCloud%E4%B9%8B%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%AE%80%E4%BB%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/tou2.jpg">
@@ -291,7 +302,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          链表中环的入口结点
+          SpringCloud之微服务简介
         </h1>
 
         <div class="post-meta">
@@ -301,7 +312,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="文章创建时间：2010-05-18 17:46:16" itemprop="dateCreated datePublished" datetime="2010-05-18T17:46:16+08:00">2010-05-18</time>
+              <time title="文章创建时间：2020-05-30 20:42:10" itemprop="dateCreated datePublished" datetime="2020-05-30T20:42:10+08:00">2020-05-30</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -309,7 +320,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">数据结构</span></a>
+                  <a href="/categories/SpringCloud/" itemprop="url" rel="index"><span itemprop="name">SpringCloud</span></a>
                 </span>
             </span>
 
@@ -331,27 +342,90 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="链表中环的入口结点"><a href="#链表中环的入口结点" class="headerlink" title="链表中环的入口结点"></a>链表中环的入口结点</h1><h2 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h2><p>给一个链表，若其中包含环，请找出该链表的环的入口结点，否则，输出null</p>
+        <h1 id="微服务"><a href="#微服务" class="headerlink" title="微服务"></a>微服务</h1><h2 id="谈谈对微服务的理解"><a href="#谈谈对微服务的理解" class="headerlink" title="谈谈对微服务的理解"></a>谈谈对微服务的理解</h2><p>微服务架构下的一整套解决方案</p>
+<ul>
+<li>服务注册与发现</li>
+<li>服务调用</li>
+<li>服务熔断</li>
+<li>负载均衡</li>
+<li>服务降级</li>
+</ul>
 <a id="more"></a>
 
-<h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><p><img data-src="image-20200426105846170.png" alt="image"></p>
-<p><strong>如何确定是否有环</strong></p>
 <ul>
-<li>把所有出现的点，都放到list中</li>
-<li>如果下次的节点，在list中出现，说明出现了环</li>
-<li>但是这种时间复杂度比较高</li>
+<li>服务消息队列</li>
+<li>配置中心</li>
+<li>服务网关</li>
+<li>服务监控</li>
+<li>全链路追踪</li>
+<li>自动化构建部署</li>
+<li>服务定时任务调度操作</li>
 </ul>
-<p><strong>第二种方式</strong></p>
-<p>定义：两个 指针，一个是慢指针，一个是快指针</p>
-<p>假设 slow 走了 L 步，那么 fast 就走了 2L 步。</p>
-<p> 我们 链表的头部 到 链表的环的入口结点处 的距离是 S</p>
-<p>那么 从入口结点 到 我们 快慢指针相遇的地点 的距离 为 d。 </p>
-<p>链表的环中，慢指针走过的距离是d，那么没走过的距离是M。</p>
-<p>我们不确定的是快指针在链表的环里走过了多少圈来与慢指针相遇，因此 将这个参数设置为n。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">那么 L &#x3D; s + d</span><br><span class="line">2L &#x3D; 2(s+d) &#x3D; n*(m + d) + d + s</span><br><span class="line">由上面公式 推导出 n(m+d) &#x3D; s + d</span><br><span class="line">得到：s &#x3D; n(m+d) -d；</span><br><span class="line">s &#x3D; nm + (n-1)(d)</span><br><span class="line">s &#x3D; m + (n-1)(m+d)</span><br></pre></td></tr></table></figure>
-
-<h2 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"># -*- coding:utf-8 -*-</span><br><span class="line"># class ListNode:</span><br><span class="line">#     def __init__(self, x):</span><br><span class="line">#         self.val &#x3D; x</span><br><span class="line">#         self.next &#x3D; None</span><br><span class="line">class Solution:</span><br><span class="line">    def EntryNodeOfLoop(self, pHead):</span><br><span class="line">        # write code here</span><br><span class="line">        #首先需要定义两个指针，其中一个快，跳两步，一个慢跳一步。</span><br><span class="line">        #循环跳</span><br><span class="line">        #要么是快的指针 为 none（没有环），要么是快慢指针相等（有环）。</span><br><span class="line">        if pHead &#x3D;&#x3D; None:</span><br><span class="line">            return None </span><br><span class="line">		#定义两个指针，一个快的一个慢的。</span><br><span class="line">        fastPointer &#x3D; pHead</span><br><span class="line">        slowPointer &#x3D; pHead</span><br><span class="line">		#当快指针存在时，而且快指针的结点指向的下一个也存在</span><br><span class="line">        while fastPointer and fastPointer.next :</span><br><span class="line">            #那么让快指针走两步</span><br><span class="line">            fastPointer &#x3D; fastPointer.next.next</span><br><span class="line">            #让慢指针走一步</span><br><span class="line">            slowPointer &#x3D; slowPointer.next</span><br><span class="line">            #如果慢指针等于快指针时，那么就说明这个链表中有环。有环的话那么就跳出，break</span><br><span class="line">            if fastPointer &#x3D;&#x3D; slowPointer:</span><br><span class="line">                break</span><br><span class="line">        #如果说两个指针没有相等的时候，快指针就已经走到链表的尽头了，说明这个链表没有环。那么就返回None。</span><br><span class="line">        if fastPointer &#x3D;&#x3D; None or fastPointer.next &#x3D;&#x3D; None:</span><br><span class="line">            return None</span><br><span class="line">        #如果slow 走了 l 的长度 那么 fast 就走了 2l 的长度</span><br><span class="line">        #假设 从开始到入口点的长度是 s；slow 在环里面走的长度是 d</span><br><span class="line"></span><br><span class="line">        # 那么  L &#x3D; s + d</span><br><span class="line">        #假设 环内 slow 没走的 长度 是 m; fast 走的长度是多少</span><br><span class="line">        # fast 走的长度 就是 ( m + d ) * n + d + s &#x3D; 2 L</span><br><span class="line">        #带入 ( m + d ) * n + d + s &#x3D; 2 （s + d ）</span><br><span class="line">        # s &#x3D; m + (n-1)(m+d)</span><br><span class="line">		#有环的话，那么就让快指针从头开始走，这次一次走一步，</span><br><span class="line">        fastPointer &#x3D; pHead</span><br><span class="line">		#此时慢指针还在环里走着，没有走到结点</span><br><span class="line">        while fastPointer !&#x3D; slowPointer:</span><br><span class="line">            fastPointer &#x3D; fastPointer.next</span><br><span class="line">            slowPointer &#x3D; slowPointer.next</span><br><span class="line">        #当两个指针相等时，就会相遇，这时返回一个指针的值，就为 入口结点处。</span><br><span class="line">        return fastPointer</span><br></pre></td></tr></table></figure>
-
+<p><img data-src="image-20200327091144073.png" alt="image"></p>
+<h2 id="Spring-Cloud"><a href="#Spring-Cloud" class="headerlink" title="Spring Cloud"></a>Spring Cloud</h2><p>分布式微服务架构的一站式解决方案，是多种微服务架构落地技术的集合体，俗称微服务全家桶</p>
+<p>下面一张图是京东的促销架构</p>
+<p><img data-src="image-20200327091044516.png" alt="image"></p>
+<p>阿里的架构图：</p>
+<p><img data-src="image-20200327091209496.png" alt="image"></p>
+<p>京东物流的架构图：</p>
+<p><img data-src="image-20200327091226696.png" alt="image"></p>
+<p>基础服务：</p>
+<p><img data-src="image-20200327091359549.png" alt="image"></p>
+<h2 id="Spring-Cloud技术栈"><a href="#Spring-Cloud技术栈" class="headerlink" title="Spring Cloud技术栈"></a>Spring Cloud技术栈</h2><p><img data-src="image-20200327091441550.png" alt="image"></p>
+<p>这是原来2020年以前的微服务方案</p>
+<p><img data-src="image-20200327091724535.png" alt="image"></p>
+<p>但是随着Eureka等组件的闭源，后续的一些解决方案也有了新的替换产品</p>
+<h2 id="Spring-Cloud版本选型"><a href="#Spring-Cloud版本选型" class="headerlink" title="Spring Cloud版本选型"></a>Spring Cloud版本选型</h2><h3 id="SpringBoot2-X版-和-SpringCloud-H版"><a href="#SpringBoot2-X版-和-SpringCloud-H版" class="headerlink" title="SpringBoot2.X版 和 SpringCloud H版"></a>SpringBoot2.X版 和 SpringCloud H版</h3><p>SpringBoot官方已经强烈推荐 2.X版</p>
+<p>SpringCloud采用英国伦敦地铁站的名称来命名，并由地铁站名称字母A-Z一次类推的形式发布迭代版本</p>
+<p>SpringCloud是由许多子项目组成的综合项目，各子项目有不同的发布节奏，为了管理SpringCloud与各子项目的版本依赖关系，发布了一个清单，其中包括了某个SpringCloud版对应的子项目版本，为了避免SpringCloud版本号与子项目版本号混淆，SpringCloud版采用了名称而非版本号命名。例如Angel，Brixton。当SpringCloud的发布内容积累到临界点或者一个重大BUG被解决后，会发布一个Service releases版本，俗称SRX版本，比如 Greenwich.SR2就是SpringCloud发布的Greenwich版本的第二个SRX版本</p>
+<p><img data-src="image-20200327093143960.png" alt="image"></p>
+<h2 id="SpringBoot和SpringCloud版本约束"><a href="#SpringBoot和SpringCloud版本约束" class="headerlink" title="SpringBoot和SpringCloud版本约束"></a>SpringBoot和SpringCloud版本约束</h2><p>SpringBoot和SpringCloud的版本选择也不是任意的，而是应该参考官网的约束配置</p>
+<p><img data-src="image-20200327093337563.png" alt="image"></p>
+<p>地址：<code>https://spring.io/projects/spring-cloud</code></p>
+<p>版本对应：<code>https://start.spring.io/actuator/info</code></p>
+<h2 id="关于Cloud各种组件的停更-升级-替换"><a href="#关于Cloud各种组件的停更-升级-替换" class="headerlink" title="关于Cloud各种组件的停更/升级/替换"></a>关于Cloud各种组件的停更/升级/替换</h2><h3 id="停更引发的升级惨案"><a href="#停更引发的升级惨案" class="headerlink" title="停更引发的升级惨案"></a>停更引发的升级惨案</h3><ul>
+<li>被动修复Bugs</li>
+<li>不再接受合并请求</li>
+<li>不再发布新版本</li>
+</ul>
+<h3 id="明细条目"><a href="#明细条目" class="headerlink" title="明细条目"></a>明细条目</h3><ul>
+<li>服务注册发现<ul>
+<li>Eureka</li>
+<li>Zookeeper</li>
+<li>Consul</li>
+<li>Nacos （推荐）</li>
+</ul>
+</li>
+<li>服务负载调用<ul>
+<li>Feign</li>
+<li>OpenFeign  （推荐）</li>
+<li>Ribbon</li>
+<li>LoadBalancer</li>
+</ul>
+</li>
+<li>服务熔断降级<ul>
+<li>Hystrix   </li>
+<li>resilience4j</li>
+<li>sentienl （推荐）</li>
+</ul>
+</li>
+<li>服务网关<ul>
+<li>Zuul</li>
+<li>Zuul2</li>
+<li>Gateway（推荐）</li>
+</ul>
+</li>
+<li>服务配置<ul>
+<li>Config</li>
+<li>Nacos（推荐）</li>
+</ul>
+</li>
+<li>服务总线<ul>
+<li>Bus</li>
+<li>Nacos（推荐）</li>
+</ul>
+</li>
+</ul>
 
     </div>
 
@@ -361,8 +435,11 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag"><i class="fa fa-tag"></i> 数据结构</a>
-              <a href="/tags/Python/" rel="tag"><i class="fa fa-tag"></i> Python</a>
+              <a href="/tags/Java/" rel="tag"><i class="fa fa-tag"></i> Java</a>
+              <a href="/tags/%E4%BA%91%E8%AE%A1%E7%AE%97/" rel="tag"><i class="fa fa-tag"></i> 云计算</a>
+              <a href="/tags/SpringCloud/" rel="tag"><i class="fa fa-tag"></i> SpringCloud</a>
+              <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" rel="tag"><i class="fa fa-tag"></i> 微服务</a>
+              <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag"><i class="fa fa-tag"></i> 分布式</a>
           </div>
 
         
@@ -370,10 +447,13 @@
 
         
     <div class="post-nav">
-      <div class="post-nav-item"></div>
       <div class="post-nav-item">
-    <a href="/2018/08/08/hello-world/" rel="next" title="Hello World">
-      Hello World <i class="fa fa-chevron-right"></i>
+    <a href="/2020/04/18/Java%E4%B8%AD%E7%9A%84%E4%BB%A3%E7%A0%81%E5%9D%97/" rel="prev" title="Java中的代码块">
+      <i class="fa fa-chevron-left"></i> Java中的代码块
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/05/30/SpringCloud%E4%B9%8BEureka%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%8F%8A%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/" rel="next" title="SpringCloud之Eureka工作原理及集群搭建">
+      SpringCloud之Eureka工作原理及集群搭建 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>

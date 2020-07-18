@@ -139,17 +139,17 @@
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">16</span></a>
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">17</span></a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">144</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">149</span></a>
 
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">115</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">121</span></a>
 
   </li>
         <li class="menu-item menu-item-about">
@@ -201,20 +201,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">144</span>
+          <span class="site-state-item-count">149</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">17</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">115</span>
+        <span class="site-state-item-count">121</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -267,6 +267,514 @@
 
         <div class="content index posts-expand">
           
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/09/26/hadoop-%E5%8D%95%E7%8B%AC%E9%85%8D%E7%BD%AE%E8%BE%85%E5%8A%A9%E5%90%8D%E7%A7%B0%E8%8A%82%E7%82%B9-SecondaryNameNode/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/tou2.jpg">
+      <meta itemprop="name" content="ylyang">
+      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="静水流深的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/09/26/hadoop-%E5%8D%95%E7%8B%AC%E9%85%8D%E7%BD%AE%E8%BE%85%E5%8A%A9%E5%90%8D%E7%A7%B0%E8%8A%82%E7%82%B9-SecondaryNameNode/" class="post-title-link" itemprop="url">hadoop - 单独配置辅助名称节点(SecondaryNameNode)</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="文章创建时间：2019-09-26 21:00:09" itemprop="dateCreated datePublished" datetime="2019-09-26T21:00:09+08:00">2019-09-26</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">大数据</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="1-修改hdfs-site-xml"><a href="#1-修改hdfs-site-xml" class="headerlink" title="1. 修改hdfs-site.xml"></a>1. 修改hdfs-site.xml</h2><p>执行命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /software/hadoop/etc/hadoop/hdfs-site.xml</span><br></pre></td></tr></table></figure>
+
+<p>在hdfs-site.xml中添加：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;dfs.namenode.secondary.http-address&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;s138:9868&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/09/26/hadoop-%E5%8D%95%E7%8B%AC%E9%85%8D%E7%BD%AE%E8%BE%85%E5%8A%A9%E5%90%8D%E7%A7%B0%E8%8A%82%E7%82%B9-SecondaryNameNode/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/09/25/hadoop-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/tou2.jpg">
+      <meta itemprop="name" content="ylyang">
+      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="静水流深的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/09/25/hadoop-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" class="post-title-link" itemprop="url">hadoop - 常用命令</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="文章创建时间：2019-09-25 20:59:52" itemprop="dateCreated datePublished" datetime="2019-09-25T20:59:52+08:00">2019-09-25</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">大数据</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>启动NameNode<br>hadoop-daemon.sh start namenode<br>hdfs –daemon start namenode<br>关闭NameNode<br>hadoop-daemon.sh stop namenode<br>hdfs –daemon stop  namenode</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/09/25/hadoop-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/09/23/hadoop-%E8%8A%82%E7%82%B9%E7%9A%84%E6%9C%8D%E5%BD%B9%E5%92%8C%E9%80%80%E5%BD%B9%EF%BC%88HDFS%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/tou2.jpg">
+      <meta itemprop="name" content="ylyang">
+      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="静水流深的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/09/23/hadoop-%E8%8A%82%E7%82%B9%E7%9A%84%E6%9C%8D%E5%BD%B9%E5%92%8C%E9%80%80%E5%BD%B9%EF%BC%88HDFS%EF%BC%89/" class="post-title-link" itemprop="url">hadoop - 节点的服役和退役（HDFS）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="文章创建时间：2019-09-23 14:53:17" itemprop="dateCreated datePublished" datetime="2019-09-23T14:53:17+08:00">2019-09-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">大数据</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="1-首先需要克隆一台主机"><a href="#1-首先需要克隆一台主机" class="headerlink" title="1. 首先需要克隆一台主机"></a>1. 首先需要克隆一台主机</h2><p>现在我这里已经有五台虚拟机，要克隆的目标主机为CentOS7-1810_04：</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/09/23/hadoop-%E8%8A%82%E7%82%B9%E7%9A%84%E6%9C%8D%E5%BD%B9%E5%92%8C%E9%80%80%E5%BD%B9%EF%BC%88HDFS%EF%BC%89/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/09/20/hadoop-%E9%85%8D%E7%BD%AE%E5%AE%8C%E5%85%A8%E5%88%86%E5%B8%83%E5%BC%8F%E6%A8%A1%E5%BC%8F%E5%B9%B6%E8%BF%90%E8%A1%8CWordCount%E7%A8%8B%E5%BA%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/tou2.jpg">
+      <meta itemprop="name" content="ylyang">
+      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="静水流深的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/09/20/hadoop-%E9%85%8D%E7%BD%AE%E5%AE%8C%E5%85%A8%E5%88%86%E5%B8%83%E5%BC%8F%E6%A8%A1%E5%BC%8F%E5%B9%B6%E8%BF%90%E8%A1%8CWordCount%E7%A8%8B%E5%BA%8F/" class="post-title-link" itemprop="url">hadoop - 配置完全分布式模式并运行WordCount程序</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="文章创建时间：2019-09-20 11:20:32" itemprop="dateCreated datePublished" datetime="2019-09-20T11:20:32+08:00">2019-09-20</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">大数据</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <ul>
+<li><ol>
+<li>Hadoop三种模式便捷切换以及让命令行提示符显式完整路径<br> （1）Hadoop三种模式便捷切换<br> 首先执行如下命令：<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[yylin@big etc]$ cp -r hadoop local</span><br><span class="line">[yylin@big etc]$ cp -r hadoop pseudo</span><br><span class="line">[yylin@big etc]$ cp -r hadoop full</span><br><span class="line">[yylin@big etc]$ rm -rf hadoop</span><br><span class="line">[yylin@big etc]$ ln -s pseudo hadoop</span><br></pre></td></tr></table></figure></li></ol></li></ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/09/20/hadoop-%E9%85%8D%E7%BD%AE%E5%AE%8C%E5%85%A8%E5%88%86%E5%B8%83%E5%BC%8F%E6%A8%A1%E5%BC%8F%E5%B9%B6%E8%BF%90%E8%A1%8CWordCount%E7%A8%8B%E5%BA%8F/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/09/17/MR%E8%AE%A1%E7%AE%97%E6%A8%A1%E5%9E%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/tou2.jpg">
+      <meta itemprop="name" content="ylyang">
+      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="静水流深的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/09/17/MR%E8%AE%A1%E7%AE%97%E6%A8%A1%E5%9E%8B/" class="post-title-link" itemprop="url">hadoop - MR计算模型</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="文章创建时间：2019-09-17 15:45:08" itemprop="dateCreated datePublished" datetime="2019-09-17T15:45:08+08:00">2019-09-17</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">大数据</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="从一个MapReduce实例开始"><a href="#从一个MapReduce实例开始" class="headerlink" title="从一个MapReduce实例开始"></a>从一个MapReduce实例开始</h2><ul>
+<li>mapreduce介绍</li>
+</ul>
+<p>​    MapReduce作为hadoop的核心价值之一，实现数据的分析和处理。相比于关系型数据库地持续更新，mr更适合批处理需要分析的数据集，一次写入，多次读取。</p>
+<p>​    MapReduce分为两个处理阶段，map阶段和reduce阶段。编写一个mr实例，共需要三个部分:</p>
+<ol>
+<li>map函数：进行数据读取，排序；map输出对应的reduce的输入(类型一致)</li>
+<li>reduce函数：实现逻辑处理</li>
+<li>job配置：控制整个作业的运行</li>
+</ol>
+<h3 id="实例介绍"><a href="#实例介绍" class="headerlink" title="实例介绍"></a>实例介绍</h3><p>​    官方的说明中，以wordcount作为示例。这里我们稍作改变，来统计一篇文章中指定的符号的数据量,类似于sql中where条件下的计数。如下引入的包都是以org.apache.hadoop开头的，包名误入会导致错误，注意，不同的版本对应的包名也存在差别。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.hadoop.conf.Configuration;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.fs.Path;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.io.IntWritable;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.io.LongWritable;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.io.Text;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.mapreduce.Job;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.mapreduce.Mapper;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.mapreduce.Reducer;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.mapreduce.lib.input.FileInputFormat;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ArticleMapper</span> <span class="keyword">extends</span> <span class="title">Mapper</span>&lt;<span class="title">LongWritable</span>, <span class="title">Text</span>, <span class="title">Text</span>, <span class="title">IntWritable</span>&gt; </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">map</span><span class="params">(LongWritable pos, Text content, Context context)</span> <span class="keyword">throws</span> IOException, InterruptedException </span>&#123;</span><br><span class="line">        String javaContent = content.toString();</span><br><span class="line">        Long count = Arrays.asList(javaContent.split(<span class="string">""</span>)).stream().filter(x -&gt; x.equals(<span class="string">"。"</span>)).count();</span><br><span class="line">        context.write(<span class="keyword">new</span> Text(<span class="string">"。"</span>), <span class="keyword">new</span> IntWritable(count.intValue()));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ArticleReducer</span> <span class="keyword">extends</span> <span class="title">Reducer</span>&lt;<span class="title">Text</span>, <span class="title">IntWritable</span>, <span class="title">Text</span>, <span class="title">IntWritable</span>&gt; </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">reduce</span><span class="params">(Text outKey, Iterable&lt;IntWritable&gt; cnt, Context context)</span> <span class="keyword">throws</span> IOException, InterruptedException </span>&#123;</span><br><span class="line">        Integer tot = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (IntWritable perCount : cnt) &#123;</span><br><span class="line">            tot += perCount.get();</span><br><span class="line">        &#125;</span><br><span class="line">        context.write(outKey, <span class="keyword">new</span> IntWritable(tot));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@CLassName</span> ArticleCommaCount</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span> TODO</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> yylin</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ArticleCommaCount</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">"一个统计文章中有多少句号的示例！"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException, IllegalStateException,ClassNotFoundException,InterruptedException </span>&#123;</span><br><span class="line">        Configuration conf = <span class="keyword">new</span> Configuration();</span><br><span class="line">        Job job = Job.getInstance(conf);</span><br><span class="line"></span><br><span class="line">        job.setMapperClass(ArticleMapper<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        job.setReducerClass(ArticleReducer<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        job.setJobName(args[<span class="number">0</span>]);</span><br><span class="line">        job.setJarByClass(ArticleCommaCount<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        job.setMapOutputKeyClass(Text<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        job.setMapOutputValueClass(IntWritable<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        job.setOutputKeyClass(Text<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        job.setOutputValueClass(IntWritable<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line"></span><br><span class="line">        FileInputFormat.setInputPaths(job, <span class="keyword">new</span> Path(args[<span class="number">1</span>]));</span><br><span class="line">        FileOutputFormat.setOutputPath(job, <span class="keyword">new</span> Path(args[<span class="number">2</span>]));</span><br><span class="line"></span><br><span class="line">        System.exit(job.waitForCompletion(<span class="keyword">true</span>) ? <span class="number">0</span> : <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对应的pom.xml文件的dependency</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.8.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.hadoop<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hadoop-hdfs<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.8.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.hadoop<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hadoop-client<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.8.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.hadoop<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hadoop-common<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.8.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.hadoop<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hadoop-mapreduce-client-jobclient<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.8.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">scope</span>&gt;</span>provided<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.hadoop<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hadoop-mapreduce-client-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.8.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.hadoop<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hadoop-mapreduce-client-common<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.8.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="运行实例"><a href="#运行实例" class="headerlink" title="运行实例"></a>运行实例</h3><ul>
+<li><p>通过hadoop jar命令：hadoop jar mrtest-1.0-SNAPSHOT.jar ArticleCommaCount /user/sunhj/input /user/sunhj/output</p>
+</li>
+<li><p>注意事项</p>
+<ol>
+<li><p>ArticleCommaCount: args[0] ,设置为jobName,args[1]是输入文件,args[2]是输出文件</p>
+</li>
+<li><p>打包的jar文件需要放到hadoop集群的机器上，不要放到hdfs文件系统中</p>
+</li>
+</ol>
+</li>
+</ul>
+<h3 id="运行日志"><a href="#运行日志" class="headerlink" title="运行日志"></a>运行日志</h3><p>​    作业运行过程中，将mr进度输出至控制台，过程中的一些重要信息都可以从日志中进行查看。也方便进行优化分析。</p>
+<p>​    由于日志在控制台上查阅的不便，hadoop也提供了相关的http页面访问。namenode内嵌的web服务器提供了相关服务。包含端口: 50070(目录服务)；8088(执行scheduler)；19888(执行历史)</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">.....</span><br><span class="line"><span class="number">19</span>/<span class="number">11</span>/<span class="number">09</span> <span class="number">11</span>:<span class="number">12</span>:<span class="number">31</span> INFO mapred<span class="variable">.MapTask</span>: mapreduce<span class="variable">.task</span><span class="variable">.io</span><span class="variable">.sort</span><span class="variable">.mb</span>: <span class="number">100</span></span><br><span class="line"><span class="number">19</span>/<span class="number">11</span>/<span class="number">09</span> <span class="number">11</span>:<span class="number">12</span>:<span class="number">31</span> INFO mapred<span class="variable">.MapTask</span>: <span class="keyword">soft</span> limit at <span class="number">83886080</span></span><br><span class="line"><span class="number">19</span>/<span class="number">11</span>/<span class="number">09</span> <span class="number">11</span>:<span class="number">12</span>:<span class="number">31</span> INFO mapred<span class="variable">.MapTask</span>: bufstart = <span class="number">0</span>; bufvoid = <span class="number">104857600</span></span><br><span class="line"><span class="number">19</span>/<span class="number">11</span>/<span class="number">09</span> <span class="number">11</span>:<span class="number">12</span>:<span class="number">31</span> INFO mapred<span class="variable">.MapTask</span>: kvstart = <span class="number">26214396</span>; length = <span class="number">6553600</span></span><br><span class="line"><span class="number">19</span>/<span class="number">11</span>/<span class="number">09</span> <span class="number">11</span>:<span class="number">12</span>:<span class="number">31</span> INFO mapred<span class="variable">.MapTask</span>: Map <span class="keyword">output</span> collector <span class="keyword">class</span> = org<span class="variable">.apache</span><span class="variable">.hadoop</span><span class="variable">.mapred</span><span class="variable">.MapTask</span>$MapOutputBuffer</span><br><span class="line"><span class="number">19</span>/<span class="number">11</span>/<span class="number">09</span> <span class="number">11</span>:<span class="number">12</span>:<span class="number">31</span> INFO mapred<span class="variable">.LocalJobRunner</span>: </span><br><span class="line"><span class="number">19</span>/<span class="number">11</span>/<span class="number">09</span> <span class="number">11</span>:<span class="number">12</span>:<span class="number">31</span> INFO mapred<span class="variable">.MapTask</span>: Starting flush of map <span class="keyword">output</span></span><br><span class="line"><span class="number">19</span>/<span class="number">11</span>/<span class="number">09</span> <span class="number">11</span>:<span class="number">12</span>:<span class="number">31</span> INFO mapred<span class="variable">.MapTask</span>: Spilling map <span class="keyword">output</span></span><br><span class="line"><span class="number">19</span>/<span class="number">11</span>/<span class="number">09</span> <span class="number">11</span>:<span class="number">12</span>:<span class="number">31</span> INFO mapred<span class="variable">.MapTask</span>: bufstart = <span class="number">0</span>; bufend = <span class="number">392</span>; bufvoid = <span class="number">104857600</span></span><br><span class="line"><span class="number">19</span>/<span class="number">11</span>/<span class="number">09</span> <span class="number">11</span>:<span class="number">12</span>:<span class="number">31</span> INFO mapred<span class="variable">.MapTask</span>: kvstart = <span class="number">26214396</span>(<span class="number">104857584</span>); kvend = <span class="number">26214204</span>(<span class="number">104856816</span>); length = <span class="number">193</span>/<span class="number">6553600</span></span><br><span class="line"><span class="number">19</span>/<span class="number">11</span>/<span class="number">09</span> <span class="number">11</span>:<span class="number">12</span>:<span class="number">31</span> INFO mapred<span class="variable">.MapTask</span>: Finished spill <span class="number">0</span></span><br><span class="line"><span class="number">19</span>/<span class="number">11</span>/<span class="number">09</span> <span class="number">11</span>:<span class="number">12</span>:<span class="number">31</span> INFO mapred<span class="variable">.Task</span>: Task:attempt_local1667141322_0001_m_000000_0 is done. And is in the process of committing</span><br><span class="line"><span class="number">19</span>/<span class="number">11</span>/<span class="number">09</span> <span class="number">11</span>:<span class="number">12</span>:<span class="number">31</span> INFO mapred<span class="variable">.LocalJobRunner</span>: map</span><br><span class="line"><span class="number">19</span>/<span class="number">11</span>/<span class="number">09</span> <span class="number">11</span>:<span class="number">12</span>:<span class="number">31</span> INFO mapred<span class="variable">.Task</span>: Task 'attempt_local1667141322_0001_m_000000_0' done.</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
+
+<h2 id="运行过程"><a href="#运行过程" class="headerlink" title="运行过程"></a>运行过程</h2><h3 id="job运行过程"><a href="#job运行过程" class="headerlink" title="job运行过程"></a>job运行过程</h3><p>当前的hadoop基本都运行在yarn上，由yarn进行资源管理。权威指南对MapReduce的工作机制有过详细的描述</p>
+<p><img data-src="17319977-9c3ce4d579428747.webp" alt="img"></p>
+<p>hd权威-mr机制.png</p>
+<p>图中大体描述了mr-job的整个过程。我在网上也找到了其他的一些更为详细的图形描述：</p>
+<p><img data-src="17319977-5ffed77c01558541.webp" alt="img"></p>
+<p>yarn-工作机制.png</p>
+<p>（0）Mr程序提交到客户端所在的节点</p>
+<p>（1）Yarnrunner向Resourcemanager申请一个Application。</p>
+<p>（2）rm将该应用程序的资源路径返回给yarnrunner</p>
+<p>（3）该程序将运行所需资源提交到HDFS上</p>
+<p>（4）程序资源提交完毕后，申请运行mrAppMaster</p>
+<p>（5）RM将用户的请求初始化成一个task</p>
+<p>（6）其中一个NodeManager领取到task任务。</p>
+<p>（7）该NodeManager创建容器Container，并产生MRAppmaster</p>
+<p>（8）Container从HDFS上拷贝资源到本地</p>
+<p>（9）MRAppmaster向RM 申请运行maptask容器</p>
+<p>（10）RM将运行maptask任务分配给另外两个NodeManager，另两个NodeManager分别领取任务并创建容器。</p>
+<p>（11）MR向两个接收到任务的NodeManager发送程序启动脚本，这两个NodeManager分别启动maptask，maptask对数据分区排序。</p>
+<p>（12）MRAppmaster向RM申请2个容器，运行reduce task。</p>
+<p>（13）reduce task向maptask获取相应分区的数据。</p>
+<p>（14）程序运行完毕后，MR会向RM注销自己。</p>
+<h3 id="MR运行过程"><a href="#MR运行过程" class="headerlink" title="MR运行过程"></a>MR运行过程</h3><p><img data-src="17319977-bb0a3efce2aad038.webp" alt="img"></p>
+<p>hadoop-mr.png</p>
+<p>整个流程可以分为 split，map，shuffle，reduce，output 五个阶段</p>
+<ol>
+<li><p>split过程</p>
+<p>split 阶段会把需要处理的数据划分为不同的切片，切片的过程由对应的inputfile类来处理；把个切片交给不同 map 程序进行处理；切片后数据会被解析为 kv 对输入到 map 进行处理（默认是一行调用一次map函数）</p>
+</li>
+<li><p>map函数</p>
+<p>对输入的 kv 对进行处理并以 kv 对的形式输出，这个阶段适合数据过滤、清洗。</p>
+</li>
+<li><p>shuffle过程</p>
+<p>shuffle是整个mr的核心，让map输出结果到reduce的输入都是按键排序的。系统执行排序的过程称为shuffle(混洗 -&gt; 洗得有序)</p>
+</li>
+<li><p>reduce函数</p>
+<p>对输入的 kv 对进行处理并以 kv 对的形式输出，一个reduce对应的一个文件。该阶段适合进行逻辑处理加工处理</p>
+</li>
+<li><p>output过程</p>
+<p>输出到指定的hdfs目录下</p>
+</li>
+</ol>
+<h2 id="关于shuffle"><a href="#关于shuffle" class="headerlink" title="关于shuffle"></a>关于shuffle</h2><p>   shuffle是MapReduce的”心脏”,是奇迹发生的地方。shuffle过程分成两个阶段，一个在map端，一个在reduce端。</p>
+<p><img data-src="17319977-282ebbb8c6acdd9b.webp" alt="img"></p>
+<p>mr-shuffle.png</p>
+<ol>
+<li><p>map端</p>
+<p>map阶段产生的输出并不是简单的写到磁盘，而是有一个缓存溢写的过程。每个map都有一个环形缓冲区(io.sort.mb=100 io.sort.spill.percent=0.8 默认)，当缓冲内容超过阈值，将会写入磁盘。写入磁盘之前会对写入数据根据要传的reduce进行分区(partition)，每个分区按键排序【如果有combiner，会对写的数据进行合并，数据更紧凑，减少到reduce的网络传输；】；每次缓冲区达到阈值就会溢写文件，溢写的文件会进行merge(一次合并多少文件 io.sort.factor=10 默认 )；这时，往往会对最后的数据进行压缩，以减少数据传输过程中的网络消耗(设置map.compress.map.output为true)</p>
+</li>
+<li><p>reduce端</p>
+<p>reduce的输入是map阶段的输出，reduce将来自各个map任务的输出【partitions】copy过来。map阶段的输出都在对应的tasktracker本地磁盘上。由于map阶段耗时存在差异，但只要有一个map完成，reduce任务就开始复制其输出。复制过程也是一个溢写(mapred.job.shuffle.input.buffer.percent)，当超过reduce任务jvm内存阈值时，会写入磁盘。随着磁盘中文件数越来越多，便会进行merge。</p>
+</li>
+</ol>
+<h2 id="MR的优化方向"><a href="#MR的优化方向" class="headerlink" title="MR的优化方向"></a>MR的优化方向</h2><p>mr的优化，往往考验着对mapreduce的理解程度。决定mr计算的效率因素比较多，比如机器性能、sql编写习惯、参数调优等。工作中，主要会考虑几个方面：</p>
+<ol>
+<li><p>join过程中是否有数据倾斜</p>
+<p>join过程中，关联的key会作为map阶段的partition，进而会导致reduce阶段数据倾斜。考虑</p>
+<p>a.设置更大的reduce数(比较粗暴);</p>
+<p>b. 将倾斜的key单独拿出来计算(比较笨拙)</p>
+<p>c. 不影响业务情况下，对倾斜的key进行发散(随机值方式，推荐)</p>
+<p>d. 设置倾斜参数(set hive.groupby.skewindata=true;set hive.map.aggr = true; 懒汉模式)</p>
+</li>
+<li><p>合理map和reduce数</p>
+<p>​    一般情况下建议map完成时间在1min左右，map数太多(分片太小)会导致map启动耗时和资源争抢，太少又不能很好的发挥mr的优势，task等待。实际情况中，建议和block大小保持一致；另外，小文件会产生大量map数</p>
+<p>​    规避使用reduce，避免产生大量的网络消耗；在大表join过程中，shuffle过程往往是整个过程的瓶颈，尽量在map端进行combine，减少读写磁盘。</p>
+</li>
+<li><p>常用优化参数</p>
+<table>
+<thead>
+<tr>
+<th>配置参数</th>
+<th>参数说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>mapreduce.map.memory.mb</td>
+<td>一个Map Task可使用的资源上限（单位:MB），默认为1024。如果Map Task实际使用的资源量超过该值，则会被强制杀死。</td>
+</tr>
+<tr>
+<td>mapreduce.reduce.memory.mb</td>
+<td>一个Reduce Task可使用的资源上限（单位:MB），默认为1024。如果Reduce Task实际使用的资源量超过该值，则会被强制杀死。</td>
+</tr>
+<tr>
+<td>mapreduce.map.cpu.vcores</td>
+<td>每个Map task可使用的最多cpu core数目，默认值: 1</td>
+</tr>
+<tr>
+<td>mapreduce.reduce.cpu.vcores</td>
+<td>每个Reduce task可使用的最多cpu core数目，默认值: 1</td>
+</tr>
+<tr>
+<td>mapreduce.reduce.shuffle.parallelcopies</td>
+<td>每个reduce去map中拿数据的并行数。默认值是5</td>
+</tr>
+<tr>
+<td>mapreduce.reduce.shuffle.merge.percent</td>
+<td>buffer中的数据达到多少比例开始写入磁盘。默认值0.66</td>
+</tr>
+<tr>
+<td>mapreduce.reduce.shuffle.input.buffer.percent</td>
+<td>buffer大小占reduce可用内存的比例。默认值0.7</td>
+</tr>
+<tr>
+<td>mapreduce.reduce.input.buffer.percent</td>
+<td>指定多少比例的内存用来存放buffer中的数据，默认值是0.0</td>
+</tr>
+</tbody></table>
+</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -766,376 +1274,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2019/07/08/%E4%BA%8C%E5%8F%89%E6%A0%91%E4%B8%AD%E5%92%8C%E4%B8%BA%E6%9F%90%E4%B8%80%E5%80%BC%E7%9A%84%E8%B7%AF%E5%BE%84/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/07/08/%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E7%9A%84%E5%90%8E%E5%BA%8F%E9%81%8D%E5%8E%86%E5%BA%8F%E5%88%97/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/tou2.jpg">
-      <meta itemprop="name" content="ylyang">
-      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="静水流深的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/07/08/%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E7%9A%84%E5%90%8E%E5%BA%8F%E9%81%8D%E5%8E%86%E5%BA%8F%E5%88%97/" class="post-title-link" itemprop="url">二叉搜索树的后序遍历序列</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="文章创建时间：2019-07-08 10:46:56" itemprop="dateCreated datePublished" datetime="2019-07-08T10:46:56+08:00">2019-07-08</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">数据结构</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="二叉搜索树的后序遍历序列"><a href="#二叉搜索树的后序遍历序列" class="headerlink" title="二叉搜索树的后序遍历序列"></a>二叉搜索树的后序遍历序列</h1><h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>输入一个整数数组，判断该数组是不是某二叉搜索树的后序遍历的结果。如果是则输出Yes,否则输出No。假设输入的数组的任意两个数字都互不相同。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/07/08/%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E7%9A%84%E5%90%8E%E5%BA%8F%E9%81%8D%E5%8E%86%E5%BA%8F%E5%88%97/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/07/02/%E4%BB%8E%E4%B8%8A%E5%BE%80%E4%B8%8B%E6%89%93%E5%8D%B0%E4%BA%8C%E5%8F%89%E6%A0%91/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/tou2.jpg">
-      <meta itemprop="name" content="ylyang">
-      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="静水流深的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/07/02/%E4%BB%8E%E4%B8%8A%E5%BE%80%E4%B8%8B%E6%89%93%E5%8D%B0%E4%BA%8C%E5%8F%89%E6%A0%91/" class="post-title-link" itemprop="url">从上往下打印二叉树</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="文章创建时间：2019-07-02 23:42:31" itemprop="dateCreated datePublished" datetime="2019-07-02T23:42:31+08:00">2019-07-02</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">数据结构</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="从上往下打印二叉树"><a href="#从上往下打印二叉树" class="headerlink" title="从上往下打印二叉树"></a>从上往下打印二叉树</h1><h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>从上往下打印出二叉树的每个节点，同层节点从左至右打印。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/07/02/%E4%BB%8E%E4%B8%8A%E5%BE%80%E4%B8%8B%E6%89%93%E5%8D%B0%E4%BA%8C%E5%8F%89%E6%A0%91/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/07/01/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E9%95%9C%E5%83%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/tou2.jpg">
-      <meta itemprop="name" content="ylyang">
-      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="静水流深的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/07/01/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E9%95%9C%E5%83%8F/" class="post-title-link" itemprop="url">二叉树的镜像</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="文章创建时间：2019-07-01 12:35:06" itemprop="dateCreated datePublished" datetime="2019-07-01T12:35:06+08:00">2019-07-01</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">数据结构</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="二叉树的镜像"><a href="#二叉树的镜像" class="headerlink" title="二叉树的镜像"></a>二叉树的镜像</h1><h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>操作给定的二叉树，将其变换为源二叉树的镜像。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/07/01/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E9%95%9C%E5%83%8F/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/06/28/%E6%A0%91%E7%9A%84%E5%AD%90%E7%BB%93%E6%9E%84/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/tou2.jpg">
-      <meta itemprop="name" content="ylyang">
-      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="静水流深的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/06/28/%E6%A0%91%E7%9A%84%E5%AD%90%E7%BB%93%E6%9E%84/" class="post-title-link" itemprop="url">树的子结构</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="文章创建时间：2019-06-28 14:31:14" itemprop="dateCreated datePublished" datetime="2019-06-28T14:31:14+08:00">2019-06-28</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">数据结构</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="树的子结构"><a href="#树的子结构" class="headerlink" title="树的子结构"></a>树的子结构</h1><h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>输入两棵二叉树A，B，判断B是不是A的子结构。（ps：我们约定空树不是任意一个树的子结构）</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/06/28/%E6%A0%91%E7%9A%84%E5%AD%90%E7%BB%93%E6%9E%84/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2019/06/26/%E9%87%8D%E5%BB%BA%E4%BA%8C%E5%8F%89%E6%A0%91/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/tou2.jpg">
-      <meta itemprop="name" content="ylyang">
-      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="静水流深的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/06/26/%E9%87%8D%E5%BB%BA%E4%BA%8C%E5%8F%89%E6%A0%91/" class="post-title-link" itemprop="url">重建二叉树</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="文章创建时间：2019-06-26 13:28:03" itemprop="dateCreated datePublished" datetime="2019-06-26T13:28:03+08:00">2019-06-26</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">数据结构</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="重建二叉树"><a href="#重建二叉树" class="headerlink" title="重建二叉树"></a>重建二叉树</h1><h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>输入某二叉树的前序遍历和中序遍历的结果，请重建出该二叉树。假设输入的前序遍历和中序遍历的结果中都不含重复的数字。例如输入前序遍历序列{1,2,4,7,3,5,6,8}和中序遍历序列{4,7,2,1,5,3,8,6}，则重建二叉树并返回。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/06/26/%E9%87%8D%E5%BB%BA%E4%BA%8C%E5%8F%89%E6%A0%91/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
