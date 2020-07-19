@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/logo.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/logo.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/logo.ico">
+  <link rel="mask-icon" href="/images/logo.ico" color="#222">
+  <meta name="google-site-verification" content="QrRqAEoLHOBZnSt7mRkhAt6dCoj3nREdeG7IU9IKL1E">
+  <meta name="msvalidate.01" content="9A1D61A279FB6EF4CF3128BF57AFCBAC">
+  <meta name="baidu-site-verification" content="5Iz7ysEFLe">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  
+  <link rel="stylesheet" href="/lib/animate-css/animate.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1/themes/blue/pace-theme-flash.min.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1/pace.min.js"></script>
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ylyang.xyz","root":"/","scheme":"Gemini","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":{"enable":true,"onlypost":false,"loadingImg":null},"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}}};
+  </script>
+
+  <meta name="description" content="SpringCloud Stream 消息驱动为什么引入消息驱动？首先看到消息驱动，我们会想到，消息中间件  ActiveMQ RabbitMQ RocketMQ Kafka   存在的问题就是，中台和后台 可能存在两种MQ，那么他们之间的实现都是不一样的，这样会导致多种问题出现，而且上述我们也看到了，目前主流的MQ有四种，我们不可能每个都去学习 这个时候的痛点就是：有没有一种新的技术诞生，让我们">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringCloud之消息驱动SpringCloudStream">
+<meta property="og:url" content="ylyang.xyz/2020/06/18/SpringCloud%E4%B9%8B%E6%B6%88%E6%81%AF%E9%A9%B1%E5%8A%A8Stream/index.html">
+<meta property="og:site_name" content="静水流深的博客">
+<meta property="og:description" content="SpringCloud Stream 消息驱动为什么引入消息驱动？首先看到消息驱动，我们会想到，消息中间件  ActiveMQ RabbitMQ RocketMQ Kafka   存在的问题就是，中台和后台 可能存在两种MQ，那么他们之间的实现都是不一样的，这样会导致多种问题出现，而且上述我们也看到了，目前主流的MQ有四种，我们不可能每个都去学习 这个时候的痛点就是：有没有一种新的技术诞生，让我们">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="ylyang.xyz/2020/06/18/SpringCloud%E4%B9%8B%E6%B6%88%E6%81%AF%E9%A9%B1%E5%8A%A8Stream/image-20200414090346586.png">
+<meta property="og:image" content="ylyang.xyz/2020/06/18/SpringCloud%E4%B9%8B%E6%B6%88%E6%81%AF%E9%A9%B1%E5%8A%A8Stream/image-20200414091850411.png">
+<meta property="og:image" content="ylyang.xyz/2020/06/18/SpringCloud%E4%B9%8B%E6%B6%88%E6%81%AF%E9%A9%B1%E5%8A%A8Stream/image-20200414092237268.png">
+<meta property="og:image" content="ylyang.xyz/2020/06/18/SpringCloud%E4%B9%8B%E6%B6%88%E6%81%AF%E9%A9%B1%E5%8A%A8Stream/image-20200414093128482.png">
+<meta property="og:image" content="ylyang.xyz/2020/06/18/SpringCloud%E4%B9%8B%E6%B6%88%E6%81%AF%E9%A9%B1%E5%8A%A8Stream/image-20200414093537489.png">
+<meta property="og:image" content="ylyang.xyz/2020/06/18/SpringCloud%E4%B9%8B%E6%B6%88%E6%81%AF%E9%A9%B1%E5%8A%A8Stream/image-20200414093854499.png">
+<meta property="og:image" content="ylyang.xyz/2020/06/18/SpringCloud%E4%B9%8B%E6%B6%88%E6%81%AF%E9%A9%B1%E5%8A%A8Stream/image-20200414095920920.png">
+<meta property="og:image" content="ylyang.xyz/2020/06/18/SpringCloud%E4%B9%8B%E6%B6%88%E6%81%AF%E9%A9%B1%E5%8A%A8Stream/image-20200414100125220.png">
+<meta property="og:image" content="ylyang.xyz/2020/06/18/SpringCloud%E4%B9%8B%E6%B6%88%E6%81%AF%E9%A9%B1%E5%8A%A8Stream/image-20200414123004267.png">
+<meta property="og:image" content="ylyang.xyz/2020/06/18/SpringCloud%E4%B9%8B%E6%B6%88%E6%81%AF%E9%A9%B1%E5%8A%A8Stream/image-20200414130034279.png">
+<meta property="og:image" content="ylyang.xyz/2020/06/18/SpringCloud%E4%B9%8B%E6%B6%88%E6%81%AF%E9%A9%B1%E5%8A%A8Stream/image-20200414125203160.png">
+<meta property="og:image" content="ylyang.xyz/2020/06/18/SpringCloud%E4%B9%8B%E6%B6%88%E6%81%AF%E9%A9%B1%E5%8A%A8Stream/image-20200414125231537.png">
+<meta property="og:image" content="ylyang.xyz/2020/06/18/SpringCloud%E4%B9%8B%E6%B6%88%E6%81%AF%E9%A9%B1%E5%8A%A8Stream/image-20200414125243408.png">
+<meta property="og:image" content="ylyang.xyz/2020/06/18/SpringCloud%E4%B9%8B%E6%B6%88%E6%81%AF%E9%A9%B1%E5%8A%A8Stream/image-20200414131334047.png">
+<meta property="article:published_time" content="2020-06-18T03:24:55.000Z">
+<meta property="article:modified_time" content="2020-07-19T03:30:24.816Z">
+<meta property="article:author" content="ylyang">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="云计算">
+<meta property="article:tag" content="分布式">
+<meta property="article:tag" content="微服务">
+<meta property="article:tag" content="SpringCloud">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="ylyang.xyz/2020/06/18/SpringCloud%E4%B9%8B%E6%B6%88%E6%81%AF%E9%A9%B1%E5%8A%A8Stream/image-20200414090346586.png">
+
+<link rel="canonical" href="ylyang.xyz/2020/06/18/SpringCloud%E4%B9%8B%E6%B6%88%E6%81%AF%E9%A9%B1%E5%8A%A8Stream/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>SpringCloud之消息驱动SpringCloudStream | 静水流深的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+   <script type="text/javascript" src="/js/myjs/clicklove.js"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <main class="main">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+        <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line toggle-line-first"></span>
+        <span class="toggle-line toggle-line-middle"></span>
+        <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">静水流深的博客</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">ylyang's blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">18</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">160</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">122</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#SpringCloud-Stream-消息驱动"><span class="nav-number">1.</span> <span class="nav-text">SpringCloud Stream 消息驱动</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么引入消息驱动？"><span class="nav-number">1.1.</span> <span class="nav-text">为什么引入消息驱动？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#消息驱动概述"><span class="nav-number">1.2.</span> <span class="nav-text">消息驱动概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#是什么"><span class="nav-number">1.2.1.</span> <span class="nav-text">是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是SpringCloudStream"><span class="nav-number">1.2.2.</span> <span class="nav-text">什么是SpringCloudStream</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SpringCloudStrem设计思想"><span class="nav-number">1.2.3.</span> <span class="nav-text">SpringCloudStrem设计思想</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#标准MQ"><span class="nav-number">1.2.3.1.</span> <span class="nav-text">标准MQ</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#为什么用SpringCloudStream"><span class="nav-number">1.2.3.2.</span> <span class="nav-text">为什么用SpringCloudStream</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SpringCloudStream为什么能屏蔽底层差异"><span class="nav-number">1.2.3.3.</span> <span class="nav-text">SpringCloudStream为什么能屏蔽底层差异</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Binder"><span class="nav-number">1.2.3.4.</span> <span class="nav-text">Binder</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Stream标准流程套路"><span class="nav-number">1.2.3.5.</span> <span class="nav-text">Stream标准流程套路</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#编码中的注解"><span class="nav-number">1.2.3.6.</span> <span class="nav-text">编码中的注解</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#案例说明"><span class="nav-number">1.3.</span> <span class="nav-text">案例说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#消息驱动之生产者"><span class="nav-number">1.4.</span> <span class="nav-text">消息驱动之生产者</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#引入依赖"><span class="nav-number">1.4.1.</span> <span class="nav-text">引入依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#修改yml"><span class="nav-number">1.4.2.</span> <span class="nav-text">修改yml</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#业务类"><span class="nav-number">1.4.3.</span> <span class="nav-text">业务类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#发送消息的接口"><span class="nav-number">1.4.3.1.</span> <span class="nav-text">发送消息的接口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#发送消息的接口实现类"><span class="nav-number">1.4.3.2.</span> <span class="nav-text">发送消息的接口实现类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Controller"><span class="nav-number">1.4.3.3.</span> <span class="nav-text">Controller</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#测试"><span class="nav-number">1.4.3.4.</span> <span class="nav-text">测试</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#消息驱动之消费者"><span class="nav-number">1.5.</span> <span class="nav-text">消息驱动之消费者</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#引入依赖-1"><span class="nav-number">1.5.1.</span> <span class="nav-text">引入依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#修改yml-1"><span class="nav-number">1.5.2.</span> <span class="nav-text">修改yml</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#业务类-1"><span class="nav-number">1.5.3.</span> <span class="nav-text">业务类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分组消费"><span class="nav-number">1.6.</span> <span class="nav-text">分组消费</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#运行后有两个问题"><span class="nav-number">1.6.1.</span> <span class="nav-text">运行后有两个问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#消费"><span class="nav-number">1.6.2.</span> <span class="nav-text">消费</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分组"><span class="nav-number">1.6.3.</span> <span class="nav-text">分组</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#原理"><span class="nav-number">1.6.3.1.</span> <span class="nav-text">原理</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#消息持久化"><span class="nav-number">1.7.</span> <span class="nav-text">消息持久化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#案例"><span class="nav-number">1.7.1.</span> <span class="nav-text">案例</span></a></li></ol></li></ol></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ylyang"
+      src="/images/tou2.jpg">
+  <p class="site-author-name" itemprop="name">ylyang</p>
+  <div class="site-description" itemprop="description">云山苍苍，江水泱泱；先生之风，山高水长。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">160</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">122</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/yangyl7239" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;yangyl7239" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:yuanlin.young@gmail.com" title="E-Mail → mailto:yuanlin.young@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://ylyang.xyz/" title="https:&#x2F;&#x2F;ylyang.xyz">Home</a>
+        </li>
+    </ul>
+  </div>
+
+      </section>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </header>
+
+      
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/yangyl7239" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div id="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+      <div class="main-inner">
+        
+
+        <div class="content post posts-expand">
+          
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2020/06/18/SpringCloud%E4%B9%8B%E6%B6%88%E6%81%AF%E9%A9%B1%E5%8A%A8Stream/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/tou2.jpg">
+      <meta itemprop="name" content="ylyang">
+      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="静水流深的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SpringCloud之消息驱动SpringCloudStream
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="文章创建时间：2020-06-18 11:24:55" itemprop="dateCreated datePublished" datetime="2020-06-18T11:24:55+08:00">2020-06-18</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/SpringCloud/" itemprop="url" rel="index"><span itemprop="name">SpringCloud</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="SpringCloud-Stream-消息驱动"><a href="#SpringCloud-Stream-消息驱动" class="headerlink" title="SpringCloud Stream 消息驱动"></a>SpringCloud Stream 消息驱动</h1><h2 id="为什么引入消息驱动？"><a href="#为什么引入消息驱动？" class="headerlink" title="为什么引入消息驱动？"></a>为什么引入消息驱动？</h2><p>首先看到消息驱动，我们会想到，消息中间件</p>
+<ul>
+<li>ActiveMQ</li>
+<li>RabbitMQ</li>
+<li>RocketMQ</li>
+<li>Kafka</li>
+</ul>
+<p><img data-src="image-20200414090346586.png" alt="image"></p>
+<p>存在的问题就是，中台和后台 可能存在两种MQ，那么他们之间的实现都是不一样的，这样会导致多种问题出现，而且上述我们也看到了，目前主流的MQ有四种，我们不可能每个都去学习</p>
+<p>这个时候的痛点就是：有没有一种新的技术诞生，让我们不在关注具体MQ的细节，我们只需要用一种适配绑定的方式，自动的给我们在各种MQ内切换。</p>
+<p>这个时候，SpringCloudStream就运营而生，解决的痛点就是屏蔽了消息中间件的底层的细节差异，我们操作Stream就可以操作各种消息中间件了，从而降低开发人员的开发成本。</p>
+<h2 id="消息驱动概述"><a href="#消息驱动概述" class="headerlink" title="消息驱动概述"></a>消息驱动概述</h2><h3 id="是什么"><a href="#是什么" class="headerlink" title="是什么"></a>是什么</h3><p>屏蔽底层消息中间件的差异，降低切换成本，统一消息的编程模型</p>
+<p>这就有点像Hibernate，它同时支持多种数据库，同时还提供了Hibernate Session的语法，也就是HQL语句，这样屏蔽了SQL具体实现细节，我们只需要操作HQL语句，就能够操作不同的数据库。</p>
+<h3 id="什么是SpringCloudStream"><a href="#什么是SpringCloudStream" class="headerlink" title="什么是SpringCloudStream"></a>什么是SpringCloudStream</h3><p>官方定义 SpringCloudStream是一个构件消息驱动微服务的框架</p>
+<p>应用程序通过inputs或者outputs来与SpringCloudStream中binder对象（绑定器）交互。</p>
+<p>通过我们配置来binding(绑定)，而SpringCloudStream的binder对象负责与消息中间件交互</p>
+<p>所以，我们只需要搞清楚如何与SpringCloudStream交互，就可以方便的使用消息驱动的方式。</p>
+<p>通过使用SpringIntegration来连接消息代理中间件以实现消息事件驱动。</p>
+<p>SpringCloudStream为一些供应商的消息中间件产品提供了个性化的自动化配置实现，引用了发布-订阅，消费组，分区的三个核心概念</p>
+<p>目前仅支持RabbitMQ 和 Kafka</p>
+<h3 id="SpringCloudStrem设计思想"><a href="#SpringCloudStrem设计思想" class="headerlink" title="SpringCloudStrem设计思想"></a>SpringCloudStrem设计思想</h3><h4 id="标准MQ"><a href="#标准MQ" class="headerlink" title="标准MQ"></a>标准MQ</h4><p><img data-src="image-20200414091850411.png" alt="image1"></p>
+<ul>
+<li>生产者/消费者之间靠消息媒介传递消息内容：Message</li>
+<li>消息必须走特定的通道：Channel</li>
+<li>消息通道里的消息如何被消费呢，谁负责收发处理<ul>
+<li>消息通道MessageChannel的子接口SubscribableChannel，由MessageHandler消息处理器所订阅</li>
+</ul>
+</li>
+</ul>
+<h4 id="为什么用SpringCloudStream"><a href="#为什么用SpringCloudStream" class="headerlink" title="为什么用SpringCloudStream"></a>为什么用SpringCloudStream</h4><p>RabbitMQ和Kafka，由于这两个消息中间件的架构上不同</p>
+<p>像RabbitMQ有exchange，kafka有Tpic和Partitions分区</p>
+<p><img data-src="image-20200414092237268.png" alt="image"></p>
+<p>这些中间件的差异导致我们实际项目开发给我们造成了一定的困扰，我们如果用了两个消息队列的其中一种，后面的业务需求，我们想往另外一种消息队列进行迁移，这时候无疑就是灾难性的，一大堆东西都要推到重新做，因为它根我们的系统耦合了，这时候SpringCloudStream给我们提供了一种解耦的方式</p>
+<p>这个时候，我们就需要一个绑定器，可以想成是翻译官，用于实现两种消息之间的转换</p>
+<h4 id="SpringCloudStream为什么能屏蔽底层差异"><a href="#SpringCloudStream为什么能屏蔽底层差异" class="headerlink" title="SpringCloudStream为什么能屏蔽底层差异"></a>SpringCloudStream为什么能屏蔽底层差异</h4><p>在没有绑定器这个概念的情况下，我们的SpringBoot应用要直接与消息中间件进行消息交互的时候，由于各消息中间件构建的初衷不同，它们的实现细节上会有较大的差异性。通过定义绑定器作为中间件，完美的实现了应用程序与消息中间件细节之间的隔离。</p>
+<p>通过向应用程序暴露统一的Channel通道，使得应用程序不需要在考虑各种不同消息中间件的实现。</p>
+<p>通过定义绑定器Binder作为中间层，实现了应用程序与消息中间件细节之间的隔离。</p>
+<h4 id="Binder"><a href="#Binder" class="headerlink" title="Binder"></a>Binder</h4><ul>
+<li>input：对应消费者</li>
+<li>output：对应生产者</li>
+</ul>
+<p>Stream对消息中间件的进一步封装，可以做到代码层面对中间件的无感知，甚至于动态的切换中间件（RabbitMQ切换Kafka），使得微服务开发的高度解耦，服务可以关注更多的自己的业务流程。</p>
+<p><img data-src="image-20200414093128482.png" alt="image"></p>
+<p>通过定义绑定器Binder作为中间层，实现了应用程序与消息中间件细节之间的隔离。</p>
+<p>Stream中的消息通信方式遵循了发布-订阅模式，Topic主题进行广播，在RabbitMQ中就是Exchange，在Kafka中就是Topic</p>
+<h4 id="Stream标准流程套路"><a href="#Stream标准流程套路" class="headerlink" title="Stream标准流程套路"></a>Stream标准流程套路</h4><p>我们的消息生产者和消费者只和Stream交互</p>
+<p><img data-src="image-20200414093537489.png" alt="image"></p>
+<ul>
+<li>Binder：很方便的连接中间件，屏蔽差异</li>
+<li>Channel：通道，是队列Queue的一种抽象，在消息通讯系统中就是实现存储和转发的没接，通过Channel对队列进行配置</li>
+<li>Source和Sink：简单的可以理解为参照对象是SpringCloudStream自身，从Stream发布消息就是输出，接受消息就是输入。</li>
+</ul>
+<h4 id="编码中的注解"><a href="#编码中的注解" class="headerlink" title="编码中的注解"></a>编码中的注解</h4><p><img data-src="image-20200414093854499.png" alt="image"></p>
+<h2 id="案例说明"><a href="#案例说明" class="headerlink" title="案例说明"></a>案例说明</h2><p>前提是已经安装好了RabbitMQ</p>
+<ul>
+<li>cloud-stream-rabbitmq-procider8801，作为消息生产者进行发消息模块</li>
+<li>cloud-stream-rabbitmq-procider8802，消息接收模块</li>
+<li>cloud-stream-rabbitmq-procider8803，消息接收模块</li>
+</ul>
+<h2 id="消息驱动之生产者"><a href="#消息驱动之生产者" class="headerlink" title="消息驱动之生产者"></a>消息驱动之生产者</h2><h3 id="引入依赖"><a href="#引入依赖" class="headerlink" title="引入依赖"></a>引入依赖</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--Stream--&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.cloud&lt;&#x2F;groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-cloud-starter-stream-rabbit&lt;&#x2F;artifactId&gt;</span><br><span class="line">&lt;&#x2F;dependency&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="修改yml"><a href="#修改yml" class="headerlink" title="修改yml"></a>修改yml</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">spring:</span><br><span class="line">  application:</span><br><span class="line">    name: cloud-stream-provider</span><br><span class="line">  cloud:</span><br><span class="line">    stream:</span><br><span class="line">      binders: # 在此处配置要绑定的rabbitMQ的服务信息</span><br><span class="line">        defaultRabbit: # 表示定义的名称，用于binding的整合</span><br><span class="line">          type: rabbit # 消息中间件类型</span><br><span class="line">          environment: # 设置rabbitMQ的相关环境配置</span><br><span class="line">            spring:</span><br><span class="line">              rabbitmq:</span><br><span class="line">                host: localhost</span><br><span class="line">                port: 5672</span><br><span class="line">                username: guest</span><br><span class="line">                password: guest</span><br><span class="line">      bindings: # 服务的整合处理</span><br><span class="line">        output: # 这个名字是一个通道的名称</span><br><span class="line">          destination: studyExchange # 表示要使用的exchange名称定义</span><br><span class="line">          content-type: application&#x2F;json # 设置消息类型，本次为json，文本则设为text&#x2F;plain</span><br><span class="line">          binder: defaultRabbit # 设置要绑定的消息服务的具体设置</span><br></pre></td></tr></table></figure>
+
+<h3 id="业务类"><a href="#业务类" class="headerlink" title="业务类"></a>业务类</h3><h4 id="发送消息的接口"><a href="#发送消息的接口" class="headerlink" title="发送消息的接口"></a>发送消息的接口</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public interface IMassageProvider &#123;</span><br><span class="line">    &#x2F;&#x2F; 定义一个发送方法</span><br><span class="line">    public String send();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="发送消息的接口实现类"><a href="#发送消息的接口实现类" class="headerlink" title="发送消息的接口实现类"></a>发送消息的接口实现类</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; @EnableBinding： 指信道channel 和 exchange绑定在一起</span><br><span class="line">@EnableBinding(Source.class) &#x2F;&#x2F;定义消息的推送管道</span><br><span class="line">public class MessageProviderImpl implements IMassageProvider &#123;</span><br><span class="line"></span><br><span class="line">    @Resource</span><br><span class="line">    private MessageChannel output; &#x2F;&#x2F;消息发送管道（原来这里是操作dao，现在是操作消息中间件发送消息）</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public String send() &#123;</span><br><span class="line">        String serial&#x3D; UUID.randomUUID().toString();</span><br><span class="line">        &#x2F;&#x2F; 消息构建器构建一个消息 MessageBuilder</span><br><span class="line">        output.send(MessageBuilder.withPayload(serial).build());</span><br><span class="line">        System.out.println(&quot;***********serial&quot;+serial);</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Controller"><a href="#Controller" class="headerlink" title="Controller"></a>Controller</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@RestController</span><br><span class="line">public class SendMessageController &#123;</span><br><span class="line">    @Resource</span><br><span class="line">    private IMassageProvider massageProvider;</span><br><span class="line"></span><br><span class="line">    @GetMapping(&quot;&#x2F;sendMessage&quot;)</span><br><span class="line">    public String sendMessage()&#123;</span><br><span class="line">        return massageProvider.send();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>定义一个REST接口，调用的时候，发送一个消息</p>
+<h4 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h4><p>我们进入RabbitAdmin页面  <code>http://localhost:15672</code></p>
+<p><img data-src="image-20200414095920920.png" alt="image"></p>
+<p>会发现它已经成功创建了一个studyExchange的交换机，这个就是我们上面配置的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">bindings: # 服务的整合处理</span><br><span class="line">  output: # 这个名字是一个通道的名称</span><br><span class="line">    destination: studyExchange # 表示要使用的exchange名称定义</span><br><span class="line">    content-type: application&#x2F;json # 设置消息类型，本次为json，文本则设为text&#x2F;plain</span><br><span class="line">    binder: defaultRabbit # 设置要绑定的消息服务的具体设置</span><br></pre></td></tr></table></figure>
+
+<p>以后就会通过这个交换机进行消息的消费</p>
+<p>我们运行下列代码，进行测试消息发送 <code>http://localhost:8801/sendMessage</code></p>
+<p>能够发现消息已经成功被RabbitMQ捕获，这个时候就完成了消息的发送</p>
+<p><img data-src="image-20200414100125220.png" alt="image"></p>
+<h2 id="消息驱动之消费者"><a href="#消息驱动之消费者" class="headerlink" title="消息驱动之消费者"></a>消息驱动之消费者</h2><h3 id="引入依赖-1"><a href="#引入依赖-1" class="headerlink" title="引入依赖"></a>引入依赖</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--Stream--&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.cloud&lt;&#x2F;groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-cloud-starter-stream-rabbit&lt;&#x2F;artifactId&gt;</span><br><span class="line">&lt;&#x2F;dependency&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="修改yml-1"><a href="#修改yml-1" class="headerlink" title="修改yml"></a>修改yml</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">spring:</span><br><span class="line">  application:</span><br><span class="line">    name: cloud-stream-consumer</span><br><span class="line">  cloud:</span><br><span class="line">    stream:</span><br><span class="line">      binders: # 在此处配置要绑定的rabbitMQ的服务信息</span><br><span class="line">        defaultRabbit: # 表示定义的名称，用于binding的整合</span><br><span class="line">          type: rabbit # 消息中间件类型</span><br><span class="line">          environment: # 设置rabbitMQ的相关环境配置</span><br><span class="line">            spring:</span><br><span class="line">              rabbitmq:</span><br><span class="line">                host: localhost</span><br><span class="line">                port: 5672</span><br><span class="line">                username: guest</span><br><span class="line">                password: guest</span><br><span class="line">      bindings: # 服务的整合处理</span><br><span class="line">        input: # 这个名字是一个通道的名称</span><br><span class="line">          destination: studyExchange # 表示要使用的exchange名称定义</span><br><span class="line">          content-type: application&#x2F;json # 设置消息类型，本次为json，文本则设为text&#x2F;plain</span><br><span class="line">          binder: defaultRabbit # 设置要绑定的消息服务的具体设置</span><br><span class="line">          group: atguiguA</span><br></pre></td></tr></table></figure>
+
+<h3 id="业务类-1"><a href="#业务类-1" class="headerlink" title="业务类"></a>业务类</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">@Component</span><br><span class="line">@EnableBinding(Sink.class)  &#x2F;&#x2F; 绑定通道</span><br><span class="line">public class ReceiveMessageListenerController &#123;</span><br><span class="line"></span><br><span class="line">    @Value(&quot;$&#123;server.port&#125;&quot;)</span><br><span class="line">    private String serverPort;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; 监听队列，用于消费者队列的消息接收</span><br><span class="line">    @StreamListener(Sink.INPUT)</span><br><span class="line">    public void input(Message&lt;String&gt; message) &#123;</span><br><span class="line">        System.out.println(&quot;消费者1号，0------&gt;接收到消息：&quot;+message.getPayload()+&quot;\t port:&quot;+serverPort);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="分组消费"><a href="#分组消费" class="headerlink" title="分组消费"></a>分组消费</h2><p>我们在创建一个8803的消费者服务，需要启动的服务</p>
+<ul>
+<li>RabbitMQ：消息中间件</li>
+<li>7001：服务注册</li>
+<li>8801：消息生产</li>
+<li>8802：消息消费</li>
+<li>8803：消息消费</li>
+</ul>
+<h3 id="运行后有两个问题"><a href="#运行后有两个问题" class="headerlink" title="运行后有两个问题"></a>运行后有两个问题</h3><ul>
+<li>有重复消费问题</li>
+<li>消息持久化问题</li>
+</ul>
+<h3 id="消费"><a href="#消费" class="headerlink" title="消费"></a>消费</h3><p>目前8802 、8803同时都收到了，存在重复消费的问题</p>
+<p>如何解决：使用分组和持久化属性 group来解决</p>
+<p>比如在如下场景中，订单系统我们做集群部署，都会从RabbitMQ中获取订单信息，那如果一个订单同时被两个服务获取到，那么就会造成数据错误，我们得避免这种情况，这时我们就可以使用Stream中的消息分组来解决。</p>
+<p><img data-src="image-20200414123004267.png" alt="image"></p>
+<p>注意：在Stream中处于同一个group中的多个消费者是竞争关系，就能够保证消息只能被其中一个消费一次</p>
+<p>不同组是可以全面消费的（重复消费）</p>
+<p>同一组会发生竞争关系，只能其中一个可以消费</p>
+<p>分布式微服务应用为了实现高可用和负载均衡，实际上都会部署多个实例，这里部署了8802 8803</p>
+<p>多数情况下，生产者发送消息给某个具体微服务时，只希望被消费一次，按照上面我们启动两个应用的例子，虽然它们同属一个应用，但是这个消息出现了被重复消费两次的情况，为了解决这个情况，在SpringCloudStream中，就提供了 消费组 的概念</p>
+<p><img data-src="image-20200414130034279.png" alt="image"></p>
+<h3 id="分组"><a href="#分组" class="headerlink" title="分组"></a>分组</h3><h4 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h4><p>微服务应用放置于同一个group中，就能够保证消息只会被其中一个应用消费一次，不同的组是可以消费的，同一组内会发生竞争关系，只有其中一个可以被消费。</p>
+<p>我们将8802和8803划分为同一组</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">application:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">cloud-stream-consumer</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">stream:</span></span><br><span class="line">      <span class="attr">binders:</span> <span class="comment"># 在此处配置要绑定的rabbitMQ的服务信息</span></span><br><span class="line">        <span class="attr">defaultRabbit:</span> <span class="comment"># 表示定义的名称，用于binding的整合</span></span><br><span class="line">          <span class="attr">type:</span> <span class="string">rabbit</span> <span class="comment"># 消息中间件类型</span></span><br><span class="line">          <span class="attr">environment:</span> <span class="comment"># 设置rabbitMQ的相关环境配置</span></span><br><span class="line">            <span class="attr">spring:</span></span><br><span class="line">              <span class="attr">rabbitmq:</span></span><br><span class="line">                <span class="attr">host:</span> <span class="string">localhost</span></span><br><span class="line">                <span class="attr">port:</span> <span class="number">5672</span></span><br><span class="line">                <span class="attr">username:</span> <span class="string">guest</span></span><br><span class="line">                <span class="attr">password:</span> <span class="string">guest</span></span><br><span class="line">      <span class="attr">bindings:</span> <span class="comment"># 服务的整合处理</span></span><br><span class="line">        <span class="attr">input:</span> <span class="comment"># 这个名字是一个通道的名称</span></span><br><span class="line">          <span class="attr">destination:</span> <span class="string">studyExchange</span> <span class="comment"># 表示要使用的exchange名称定义</span></span><br><span class="line">          <span class="attr">content-type:</span> <span class="string">application/json</span> <span class="comment"># 设置消息类型，本次为json，文本则设为text/plain</span></span><br><span class="line">          <span class="attr">binder:</span> <span class="string">defaultRabbit</span> <span class="comment"># 设置要绑定的消息服务的具体设置</span></span><br><span class="line">          <span class="attr">group:</span> <span class="string">atguiguA</span></span><br></pre></td></tr></table></figure>
+
+<p>引入：<code>group: atguiguA</code></p>
+<p>然后我们执行消息发送的接口：<code>http://localhost:8801/sendMessage</code></p>
+<p>我们在8801服务，同时发送了6条消息</p>
+<p><img data-src="image-20200414125203160.png" alt="image"></p>
+<p>然后看8802服务，接收到了3条</p>
+<p><img data-src="image-20200414125231537.png" alt="image"></p>
+<p>8803服务，也接收到了3条</p>
+<p><img data-src="image-20200414125243408.png" alt="image"></p>
+<p>这个时候，就通过分组，避免了消息的重复消费问题</p>
+<p>8802、8803通过实现轮询分组，每次只有一个消费者，最后发送的消息只能够被一个接受</p>
+<p>如果将他们的group变成两个不同的组，那么消息就会被重复消费</p>
+<h2 id="消息持久化"><a href="#消息持久化" class="headerlink" title="消息持久化"></a>消息持久化</h2><p>通过上面的方式，我们解决了重复消费的问题，再看看持久化</p>
+<h3 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h3><ul>
+<li>停止8802和8803，并移除8802的group，保留8803的group</li>
+<li>8801先发送4条消息到RabbitMQ</li>
+<li>先启动8802，无分组属性，后台没有打出来消息</li>
+<li>在启动8803，有分组属性，后台打出来MQ上的消息</li>
+</ul>
+<p>这就说明消息已经被持久化了，等消费者登录后，会自动从消息队列中获取消息进行消费</p>
+<p><img data-src="image-20200414131334047.png" alt="image"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"><i class="fa fa-tag"></i> Java</a>
+              <a href="/tags/%E4%BA%91%E8%AE%A1%E7%AE%97/" rel="tag"><i class="fa fa-tag"></i> 云计算</a>
+              <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag"><i class="fa fa-tag"></i> 分布式</a>
+              <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" rel="tag"><i class="fa fa-tag"></i> 微服务</a>
+              <a href="/tags/SpringCloud/" rel="tag"><i class="fa fa-tag"></i> SpringCloud</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/06/15/SpringCloud%E4%B9%8B%E6%B6%88%E6%81%AF%E6%80%BB%E7%BA%BFBus/" rel="prev" title="SpringCloud之消息总线Bus">
+      <i class="fa fa-chevron-left"></i> SpringCloud之消息总线Bus
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/06/21/SpringCloud%E4%B9%8B%E5%88%86%E5%B8%83%E5%BC%8F%E8%AF%B7%E6%B1%82%E9%93%BE%E8%B7%AF%E8%B7%9F%E8%B8%AASleuth/" rel="next" title="SpringCloud之分布式请求链路跟踪Sleuth">
+      SpringCloud之分布式请求链路跟踪Sleuth <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+        </div>
+        
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Powered by ylyang</span>
+</div>
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="//cdn.jsdelivr.net/npm/ribbon.js@1/dist/ribbon.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
