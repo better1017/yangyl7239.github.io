@@ -623,133 +623,14 @@
 <li>RocketMQ</li>
 <li>Kafka</li>
 </ul>
-<p><img data-src="image-20200414090346586.png" alt="image"></p>
-<p>存在的问题就是，中台和后台 可能存在两种MQ，那么他们之间的实现都是不一样的，这样会导致多种问题出现，而且上述我们也看到了，目前主流的MQ有四种，我们不可能每个都去学习</p>
-<p>这个时候的痛点就是：有没有一种新的技术诞生，让我们不在关注具体MQ的细节，我们只需要用一种适配绑定的方式，自动的给我们在各种MQ内切换。</p>
-<p>这个时候，SpringCloudStream就运营而生，解决的痛点就是屏蔽了消息中间件的底层的细节差异，我们操作Stream就可以操作各种消息中间件了，从而降低开发人员的开发成本。</p>
-<h2 id="消息驱动概述"><a href="#消息驱动概述" class="headerlink" title="消息驱动概述"></a>消息驱动概述</h2><h3 id="是什么"><a href="#是什么" class="headerlink" title="是什么"></a>是什么</h3><p>屏蔽底层消息中间件的差异，降低切换成本，统一消息的编程模型</p>
-<p>这就有点像Hibernate，它同时支持多种数据库，同时还提供了Hibernate Session的语法，也就是HQL语句，这样屏蔽了SQL具体实现细节，我们只需要操作HQL语句，就能够操作不同的数据库。</p>
-<h3 id="什么是SpringCloudStream"><a href="#什么是SpringCloudStream" class="headerlink" title="什么是SpringCloudStream"></a>什么是SpringCloudStream</h3><p>官方定义 SpringCloudStream是一个构件消息驱动微服务的框架</p>
-<p>应用程序通过inputs或者outputs来与SpringCloudStream中binder对象（绑定器）交互。</p>
-<p>通过我们配置来binding(绑定)，而SpringCloudStream的binder对象负责与消息中间件交互</p>
-<p>所以，我们只需要搞清楚如何与SpringCloudStream交互，就可以方便的使用消息驱动的方式。</p>
-<p>通过使用SpringIntegration来连接消息代理中间件以实现消息事件驱动。</p>
-<p>SpringCloudStream为一些供应商的消息中间件产品提供了个性化的自动化配置实现，引用了发布-订阅，消费组，分区的三个核心概念</p>
-<p>目前仅支持RabbitMQ 和 Kafka</p>
-<h3 id="SpringCloudStrem设计思想"><a href="#SpringCloudStrem设计思想" class="headerlink" title="SpringCloudStrem设计思想"></a>SpringCloudStrem设计思想</h3><h4 id="标准MQ"><a href="#标准MQ" class="headerlink" title="标准MQ"></a>标准MQ</h4><p><img data-src="image-20200414091850411.png" alt="image1"></p>
-<ul>
-<li>生产者/消费者之间靠消息媒介传递消息内容：Message</li>
-<li>消息必须走特定的通道：Channel</li>
-<li>消息通道里的消息如何被消费呢，谁负责收发处理<ul>
-<li>消息通道MessageChannel的子接口SubscribableChannel，由MessageHandler消息处理器所订阅</li>
-</ul>
-</li>
-</ul>
-<h4 id="为什么用SpringCloudStream"><a href="#为什么用SpringCloudStream" class="headerlink" title="为什么用SpringCloudStream"></a>为什么用SpringCloudStream</h4><p>RabbitMQ和Kafka，由于这两个消息中间件的架构上不同</p>
-<p>像RabbitMQ有exchange，kafka有Tpic和Partitions分区</p>
-<p><img data-src="image-20200414092237268.png" alt="image"></p>
-<p>这些中间件的差异导致我们实际项目开发给我们造成了一定的困扰，我们如果用了两个消息队列的其中一种，后面的业务需求，我们想往另外一种消息队列进行迁移，这时候无疑就是灾难性的，一大堆东西都要推到重新做，因为它根我们的系统耦合了，这时候SpringCloudStream给我们提供了一种解耦的方式</p>
-<p>这个时候，我们就需要一个绑定器，可以想成是翻译官，用于实现两种消息之间的转换</p>
-<h4 id="SpringCloudStream为什么能屏蔽底层差异"><a href="#SpringCloudStream为什么能屏蔽底层差异" class="headerlink" title="SpringCloudStream为什么能屏蔽底层差异"></a>SpringCloudStream为什么能屏蔽底层差异</h4><p>在没有绑定器这个概念的情况下，我们的SpringBoot应用要直接与消息中间件进行消息交互的时候，由于各消息中间件构建的初衷不同，它们的实现细节上会有较大的差异性。通过定义绑定器作为中间件，完美的实现了应用程序与消息中间件细节之间的隔离。</p>
-<p>通过向应用程序暴露统一的Channel通道，使得应用程序不需要在考虑各种不同消息中间件的实现。</p>
-<p>通过定义绑定器Binder作为中间层，实现了应用程序与消息中间件细节之间的隔离。</p>
-<h4 id="Binder"><a href="#Binder" class="headerlink" title="Binder"></a>Binder</h4><ul>
-<li>input：对应消费者</li>
-<li>output：对应生产者</li>
-</ul>
-<p>Stream对消息中间件的进一步封装，可以做到代码层面对中间件的无感知，甚至于动态的切换中间件（RabbitMQ切换Kafka），使得微服务开发的高度解耦，服务可以关注更多的自己的业务流程。</p>
-<p><img data-src="image-20200414093128482.png" alt="image"></p>
-<p>通过定义绑定器Binder作为中间层，实现了应用程序与消息中间件细节之间的隔离。</p>
-<p>Stream中的消息通信方式遵循了发布-订阅模式，Topic主题进行广播，在RabbitMQ中就是Exchange，在Kafka中就是Topic</p>
-<h4 id="Stream标准流程套路"><a href="#Stream标准流程套路" class="headerlink" title="Stream标准流程套路"></a>Stream标准流程套路</h4><p>我们的消息生产者和消费者只和Stream交互</p>
-<p><img data-src="image-20200414093537489.png" alt="image"></p>
-<ul>
-<li>Binder：很方便的连接中间件，屏蔽差异</li>
-<li>Channel：通道，是队列Queue的一种抽象，在消息通讯系统中就是实现存储和转发的没接，通过Channel对队列进行配置</li>
-<li>Source和Sink：简单的可以理解为参照对象是SpringCloudStream自身，从Stream发布消息就是输出，接受消息就是输入。</li>
-</ul>
-<h4 id="编码中的注解"><a href="#编码中的注解" class="headerlink" title="编码中的注解"></a>编码中的注解</h4><p><img data-src="image-20200414093854499.png" alt="image"></p>
-<h2 id="案例说明"><a href="#案例说明" class="headerlink" title="案例说明"></a>案例说明</h2><p>前提是已经安装好了RabbitMQ</p>
-<ul>
-<li>cloud-stream-rabbitmq-procider8801，作为消息生产者进行发消息模块</li>
-<li>cloud-stream-rabbitmq-procider8802，消息接收模块</li>
-<li>cloud-stream-rabbitmq-procider8803，消息接收模块</li>
-</ul>
-<h2 id="消息驱动之生产者"><a href="#消息驱动之生产者" class="headerlink" title="消息驱动之生产者"></a>消息驱动之生产者</h2><h3 id="引入依赖"><a href="#引入依赖" class="headerlink" title="引入依赖"></a>引入依赖</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--Stream--&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.cloud&lt;&#x2F;groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-cloud-starter-stream-rabbit&lt;&#x2F;artifactId&gt;</span><br><span class="line">&lt;&#x2F;dependency&gt;</span><br></pre></td></tr></table></figure>
-
-<h3 id="修改yml"><a href="#修改yml" class="headerlink" title="修改yml"></a>修改yml</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">spring:</span><br><span class="line">  application:</span><br><span class="line">    name: cloud-stream-provider</span><br><span class="line">  cloud:</span><br><span class="line">    stream:</span><br><span class="line">      binders: # 在此处配置要绑定的rabbitMQ的服务信息</span><br><span class="line">        defaultRabbit: # 表示定义的名称，用于binding的整合</span><br><span class="line">          type: rabbit # 消息中间件类型</span><br><span class="line">          environment: # 设置rabbitMQ的相关环境配置</span><br><span class="line">            spring:</span><br><span class="line">              rabbitmq:</span><br><span class="line">                host: localhost</span><br><span class="line">                port: 5672</span><br><span class="line">                username: guest</span><br><span class="line">                password: guest</span><br><span class="line">      bindings: # 服务的整合处理</span><br><span class="line">        output: # 这个名字是一个通道的名称</span><br><span class="line">          destination: studyExchange # 表示要使用的exchange名称定义</span><br><span class="line">          content-type: application&#x2F;json # 设置消息类型，本次为json，文本则设为text&#x2F;plain</span><br><span class="line">          binder: defaultRabbit # 设置要绑定的消息服务的具体设置</span><br></pre></td></tr></table></figure>
-
-<h3 id="业务类"><a href="#业务类" class="headerlink" title="业务类"></a>业务类</h3><h4 id="发送消息的接口"><a href="#发送消息的接口" class="headerlink" title="发送消息的接口"></a>发送消息的接口</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public interface IMassageProvider &#123;</span><br><span class="line">    &#x2F;&#x2F; 定义一个发送方法</span><br><span class="line">    public String send();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="发送消息的接口实现类"><a href="#发送消息的接口实现类" class="headerlink" title="发送消息的接口实现类"></a>发送消息的接口实现类</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; @EnableBinding： 指信道channel 和 exchange绑定在一起</span><br><span class="line">@EnableBinding(Source.class) &#x2F;&#x2F;定义消息的推送管道</span><br><span class="line">public class MessageProviderImpl implements IMassageProvider &#123;</span><br><span class="line"></span><br><span class="line">    @Resource</span><br><span class="line">    private MessageChannel output; &#x2F;&#x2F;消息发送管道（原来这里是操作dao，现在是操作消息中间件发送消息）</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public String send() &#123;</span><br><span class="line">        String serial&#x3D; UUID.randomUUID().toString();</span><br><span class="line">        &#x2F;&#x2F; 消息构建器构建一个消息 MessageBuilder</span><br><span class="line">        output.send(MessageBuilder.withPayload(serial).build());</span><br><span class="line">        System.out.println(&quot;***********serial&quot;+serial);</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="Controller"><a href="#Controller" class="headerlink" title="Controller"></a>Controller</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@RestController</span><br><span class="line">public class SendMessageController &#123;</span><br><span class="line">    @Resource</span><br><span class="line">    private IMassageProvider massageProvider;</span><br><span class="line"></span><br><span class="line">    @GetMapping(&quot;&#x2F;sendMessage&quot;)</span><br><span class="line">    public String sendMessage()&#123;</span><br><span class="line">        return massageProvider.send();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>定义一个REST接口，调用的时候，发送一个消息</p>
-<h4 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h4><p>我们进入RabbitAdmin页面  <code>http://localhost:15672</code></p>
-<p><img data-src="image-20200414095920920.png" alt="image"></p>
-<p>会发现它已经成功创建了一个studyExchange的交换机，这个就是我们上面配置的</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">bindings: # 服务的整合处理</span><br><span class="line">  output: # 这个名字是一个通道的名称</span><br><span class="line">    destination: studyExchange # 表示要使用的exchange名称定义</span><br><span class="line">    content-type: application&#x2F;json # 设置消息类型，本次为json，文本则设为text&#x2F;plain</span><br><span class="line">    binder: defaultRabbit # 设置要绑定的消息服务的具体设置</span><br></pre></td></tr></table></figure>
-
-<p>以后就会通过这个交换机进行消息的消费</p>
-<p>我们运行下列代码，进行测试消息发送 <code>http://localhost:8801/sendMessage</code></p>
-<p>能够发现消息已经成功被RabbitMQ捕获，这个时候就完成了消息的发送</p>
-<p><img data-src="image-20200414100125220.png" alt="image"></p>
-<h2 id="消息驱动之消费者"><a href="#消息驱动之消费者" class="headerlink" title="消息驱动之消费者"></a>消息驱动之消费者</h2><h3 id="引入依赖-1"><a href="#引入依赖-1" class="headerlink" title="引入依赖"></a>引入依赖</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--Stream--&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.cloud&lt;&#x2F;groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-cloud-starter-stream-rabbit&lt;&#x2F;artifactId&gt;</span><br><span class="line">&lt;&#x2F;dependency&gt;</span><br></pre></td></tr></table></figure>
-
-<h3 id="修改yml-1"><a href="#修改yml-1" class="headerlink" title="修改yml"></a>修改yml</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">spring:</span><br><span class="line">  application:</span><br><span class="line">    name: cloud-stream-consumer</span><br><span class="line">  cloud:</span><br><span class="line">    stream:</span><br><span class="line">      binders: # 在此处配置要绑定的rabbitMQ的服务信息</span><br><span class="line">        defaultRabbit: # 表示定义的名称，用于binding的整合</span><br><span class="line">          type: rabbit # 消息中间件类型</span><br><span class="line">          environment: # 设置rabbitMQ的相关环境配置</span><br><span class="line">            spring:</span><br><span class="line">              rabbitmq:</span><br><span class="line">                host: localhost</span><br><span class="line">                port: 5672</span><br><span class="line">                username: guest</span><br><span class="line">                password: guest</span><br><span class="line">      bindings: # 服务的整合处理</span><br><span class="line">        input: # 这个名字是一个通道的名称</span><br><span class="line">          destination: studyExchange # 表示要使用的exchange名称定义</span><br><span class="line">          content-type: application&#x2F;json # 设置消息类型，本次为json，文本则设为text&#x2F;plain</span><br><span class="line">          binder: defaultRabbit # 设置要绑定的消息服务的具体设置</span><br><span class="line">          group: atguiguA</span><br></pre></td></tr></table></figure>
-
-<h3 id="业务类-1"><a href="#业务类-1" class="headerlink" title="业务类"></a>业务类</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">@Component</span><br><span class="line">@EnableBinding(Sink.class)  &#x2F;&#x2F; 绑定通道</span><br><span class="line">public class ReceiveMessageListenerController &#123;</span><br><span class="line"></span><br><span class="line">    @Value(&quot;$&#123;server.port&#125;&quot;)</span><br><span class="line">    private String serverPort;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; 监听队列，用于消费者队列的消息接收</span><br><span class="line">    @StreamListener(Sink.INPUT)</span><br><span class="line">    public void input(Message&lt;String&gt; message) &#123;</span><br><span class="line">        System.out.println(&quot;消费者1号，0------&gt;接收到消息：&quot;+message.getPayload()+&quot;\t port:&quot;+serverPort);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="分组消费"><a href="#分组消费" class="headerlink" title="分组消费"></a>分组消费</h2><p>我们在创建一个8803的消费者服务，需要启动的服务</p>
-<ul>
-<li>RabbitMQ：消息中间件</li>
-<li>7001：服务注册</li>
-<li>8801：消息生产</li>
-<li>8802：消息消费</li>
-<li>8803：消息消费</li>
-</ul>
-<h3 id="运行后有两个问题"><a href="#运行后有两个问题" class="headerlink" title="运行后有两个问题"></a>运行后有两个问题</h3><ul>
-<li>有重复消费问题</li>
-<li>消息持久化问题</li>
-</ul>
-<h3 id="消费"><a href="#消费" class="headerlink" title="消费"></a>消费</h3><p>目前8802 、8803同时都收到了，存在重复消费的问题</p>
-<p>如何解决：使用分组和持久化属性 group来解决</p>
-<p>比如在如下场景中，订单系统我们做集群部署，都会从RabbitMQ中获取订单信息，那如果一个订单同时被两个服务获取到，那么就会造成数据错误，我们得避免这种情况，这时我们就可以使用Stream中的消息分组来解决。</p>
-<p><img data-src="image-20200414123004267.png" alt="image"></p>
-<p>注意：在Stream中处于同一个group中的多个消费者是竞争关系，就能够保证消息只能被其中一个消费一次</p>
-<p>不同组是可以全面消费的（重复消费）</p>
-<p>同一组会发生竞争关系，只能其中一个可以消费</p>
-<p>分布式微服务应用为了实现高可用和负载均衡，实际上都会部署多个实例，这里部署了8802 8803</p>
-<p>多数情况下，生产者发送消息给某个具体微服务时，只希望被消费一次，按照上面我们启动两个应用的例子，虽然它们同属一个应用，但是这个消息出现了被重复消费两次的情况，为了解决这个情况，在SpringCloudStream中，就提供了 消费组 的概念</p>
-<p><img data-src="image-20200414130034279.png" alt="image"></p>
-<h3 id="分组"><a href="#分组" class="headerlink" title="分组"></a>分组</h3><h4 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h4><p>微服务应用放置于同一个group中，就能够保证消息只会被其中一个应用消费一次，不同的组是可以消费的，同一组内会发生竞争关系，只有其中一个可以被消费。</p>
-<p>我们将8802和8803划分为同一组</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">application:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">cloud-stream-consumer</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">stream:</span></span><br><span class="line">      <span class="attr">binders:</span> <span class="comment"># 在此处配置要绑定的rabbitMQ的服务信息</span></span><br><span class="line">        <span class="attr">defaultRabbit:</span> <span class="comment"># 表示定义的名称，用于binding的整合</span></span><br><span class="line">          <span class="attr">type:</span> <span class="string">rabbit</span> <span class="comment"># 消息中间件类型</span></span><br><span class="line">          <span class="attr">environment:</span> <span class="comment"># 设置rabbitMQ的相关环境配置</span></span><br><span class="line">            <span class="attr">spring:</span></span><br><span class="line">              <span class="attr">rabbitmq:</span></span><br><span class="line">                <span class="attr">host:</span> <span class="string">localhost</span></span><br><span class="line">                <span class="attr">port:</span> <span class="number">5672</span></span><br><span class="line">                <span class="attr">username:</span> <span class="string">guest</span></span><br><span class="line">                <span class="attr">password:</span> <span class="string">guest</span></span><br><span class="line">      <span class="attr">bindings:</span> <span class="comment"># 服务的整合处理</span></span><br><span class="line">        <span class="attr">input:</span> <span class="comment"># 这个名字是一个通道的名称</span></span><br><span class="line">          <span class="attr">destination:</span> <span class="string">studyExchange</span> <span class="comment"># 表示要使用的exchange名称定义</span></span><br><span class="line">          <span class="attr">content-type:</span> <span class="string">application/json</span> <span class="comment"># 设置消息类型，本次为json，文本则设为text/plain</span></span><br><span class="line">          <span class="attr">binder:</span> <span class="string">defaultRabbit</span> <span class="comment"># 设置要绑定的消息服务的具体设置</span></span><br><span class="line">          <span class="attr">group:</span> <span class="string">atguiguA</span></span><br></pre></td></tr></table></figure>
-
-<p>引入：<code>group: atguiguA</code></p>
-<p>然后我们执行消息发送的接口：<code>http://localhost:8801/sendMessage</code></p>
-<p>我们在8801服务，同时发送了6条消息</p>
-<p><img data-src="image-20200414125203160.png" alt="image"></p>
-<p>然后看8802服务，接收到了3条</p>
-<p><img data-src="image-20200414125231537.png" alt="image"></p>
-<p>8803服务，也接收到了3条</p>
-<p><img data-src="image-20200414125243408.png" alt="image"></p>
-<p>这个时候，就通过分组，避免了消息的重复消费问题</p>
-<p>8802、8803通过实现轮询分组，每次只有一个消费者，最后发送的消息只能够被一个接受</p>
-<p>如果将他们的group变成两个不同的组，那么消息就会被重复消费</p>
-<h2 id="消息持久化"><a href="#消息持久化" class="headerlink" title="消息持久化"></a>消息持久化</h2><p>通过上面的方式，我们解决了重复消费的问题，再看看持久化</p>
-<h3 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h3><ul>
-<li>停止8802和8803，并移除8802的group，保留8803的group</li>
-<li>8801先发送4条消息到RabbitMQ</li>
-<li>先启动8802，无分组属性，后台没有打出来消息</li>
-<li>在启动8803，有分组属性，后台打出来MQ上的消息</li>
-</ul>
-<p>这就说明消息已经被持久化了，等消费者登录后，会自动从消息队列中获取消息进行消费</p>
-<p><img data-src="image-20200414131334047.png" alt="image"></p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/06/18/SpringCloud%E4%B9%8B%E6%B6%88%E6%81%AF%E9%A9%B1%E5%8A%A8Stream/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
