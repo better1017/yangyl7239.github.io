@@ -24,7 +24,7 @@
 
 <script class="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"ylyang.xyz","root":"/","scheme":"Gemini","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":{"enable":true,"onlypost":false,"loadingImg":null},"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}}};
+    var CONFIG = {"hostname":"ylyang.xyz","root":"/","scheme":"Gemini","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":{"enable":true,"onlypost":false,"loadingImg":null},"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"path":"./public/search.xml"};
   </script>
 
   <meta name="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
@@ -124,6 +124,7 @@
 
   <div class="site-nav-right">
     <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
@@ -139,17 +140,17 @@
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">18</span></a>
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">19</span></a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">165</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">168</span></a>
 
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">122</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">125</span></a>
 
   </li>
         <li class="menu-item menu-item-about">
@@ -157,11 +158,38 @@
     <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
 
   </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
   </ul>
 </nav>
 
 
 
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
 
 </div>
           
@@ -201,20 +229,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">165</span>
+          <span class="site-state-item-count">168</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-count">19</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">122</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -275,13 +303,73 @@
     <div class="posts-collapse">
       <div class="collection-title">
         
-        <span class="collection-header">非常好! 目前共计 165 篇文章。 继续努力。</span>
+        <span class="collection-header">非常好! 目前共计 168 篇文章。 继续努力。</span>
       </div>
 
       
     <div class="collection-year">
       <span class="collection-header">2019</span>
     </div>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-07-02T23:42:31+08:00"
+              content="2019-07-02">
+          07-02
+        </time>
+      </div>
+
+      <div class="post-title">
+          <a class="post-title-link" href="/2019/07/02/%E4%BB%8E%E4%B8%8A%E5%BE%80%E4%B8%8B%E6%89%93%E5%8D%B0%E4%BA%8C%E5%8F%89%E6%A0%91/" itemprop="url">
+            <span itemprop="name">从上往下打印二叉树</span>
+          </a>
+      </div>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-07-01T12:35:06+08:00"
+              content="2019-07-01">
+          07-01
+        </time>
+      </div>
+
+      <div class="post-title">
+          <a class="post-title-link" href="/2019/07/01/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E9%95%9C%E5%83%8F/" itemprop="url">
+            <span itemprop="name">二叉树的镜像</span>
+          </a>
+      </div>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-06-28T14:31:14+08:00"
+              content="2019-06-28">
+          06-28
+        </time>
+      </div>
+
+      <div class="post-title">
+          <a class="post-title-link" href="/2019/06/28/%E6%A0%91%E7%9A%84%E5%AD%90%E7%BB%93%E6%9E%84/" itemprop="url">
+            <span itemprop="name">树的子结构</span>
+          </a>
+      </div>
+
+    </header>
+  </article>
 
   <article itemscope itemtype="http://schema.org/Article">
     <header class="post-header">
@@ -423,66 +511,6 @@
     </header>
   </article>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2019-05-18T17:46:16+08:00"
-              content="2019-05-18">
-          05-18
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2019/05/18/%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%8E%AF%E7%9A%84%E5%85%A5%E5%8F%A3%E7%BB%93%E7%82%B9/" itemprop="url">
-            <span itemprop="name">链表中环的入口结点</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2019-05-06T12:40:39+08:00"
-              content="2019-05-06">
-          05-06
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2019/05/06/%E5%AD%A9%E5%AD%90%E4%BB%AC%E7%9A%84%E6%B8%B8%E6%88%8F-%E5%9C%86%E5%9C%88%E4%B8%AD%E6%9C%80%E5%90%8E%E5%89%A9%E4%B8%8B%E7%9A%84%E6%95%B0/" itemprop="url">
-            <span itemprop="name">孩子们的游戏-圆圈中最后剩下的数</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2019-05-05T12:02:39+08:00"
-              content="2019-05-05">
-          05-05
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2019/05/05/%E6%A0%88%E7%9A%84%E5%8E%8B%E5%85%A5%E5%BC%B9%E5%87%BA%E5%BA%8F%E5%88%97/" itemprop="url">
-            <span itemprop="name">栈的压入弹出序列</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
 
     </div>
   </div>
@@ -598,6 +626,10 @@
   </script>
 
 
+
+
+  
+<script src="/js/local-search.js"></script>
 
 
 

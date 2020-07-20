@@ -24,7 +24,7 @@
 
 <script class="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"ylyang.xyz","root":"/","scheme":"Gemini","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":{"enable":true,"onlypost":false,"loadingImg":null},"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}}};
+    var CONFIG = {"hostname":"ylyang.xyz","root":"/","scheme":"Gemini","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":{"enable":true,"onlypost":false,"loadingImg":null},"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"path":"./public/search.xml"};
   </script>
 
   <meta name="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
@@ -124,6 +124,7 @@
 
   <div class="site-nav-right">
     <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
@@ -139,17 +140,17 @@
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">18</span></a>
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">19</span></a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">165</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">168</span></a>
 
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">122</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">125</span></a>
 
   </li>
         <li class="menu-item menu-item-about">
@@ -157,11 +158,38 @@
     <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
 
   </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
   </ul>
 </nav>
 
 
 
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
 
 </div>
           
@@ -201,20 +229,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">165</span>
+          <span class="site-state-item-count">168</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-count">19</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">122</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -267,6 +295,81 @@
 
         <div class="content index posts-expand">
           
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2020/06/04/SpringCloud%E4%B9%8BRibbon%E5%AE%9E%E7%8E%B0%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/tou2.jpg">
+      <meta itemprop="name" content="ylyang">
+      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="静水流深的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/06/04/SpringCloud%E4%B9%8BRibbon%E5%AE%9E%E7%8E%B0%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" class="post-title-link" itemprop="url">SpringCloud之Ribbon实现负载均衡</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="文章创建时间：2020-06-04 21:11:24" itemprop="dateCreated datePublished" datetime="2020-06-04T21:11:24+08:00">2020-06-04</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/SpringCloud/" itemprop="url" rel="index"><span itemprop="name">SpringCloud</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Ribbon实现负载均衡"><a href="#Ribbon实现负载均衡" class="headerlink" title="Ribbon实现负载均衡"></a>Ribbon实现负载均衡</h1><p>Ribbon目前已经进入了维护模式，但是目前主流还是使用Ribbon</p>
+<p>Spring Cloud想通过LoadBalancer用于替换Ribbon</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/06/04/SpringCloud%E4%B9%8BRibbon%E5%AE%9E%E7%8E%B0%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -654,7 +757,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2020/05/13/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2020/05/13/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F-D/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/tou2.jpg">
@@ -668,7 +771,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/05/13/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" class="post-title-link" itemprop="url">设计模式之工厂模式</a>
+            <a href="/2020/05/13/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F-D/" class="post-title-link" itemprop="url">设计模式之工厂模式</a>
         </h2>
 
         <div class="post-meta">
@@ -704,7 +807,7 @@
           <h1 id="工厂模式简介"><a href="#工厂模式简介" class="headerlink" title="工厂模式简介"></a>工厂模式简介</h1><p><strong>创建型模式：</strong>它提供了一种创建对象的最佳方式。在工厂模式中，我们在创建对象时不会对客户端暴露创建逻辑，并且是通过使用一个共同的接口来指向新创建的对象。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/05/13/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/#more" rel="contents">
+              <a class="btn" href="/2020/05/13/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F-D/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -949,81 +1052,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2020/04/03/equals%E4%B8%8E%E5%8F%8C%E7%AD%89%E4%BA%8E%E5%8F%B7%E7%9A%84%E5%8C%BA%E5%88%AB/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/tou2.jpg">
-      <meta itemprop="name" content="ylyang">
-      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="静水流深的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/04/03/equals%E4%B8%8E%E5%8F%8C%E7%AD%89%E4%BA%8E%E5%8F%B7%E7%9A%84%E5%8C%BA%E5%88%AB/" class="post-title-link" itemprop="url">equals与==的区别</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="文章创建时间：2020-04-03 16:26:51" itemprop="dateCreated datePublished" datetime="2020-04-03T16:26:51+08:00">2020-04-03</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="等等与equals的区别"><a href="#等等与equals的区别" class="headerlink" title="等等与equals的区别"></a>等等与equals的区别</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>我们都知道， == 是比较内存地址，equals是比较值</p>
-<p>但是这种非常错误的一种观点</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/04/03/equals%E4%B8%8E%E5%8F%8C%E7%AD%89%E4%BA%8E%E5%8F%B7%E7%9A%84%E5%8C%BA%E5%88%AB/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1133,6 +1161,10 @@
   </script>
 
 
+
+
+  
+<script src="/js/local-search.js"></script>
 
 
 

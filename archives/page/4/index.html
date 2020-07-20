@@ -24,7 +24,7 @@
 
 <script class="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"ylyang.xyz","root":"/","scheme":"Gemini","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":{"enable":true,"onlypost":false,"loadingImg":null},"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}}};
+    var CONFIG = {"hostname":"ylyang.xyz","root":"/","scheme":"Gemini","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":{"enable":true,"onlypost":false,"loadingImg":null},"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"path":"./public/search.xml"};
   </script>
 
   <meta name="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
@@ -124,6 +124,7 @@
 
   <div class="site-nav-right">
     <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
@@ -139,17 +140,17 @@
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">18</span></a>
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">19</span></a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">165</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">168</span></a>
 
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">122</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">125</span></a>
 
   </li>
         <li class="menu-item menu-item-about">
@@ -157,11 +158,38 @@
     <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
 
   </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
   </ul>
 </nav>
 
 
 
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
 
 </div>
           
@@ -201,20 +229,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">165</span>
+          <span class="site-state-item-count">168</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-count">19</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">122</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -275,13 +303,73 @@
     <div class="posts-collapse">
       <div class="collection-title">
         
-        <span class="collection-header">非常好! 目前共计 165 篇文章。 继续努力。</span>
+        <span class="collection-header">非常好! 目前共计 168 篇文章。 继续努力。</span>
       </div>
 
       
     <div class="collection-year">
       <span class="collection-header">2019</span>
     </div>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-11-01T11:04:15+08:00"
+              content="2019-11-01">
+          11-01
+        </time>
+      </div>
+
+      <div class="post-title">
+          <a class="post-title-link" href="/2019/11/01/%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%92%8C%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B/" itemprop="url">
+            <span itemprop="name">计算机网络之TCP三次握手和四次挥手</span>
+          </a>
+      </div>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-10-25T09:55:15+08:00"
+              content="2019-10-25">
+          10-25
+        </time>
+      </div>
+
+      <div class="post-title">
+          <a class="post-title-link" href="/2019/10/25/SpringBoot%E4%B9%8B%E6%97%B6%E5%8C%BA%E9%97%AE%E9%A2%98/" itemprop="url">
+            <span itemprop="name">SpringBoot之时区问题</span>
+          </a>
+      </div>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-10-19T10:46:15+08:00"
+              content="2019-10-19">
+          10-19
+        </time>
+      </div>
+
+      <div class="post-title">
+          <a class="post-title-link" href="/2019/10/19/SpringBoot%E4%B9%8B%E4%BD%BF%E7%94%A8DevTools%E5%AE%9E%E7%8E%B0SpringBoot%E9%A1%B9%E7%9B%AE%E7%83%AD%E9%83%A8%E7%BD%B2/" itemprop="url">
+            <span itemprop="name">SpringBoot之使用DevTools实现SpringBoot项目热部署</span>
+          </a>
+      </div>
+
+    </header>
+  </article>
 
   <article itemscope itemtype="http://schema.org/Article">
     <header class="post-header">
@@ -423,66 +511,6 @@
     </header>
   </article>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2019-10-11T21:41:08+08:00"
-              content="2019-10-11">
-          10-11
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2019/10/11/GitHub%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" itemprop="url">
-            <span itemprop="name">GitHub基本使用学习</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2019-10-11T15:37:19+08:00"
-              content="2019-10-11">
-          10-11
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2019/10/11/%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%8F%98%E6%85%A2%EF%BC%8C%E8%AF%8A%E6%96%AD%E6%80%9D%E8%B7%AF%E5%92%8C%E6%80%A7%E8%83%BD%E8%AF%84%E4%BC%B0/" itemprop="url">
-            <span itemprop="name">生产环境服务器变慢，诊断思路和性能评估</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2019-10-11T12:22:39+08:00"
-              content="2019-10-11">
-          10-11
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2019/10/11/JVM%E4%B9%8B%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/" itemprop="url">
-            <span itemprop="name">JVM之垃圾回收器</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
 
     </div>
   </div>
@@ -598,6 +626,10 @@
   </script>
 
 
+
+
+  
+<script src="/js/local-search.js"></script>
 
 
 

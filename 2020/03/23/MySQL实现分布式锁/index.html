@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/logo.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/logo.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/logo.ico">
+  <link rel="mask-icon" href="/images/logo.ico" color="#222">
+  <meta name="google-site-verification" content="QrRqAEoLHOBZnSt7mRkhAt6dCoj3nREdeG7IU9IKL1E">
+  <meta name="msvalidate.01" content="9A1D61A279FB6EF4CF3128BF57AFCBAC">
+  <meta name="baidu-site-verification" content="5Iz7ysEFLe">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  
+  <link rel="stylesheet" href="/lib/animate-css/animate.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1/themes/blue/pace-theme-corner-indicator.min.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1/pace.min.js"></script>
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ylyang.xyz","root":"/","scheme":"Gemini","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":{"enable":true,"onlypost":false,"loadingImg":null},"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"path":"./public/search.xml"};
+  </script>
+
+  <meta name="description" content="前言分布式锁还可以基于数据库（MySQL）进行实现，一般分为3类：基于表记录、乐观锁和悲观锁。 基于表记录基于表记录，可以通过UNIQUE KEY实现锁 创建这样一张表 1234567CREATE TABLE &#96;database_lock&#96; (	&#96;id&#96; BIGINT NOT NULL AUTO_INCREMENT,	&#96;resource&#96; int NOT NULL COMMENT &#39;锁定的资源&#39;,">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL实现分布式锁">
+<meta property="og:url" content="ylyang.xyz/2020/03/23/MySQL%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/index.html">
+<meta property="og:site_name" content="静水流深的博客">
+<meta property="og:description" content="前言分布式锁还可以基于数据库（MySQL）进行实现，一般分为3类：基于表记录、乐观锁和悲观锁。 基于表记录基于表记录，可以通过UNIQUE KEY实现锁 创建这样一张表 1234567CREATE TABLE &#96;database_lock&#96; (	&#96;id&#96; BIGINT NOT NULL AUTO_INCREMENT,	&#96;resource&#96; int NOT NULL COMMENT &#39;锁定的资源&#39;,">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-03-23T09:15:27.000Z">
+<meta property="article:modified_time" content="2020-07-19T09:41:05.452Z">
+<meta property="article:author" content="ylyang">
+<meta property="article:tag" content="分布式">
+<meta property="article:tag" content="分布式锁">
+<meta property="article:tag" content="MySQL">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="ylyang.xyz/2020/03/23/MySQL%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>MySQL实现分布式锁 | 静水流深的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+   <script type="text/javascript" src="/js/myjs/clicklove.js"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <main class="main">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+        <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line toggle-line-first"></span>
+        <span class="toggle-line toggle-line-middle"></span>
+        <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">静水流深的博客</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">ylyang's blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">19</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">168</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">125</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基于表记录"><span class="nav-number">2.</span> <span class="nav-text">基于表记录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数据库乐观锁实现"><span class="nav-number">3.</span> <span class="nav-text">数据库乐观锁实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数据库悲观锁"><span class="nav-number">4.</span> <span class="nav-text">数据库悲观锁</span></a></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ylyang"
+      src="/images/tou2.jpg">
+  <p class="site-author-name" itemprop="name">ylyang</p>
+  <div class="site-description" itemprop="description">云山苍苍，江水泱泱；先生之风，山高水长。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">168</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">125</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/yangyl7239" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;yangyl7239" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:yuanlin.young@gmail.com" title="E-Mail → mailto:yuanlin.young@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://ylyang.xyz/" title="https:&#x2F;&#x2F;ylyang.xyz">Home</a>
+        </li>
+    </ul>
+  </div>
+
+      </section>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </header>
+
+      
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/yangyl7239" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div id="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+      <div class="main-inner">
+        
+
+        <div class="content post posts-expand">
+          
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2020/03/23/MySQL%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/tou2.jpg">
+      <meta itemprop="name" content="ylyang">
+      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="静水流深的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          MySQL实现分布式锁
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="文章创建时间：2020-03-23 17:15:27" itemprop="dateCreated datePublished" datetime="2020-03-23T17:15:27+08:00">2020-03-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">分布式</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>分布式锁还可以基于数据库（MySQL）进行实现，一般分为3类：基于表记录、乐观锁和悲观锁。</p>
+<h1 id="基于表记录"><a href="#基于表记录" class="headerlink" title="基于表记录"></a>基于表记录</h1><p>基于表记录，可以通过UNIQUE KEY实现锁</p>
+<p>创建这样一张表</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`database_lock`</span> (</span><br><span class="line">	<span class="string">`id`</span> <span class="built_in">BIGINT</span> <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT,</span><br><span class="line">	<span class="string">`resource`</span> <span class="built_in">int</span> <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'锁定的资源'</span>,</span><br><span class="line">	<span class="string">`description`</span> <span class="built_in">varchar</span>(<span class="number">1024</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">""</span> <span class="keyword">COMMENT</span> <span class="string">'描述'</span>,</span><br><span class="line">	PRIMARY <span class="keyword">KEY</span> (<span class="string">`id`</span>),</span><br><span class="line">	<span class="keyword">UNIQUE</span> <span class="keyword">KEY</span> <span class="string">`uiq_idx_resource`</span> (<span class="string">`resource`</span>) </span><br><span class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8mb4 <span class="keyword">COMMENT</span>=<span class="string">'数据库分布式锁表'</span>;</span><br></pre></td></tr></table></figure>
+
+<p>如果要锁住某方法，只要执行以下sql：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> database_lock(<span class="keyword">resource</span>, description) <span class="keyword">VALUES</span> (<span class="number">1</span>, <span class="string">'lock'</span>);</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意：</strong>在表database_lock中，resource字段做了唯一性约束，这样如果有多个请求同时提交到数据库的话，数据库可以保证只有一个操作可以成功（其它的会报错：ERROR 1062 (23000): Duplicate entry ‘1’ for key ‘uiq_idx_resource’），那么那么我们就可以认为操作成功的那个请求获得了锁。</p>
+<p>当需要释放锁的时，可以<strong>删除这条数据</strong>：</p>
+<p>这种实现方式非常的简单，但是需要<strong>注意</strong>以下几点：</p>
+<p>这种锁没有失效时间，一旦释放锁的操作失败就会导致锁记录一直在数据库中，其它线程无法获得锁。这个缺陷也很好解决，比如可以做一个定时任务去定时清理。<br>这种锁的可靠性依赖于数据库。建议设置备库，避免单点，进一步提高可靠性。<br>这种锁是非阻塞的，因为插入数据失败之后会直接报错，想要获得锁就需要再次操作。如果需要阻塞式的，可以弄个for循环、while循环之类的，直至INSERT成功再返回。<br>这种锁也是非可重入的，因为同一个线程在没有释放锁之前无法再次获得锁，因为数据库中已经存在同一份记录了。想要实现可重入锁，可以在数据库中添加一些字段，比如获得锁的主机信息、线程信息等，那么在再次获得锁的时候可以先查询数据，如果当前的主机信息和线程信息等能被查到的话，可以直接把锁分配给它。</p>
+<p>让我们总结分布式锁需要具备的几个条件：</p>
+<p><strong>互斥（必须）：</strong>同一时刻，分布式部署的应用中，同一个方法/资源只能被一台机器上的一个线程占用。</p>
+<p><strong>锁失效保护（必须）：</strong>出现客户端断电等异常情况，锁仍然能被其他客户端获取，防止死锁。</p>
+<p><strong>可重入（可选）：</strong>同一个线程在没有释放锁之前，如果想再次操作，可以直接获得锁。</p>
+<p><strong>阻塞/非阻塞（可选）：</strong>若没有获取到锁，返回获取失败</p>
+<p><strong>高可用、高性能（可选）：</strong>获取释放锁最好是原子操作，获取释放锁的性能要好</p>
+<p>除了互斥，其他条件都存在一些问题：</p>
+<p>1、目前没有锁失效时间，如果解锁失败，就会导致锁记录永远留在数据库中，无法被其他线程获取，该方法就会永久不可用。</p>
+<p>2、该锁不可重入，因为它不认识请求方是不是当前占用锁的线程。</p>
+<p>3、该锁是非阻塞的，因为数据库插入操作失败会直接报错，线程只能再次请求获得锁。</p>
+<p>4、当前数据库是单点，一旦宕机，锁机制就会完全崩坏。</p>
+<p>解决方案：</p>
+<p>1、针对锁失效问题，我们可以新增一个expire超时字段，在加锁时设置。然后另起一个线程，负责轮询删除表中超时的数据。</p>
+<p>2、针对不可重入问题，我们可以再新增一个request_info字段，记录当前获取锁的线程的机器和线程信息，当相同的线程再次访问时，就可以识别放行了。</p>
+<p>3、针对非阻塞，还是和redis实现一样，写一个while死循环，失败了不断重试，直到获取锁成功为止。</p>
+<p>4、针对单点问题，通用方案就是配置主从数据库。</p>
+<h1 id="数据库乐观锁实现"><a href="#数据库乐观锁实现" class="headerlink" title="数据库乐观锁实现"></a>数据库乐观锁实现</h1><p>乐观锁，系统认为数据的更新在大多数情况下是<strong>不会产生冲突</strong>的，只在数据库更新操作提交的时候才对数据作冲突检测。如果检测的结果出现了与预期数据不一致的情况，则返回失败信息。</p>
+<p>乐观锁大多数是<strong>基于数据版本(version)</strong>的记录机制实现的。数据版本，即为数据增加一个版本标识，在基于数据库表的版本解决方案中，一般是通过为数据库表添加一个 “version”字段来实现读取出数据时，将此版本号一同读出，之后更新时，对此版本号加1。在更新过程中，会对版本号进行比较，如果是一致的，没有发生改变，则会成功执行本次操作；如果版本号不一致，则会更新失败。</p>
+<p>为了更好的理解数据库乐观锁在实际项目中的使用，这里就列举一个典型的电商库存的例子。一个电商平台都会存在商品的库存，当用户进行购买的时候就会对库存进行操作（库存减1代表已经卖出了一件）。我们将这个库存模型用下面的一张表optimistic_lock来表述，参考如下：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`optimistic_lock`</span> (</span><br><span class="line">	<span class="string">`id`</span> <span class="built_in">BIGINT</span> <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT,</span><br><span class="line">	<span class="string">`resource`</span> <span class="built_in">int</span> <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'锁定的资源'</span>,</span><br><span class="line">	<span class="string">`version`</span> <span class="built_in">int</span> <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'版本信息'</span>,</span><br><span class="line">	<span class="string">`created_at`</span> datetime <span class="keyword">COMMENT</span> <span class="string">'创建时间'</span>,</span><br><span class="line">	<span class="string">`updated_at`</span> datetime <span class="keyword">COMMENT</span> <span class="string">'更新时间'</span>,</span><br><span class="line">	<span class="string">`deleted_at`</span> datetime <span class="keyword">COMMENT</span> <span class="string">'删除时间'</span>, </span><br><span class="line">	PRIMARY <span class="keyword">KEY</span> (<span class="string">`id`</span>),</span><br><span class="line">	<span class="keyword">UNIQUE</span> <span class="keyword">KEY</span> <span class="string">`uiq_idx_resource`</span> (<span class="string">`resource`</span>) </span><br><span class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8mb4 <span class="keyword">COMMENT</span>=<span class="string">'数据库分布式锁表'</span>;</span><br></pre></td></tr></table></figure>
+
+<p>其中：</p>
+<p>id表示主键；</p>
+<p>resource表示具体操作的资源，在这里也就是特指库存；</p>
+<p>version表示版本号。</p>
+<p>在使用乐观锁之前要确保表中有相应的数据，比如</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> optimistic_lock(<span class="keyword">resource</span>, <span class="keyword">version</span>, created_at, updated_at) <span class="keyword">VALUES</span>(<span class="number">20</span>, <span class="number">1</span>, <span class="keyword">CURTIME</span>(), <span class="keyword">CURTIME</span>());</span><br></pre></td></tr></table></figure>
+
+<p>如果只是一个线程进行操作，数据库本身就能保证操作的正确性。主要步骤如下：</p>
+<p>STEP1 - 获取资源：<code>SELECT resource FROM optimistic_lock WHERE id = 1</code><br>STEP2 - 执行业务逻辑<br>STEP3 - 更新资源：<code>UPDATE optimistic_lock SET resource = resource -1 WHERE id = 1</code></p>
+<p>然而在并发的情况下就会产生一些意想不到的问题：比如两个线程同时购买一件商品，在数据库层面实际操作应该是库存（resource）减2，但是由于是高并发的情况，第一个线程执行之后（执行了<strong>STEP1</strong>、<strong>STEP2</strong>但是还没有完成<strong>STEP3</strong>），第二个线程在购买相同的商品（执行<strong>STEP1</strong>），此时查询出的库存并没有完成减1的动作，那么最终会导致2个线程购买的商品却出现库存只减1的情况。</p>
+<p>在引入了<code>version</code>字段之后，那么具体的操作就会演变成下面的内容：</p>
+<p>STEP1 - 获取资源： <code>SELECT resource, version FROM optimistic_lock WHERE id = 1</code><br>STEP2 - 执行业务逻辑<br>STEP3 - 更新资源：<code>UPDATE optimistic_lock SET resource = resource -1, version = version + 1 WHERE id = 1 AND version = oldVersion</code></p>
+<p>其实，借助更新时间戳（updated_at）也可以实现乐观锁，和采用<code>version</code>字段的方式相似：更新操作执行前线获取记录当前的更新时间，在提交更新时，检测当前更新时间是否与更新开始时获取的更新时间戳相等。</p>
+<p>乐观锁的优点比较明显，由于在检测数据冲突时并不依赖数据库本身的锁机制，不会影响请求的性能，当产生并发且并发量较小的时候只有少部分请求会失败。缺点是需要对表的设计增加额外的字段，增加了数据库的冗余，另外，当应用<strong>并发量</strong>高的时候，<code>version</code>值在频繁变化，则会导致大量请求失败，影响系统的可用性。我们通过上述sql语句还可以看到，数据库锁都是作用于同一行数据记录上，这就导致一个明显的缺点，在一些特殊场景，如大促、秒杀等活动开展的时候，大量的请求同时请求同一条记录的行锁，会对数据库产生很大的写压力。所以综合数据库乐观锁的优缺点，乐观锁比较适合并发量不高，并且写操作不频繁的场景。</p>
+<h1 id="数据库悲观锁"><a href="#数据库悲观锁" class="headerlink" title="数据库悲观锁"></a>数据库悲观锁</h1><p>除了可以通过增删操作数据库表中的记录以外，我们还可以借助数据库中自带的锁来实现分布式锁。在查询语句后面增加<code>FOR UPDATE</code>，数据库会在查询过程中给数据库表增加<strong>悲观锁</strong>，也称<strong>排他锁</strong>。当某条记录被加上悲观锁之后，其它线程也就无法再改行上增加悲观锁。</p>
+<p>悲观锁，与乐观锁相反，总是假设最坏的情况，<strong>它认为数据的更新在大多数情况下是会产生冲突的</strong>。</p>
+<p>在使用悲观锁的同时，我们需要注意一下锁的级别。<strong>MySQL InnoDB</strong>引起在加锁的时候，只有明确地指定主键(或索引)的才会执行<strong>行锁</strong> (只锁住被选取的数据)，否则MySQL 将会执行<strong>表锁</strong>(将整个数据表单给锁住)。</p>
+<p>在使用悲观锁时，我们必须关闭<strong>MySQL</strong>数据库的自动提交属性（参考下面的示例），因为<strong>MySQL</strong>默认使用<strong>autocommit</strong>模式，也就是说，当你执行一个更新操作后，<strong>MySQL</strong>会立刻将结果进行提交。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SET AUTOCOMMIT = 0;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br></pre></td></tr></table></figure>
+
+<p>上面的示例中演示了指定主键并且能查询到数据的过程（触发行锁），如果查不到数据那么也就无从“锁”起了。</p>
+<p>如果未指定主键（或者索引）且能查询到数据，那么就会触发表锁，比如<strong>STEP1</strong>改为执行（这里的<code>version</code>只是当做一个普通的字段来使用，与上面的乐观锁无关）：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> database_lock <span class="keyword">WHERE</span> description=<span class="string">'lock'</span> <span class="keyword">FOR</span> <span class="keyword">UPDATE</span>;</span><br></pre></td></tr></table></figure>
+
+<p>或者主键不明确也会触发表锁，又比如<strong>STEP1</strong>改为执行：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> database_lock <span class="keyword">WHERE</span> <span class="keyword">id</span>&gt;<span class="number">0</span> <span class="keyword">FOR</span> <span class="keyword">UPDATE</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意：</strong>虽然我们可以显示显式使用<strong>行级锁</strong>（指定可查询的主键或索引），但是<strong>MySQL</strong>会对查询进行优化，即便在条件中使用了索引字段，但是否真的使用索引来检索数据是由<strong>MySQL</strong>通过判断不同执行计划的代价来决定的，如果<strong>MySQL</strong>认为全表扫描效率更高，比如对一些很小的表，它有可能不会使用索引，在这种情况下<strong>InnoDB</strong>将使用<strong>表锁</strong>，而不是<strong>行锁</strong>。</p>
+<p><strong>在悲观锁中</strong>，每一次行数据的访问都是独占的，只有当正在访问该行数据的请求事务提交以后，其他请求才能依次访问该数据，否则将阻塞等待锁的获取。悲观锁可以严格保证数据访问的安全。但是缺点也明显，即每次请求都会额外产生加锁的开销且未获取到锁的请求将会阻塞等待锁的获取，在高并发环境下，容易造成大量请求阻塞，影响系统可用性。另外，悲观锁使用不当还可能产生<strong>死锁</strong>的情况。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag"><i class="fa fa-tag"></i> 分布式</a>
+              <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" rel="tag"><i class="fa fa-tag"></i> 分布式锁</a>
+              <a href="/tags/MySQL/" rel="tag"><i class="fa fa-tag"></i> MySQL</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/03/20/Redis%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" rel="prev" title="Redis实现分布式锁">
+      <i class="fa fa-chevron-left"></i> Redis实现分布式锁
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/03/24/Java%E7%9A%84%E9%94%81%E4%B9%8BAQS%E5%8E%9F%E7%90%86%EF%BC%88%E6%B5%85%E6%9E%90%EF%BC%89/" rel="next" title="Java的锁之AQS原理（浅析）">
+      Java的锁之AQS原理（浅析） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+        </div>
+        
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Powered by ylyang</span>
+</div>
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="//cdn.jsdelivr.net/npm/ribbon.js@1/dist/ribbon.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

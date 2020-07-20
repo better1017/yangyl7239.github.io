@@ -24,7 +24,7 @@
 
 <script class="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"ylyang.xyz","root":"/","scheme":"Gemini","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":{"enable":true,"onlypost":false,"loadingImg":null},"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}}};
+    var CONFIG = {"hostname":"ylyang.xyz","root":"/","scheme":"Gemini","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":{"enable":true,"onlypost":false,"loadingImg":null},"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"path":"./public/search.xml"};
   </script>
 
   <meta name="description" content="Volatile禁止指令重排计算机在执行程序时，为了提高性能，编译器和处理器常常会对指令重排，一般分为以下三种： 1源代码 -&gt; 编译器优化的重排 -&gt; 指令并行的重排 -&gt; 内存系统的重排 -&gt; 最终执行指令  单线程环境里面确保最终执行结果和代码顺序的结果一致 处理器在进行重排序时，必须要考虑指令之间的数据依赖性 多线程环境中线程交替执行，由于编译器优化重排的存在，两个">
@@ -40,8 +40,8 @@
 <meta property="article:author" content="ylyang">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="JVM">
-<meta property="article:tag" content="Volatile">
 <meta property="article:tag" content="JMM">
+<meta property="article:tag" content="Volatile">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="ylyang.xyz/2019/09/30/%E5%AF%B9Volatile%E7%A6%81%E6%AD%A2%E6%8C%87%E4%BB%A4%E9%87%8D%E6%8E%92%E7%9A%84%E5%88%86%E6%9E%90/image1.png">
 
@@ -131,6 +131,7 @@
 
   <div class="site-nav-right">
     <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
@@ -146,17 +147,17 @@
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">18</span></a>
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">19</span></a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">165</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">168</span></a>
 
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">122</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">125</span></a>
 
   </li>
         <li class="menu-item menu-item-about">
@@ -164,11 +165,38 @@
     <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
 
   </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
   </ul>
 </nav>
 
 
 
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
 
 </div>
           
@@ -209,20 +237,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">165</span>
+          <span class="site-state-item-count">168</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-count">19</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">122</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -448,8 +476,8 @@
           <div class="post-tags">
               <a href="/tags/Java/" rel="tag"><i class="fa fa-tag"></i> Java</a>
               <a href="/tags/JVM/" rel="tag"><i class="fa fa-tag"></i> JVM</a>
-              <a href="/tags/Volatile/" rel="tag"><i class="fa fa-tag"></i> Volatile</a>
               <a href="/tags/JMM/" rel="tag"><i class="fa fa-tag"></i> JMM</a>
+              <a href="/tags/Volatile/" rel="tag"><i class="fa fa-tag"></i> Volatile</a>
           </div>
 
         
@@ -576,6 +604,10 @@
   </script>
 
 
+
+
+  
+<script src="/js/local-search.js"></script>
 
 
 

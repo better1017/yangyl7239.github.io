@@ -24,7 +24,7 @@
 
 <script class="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"ylyang.xyz","root":"/","scheme":"Gemini","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":{"enable":true,"onlypost":false,"loadingImg":null},"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}}};
+    var CONFIG = {"hostname":"ylyang.xyz","root":"/","scheme":"Gemini","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":{"enable":true,"onlypost":false,"loadingImg":null},"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"path":"./public/search.xml"};
   </script>
 
   <meta name="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
@@ -124,6 +124,7 @@
 
   <div class="site-nav-right">
     <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
@@ -139,17 +140,17 @@
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">18</span></a>
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">19</span></a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">165</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">168</span></a>
 
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">122</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">125</span></a>
 
   </li>
         <li class="menu-item menu-item-about">
@@ -157,11 +158,38 @@
     <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
 
   </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
   </ul>
 </nav>
 
 
 
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
 
 </div>
           
@@ -201,20 +229,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">165</span>
+          <span class="site-state-item-count">168</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-count">19</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">122</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -267,6 +295,237 @@
 
         <div class="content index posts-expand">
           
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2018/12/19/%E4%BB%8E%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%A7%BB%E9%99%A4%E7%9B%B8%E7%AD%89%E7%9A%84%E6%95%B0%E5%80%BC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/tou2.jpg">
+      <meta itemprop="name" content="ylyang">
+      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="静水流深的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/12/19/%E4%BB%8E%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%A7%BB%E9%99%A4%E7%9B%B8%E7%AD%89%E7%9A%84%E6%95%B0%E5%80%BC/" class="post-title-link" itemprop="url">从有序数组中移除相等的数值</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="文章创建时间：2018-12-19 23:07:05" itemprop="dateCreated datePublished" datetime="2018-12-19T23:07:05+08:00">2018-12-19</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><ul>
+<li>Remove Duplicates From Sorted Array</li>
+</ul>
+<p>Given a sorted array, remove the duplicates in place such that each element appear only once and return the new length.<br>Do not allocate extra space for another array, you must do this in place with constant memory.<br>For example,<br>Given input array A =[1,1,2],<br>Your function should return length =2, and A is now[1,2].</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/12/19/%E4%BB%8E%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%A7%BB%E9%99%A4%E7%9B%B8%E7%AD%89%E7%9A%84%E6%95%B0%E5%80%BC/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2018/12/18/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F02%E4%B9%8B%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/tou2.jpg">
+      <meta itemprop="name" content="ylyang">
+      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="静水流深的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/12/18/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F02%E4%B9%8B%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" class="post-title-link" itemprop="url">工厂模式02之工厂方法模式</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="文章创建时间：2018-12-18 14:14:37" itemprop="dateCreated datePublished" datetime="2018-12-18T14:14:37+08:00">2018-12-18</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">设计模式</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><ul>
+<li><p>简单工厂模式实现了生成产品类的代码与客户端代码分离，在工厂类中可以添加生成产品的逻辑代码。</p>
+</li>
+<li><p>但是简单工厂模式不符合“开放-封闭”原则。例如要加一个 <strong>新产品类</strong>，就要修改 <strong>工厂类</strong> 生成产品的逻辑代码，增加<em>if-else</em>判断。对于这个问题，工厂方法模式可以解决。</p>
+</li>
+</ul>
+<h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><p><strong>工厂方法模式</strong> 定义了一个创建对象的接口，但由子类决定要实例化的类是哪一个。<strong>工厂方法模式</strong> 让类把实例化推迟到子类。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/12/18/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F02%E4%B9%8B%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2018/12/18/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F01%E4%B9%8B%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/tou2.jpg">
+      <meta itemprop="name" content="ylyang">
+      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="静水流深的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/12/18/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F01%E4%B9%8B%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82/" class="post-title-link" itemprop="url">工厂模式01之简单工厂</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="文章创建时间：2018-12-18 00:02:30" itemprop="dateCreated datePublished" datetime="2018-12-18T00:02:30+08:00">2018-12-18</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">设计模式</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h1><p><strong>简单工厂</strong>可以理解为，定义一个工厂类，根据传入的参数不同而返回不同的实例，这些实例通常有共同的父类。<br>虽然简单工厂经常会被使用，但是并不能算作是一种设计模式，反而更像是一种编程习惯。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/12/18/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F01%E4%B9%8B%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -817,241 +1076,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2018/12/13/%E5%94%AF%E4%B8%80%E8%B7%AF%E5%BE%84/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/tou2.jpg">
-      <meta itemprop="name" content="ylyang">
-      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="静水流深的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/12/13/%E5%94%AF%E4%B8%80%E8%B7%AF%E5%BE%84/" class="post-title-link" itemprop="url">唯一路径</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="文章创建时间：2018-12-13 17:06:12" itemprop="dateCreated datePublished" datetime="2018-12-13T17:06:12+08:00">2018-12-13</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Unique-Paths"><a href="#Unique-Paths" class="headerlink" title="Unique Paths"></a>Unique Paths</h1><p>A robot is located at the top-left corner of a m x n grid (marked ‘Start’ in the diagram below).<br>The robot can only move either down or right at any point in time. The robot is trying to reach the bottom-right corner of the grid (marked ‘Finish’ in the diagram below).<br>How many possible unique paths are there?<br><img data-src="https://upload-images.jianshu.io/upload_images/15108298-b7a195c19079b7e1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt><br>Above is a 3 x 7 grid. How many possible unique paths are there?<br><strong>Note</strong>: m and n will be at most 100.</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2018/12/13/%E5%94%AF%E4%B8%80%E8%B7%AF%E5%BE%84/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2018/12/12/%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%8F%89%E6%A0%91/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/tou2.jpg">
-      <meta itemprop="name" content="ylyang">
-      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="静水流深的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/12/12/%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%8F%89%E6%A0%91/" class="post-title-link" itemprop="url">平衡二叉树</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="文章创建时间：2018-12-12 19:32:13" itemprop="dateCreated datePublished" datetime="2018-12-12T19:32:13+08:00">2018-12-12</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Balanced-Binary-Tree"><a href="#Balanced-Binary-Tree" class="headerlink" title="Balanced Binary Tree"></a>Balanced Binary Tree</h1><p>Given a binary tree, determine if it is height-balanced.<br>For this problem, a height-balanced binary tree is defined as a binary tree in which the depth of the two subtrees of every node never differ by more than 1.</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2018/12/12/%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%8F%89%E6%A0%91/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2018/12/11/%E5%86%8D%E8%B0%88%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F%EF%BC%88%E6%80%BB%E7%BB%93%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/tou2.jpg">
-      <meta itemprop="name" content="ylyang">
-      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="静水流深的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/12/11/%E5%86%8D%E8%B0%88%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F%EF%BC%88%E6%80%BB%E7%BB%93%EF%BC%89/" class="post-title-link" itemprop="url">再谈装饰者模式（总结）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="文章创建时间：2018-12-11 15:11:42" itemprop="dateCreated datePublished" datetime="2018-12-11T15:11:42+08:00">2018-12-11</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">设计模式</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <ul>
-<li><p>在之前的文章 <strong><a href="https://yangyuanlin.club/2018/09/14/装饰者模式—JavaIO/" target="_blank" rel="noopener">浅谈装饰者模式+JAVA I/O中的装饰者模式</a></strong> 中，浅谈了一下装饰者模式，这篇文章来总结一下装饰者模式。</p>
-</li>
-<li><p>装饰者模式遵循<strong>开放-关闭原则</strong>，即，类应该对扩展开放，对修改关闭；</p>
-</li>
-<li><p>用<strong>运行时扩展</strong>来取代<strong>编译时继承</strong>；</p>
-</li>
-<li><p>解决了<strong>继承滥用</strong>的问题；</p>
-</li>
-<li><p>用<strong>对象组合</strong>的方式，做到在运行时装饰类，能够在不修改任何底层代码的情况下，给对象赋予新的职责。</p>
-</li>
-<li><p>尽管<strong>继承</strong>威力强大，继承并不总是实现最有弹性和最好维护的设计。</p>
-</li>
-<li><p>用<strong>组合</strong>和<strong>委托</strong>可以在运行时具有继承行为的效果。</p></li></ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2018/12/11/%E5%86%8D%E8%B0%88%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F%EF%BC%88%E6%80%BB%E7%BB%93%EF%BC%89/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1161,6 +1185,10 @@
   </script>
 
 
+
+
+  
+<script src="/js/local-search.js"></script>
 
 
 
