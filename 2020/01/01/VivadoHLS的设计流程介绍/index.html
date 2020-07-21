@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/logo.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/logo.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/logo.ico">
+  <link rel="mask-icon" href="/images/logo.ico" color="#222">
+  <meta name="google-site-verification" content="QrRqAEoLHOBZnSt7mRkhAt6dCoj3nREdeG7IU9IKL1E">
+  <meta name="msvalidate.01" content="9A1D61A279FB6EF4CF3128BF57AFCBAC">
+  <meta name="baidu-site-verification" content="5Iz7ysEFLe">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  
+  <link rel="stylesheet" href="/lib/animate-css/animate.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1/themes/blue/pace-theme-corner-indicator.min.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1/pace.min.js"></script>
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ylyang.xyz","root":"/","scheme":"Gemini","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":{"enable":true,"onlypost":false,"loadingImg":null},"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"path":"./public/search.xml"};
+  </script>
+
+  <meta name="description" content="VivadoHLS的设计流程（介绍）传统的RTL设计流程：  如果采用传统的这种流程，就需要用硬件描述语言比如VHDL、Verilog或者System Verilog描述算法以及相应的Test Bench，然后执行行为级仿真（RTL Simulation），这个过程是一个迭代的过程，以验证算法的正确性，然后再执行综合（Synthesis）和实现（Implementation），在这个阶段要实现设计">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VivadoHLS的设计流程介绍">
+<meta property="og:url" content="ylyang.xyz/2020/01/01/VivadoHLS%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%B5%81%E7%A8%8B%E4%BB%8B%E7%BB%8D/index.html">
+<meta property="og:site_name" content="静水流深的博客">
+<meta property="og:description" content="VivadoHLS的设计流程（介绍）传统的RTL设计流程：  如果采用传统的这种流程，就需要用硬件描述语言比如VHDL、Verilog或者System Verilog描述算法以及相应的Test Bench，然后执行行为级仿真（RTL Simulation），这个过程是一个迭代的过程，以验证算法的正确性，然后再执行综合（Synthesis）和实现（Implementation），在这个阶段要实现设计">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps23.jpg">
+<meta property="og:image" content="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps24.jpg">
+<meta property="og:image" content="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps25.jpg">
+<meta property="og:image" content="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps26.jpg">
+<meta property="og:image" content="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps27.jpg">
+<meta property="og:image" content="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps28.jpg">
+<meta property="og:image" content="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps29.jpg">
+<meta property="og:image" content="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps30.jpg">
+<meta property="og:image" content="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps31.jpg">
+<meta property="og:image" content="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps32.jpg">
+<meta property="og:image" content="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps33.jpg">
+<meta property="og:image" content="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps34.jpg">
+<meta property="og:image" content="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps35.jpg">
+<meta property="og:image" content="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps36.jpg">
+<meta property="og:image" content="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps37.jpg">
+<meta property="og:image" content="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps38.jpg">
+<meta property="og:image" content="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps39.jpg">
+<meta property="og:image" content="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps40.jpg">
+<meta property="og:image" content="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps41.jpg">
+<meta property="og:image" content="ylyang.xyz/2020/01/01/VivadoHLS%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%B5%81%E7%A8%8B%E4%BB%8B%E7%BB%8D/1.PNG">
+<meta property="og:image" content="ylyang.xyz/2020/01/01/VivadoHLS%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%B5%81%E7%A8%8B%E4%BB%8B%E7%BB%8D/2.PNG">
+<meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%B5%81%E7%A8%8B%E4%BB%8B%E7%BB%8D%5C3.PNG">
+<meta property="og:image" content="ylyang.xyz/2020/01/01/VivadoHLS%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%B5%81%E7%A8%8B%E4%BB%8B%E7%BB%8D/4.PNG">
+<meta property="og:image" content="ylyang.xyz/2020/01/01/VivadoHLS%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%B5%81%E7%A8%8B%E4%BB%8B%E7%BB%8D/5.PNG">
+<meta property="og:image" content="ylyang.xyz/2020/01/01/VivadoHLS%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%B5%81%E7%A8%8B%E4%BB%8B%E7%BB%8D/6.PNG">
+<meta property="og:image" content="ylyang.xyz/2020/01/01/VivadoHLS%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%B5%81%E7%A8%8B%E4%BB%8B%E7%BB%8D/7.PNG">
+<meta property="og:image" content="ylyang.xyz/2020/01/01/VivadoHLS%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%B5%81%E7%A8%8B%E4%BB%8B%E7%BB%8D/8.PNG">
+<meta property="og:image" content="ylyang.xyz/2020/01/01/VivadoHLS%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%B5%81%E7%A8%8B%E4%BB%8B%E7%BB%8D/9.PNG">
+<meta property="og:image" content="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps42.jpg">
+<meta property="og:image" content="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps43.jpg">
+<meta property="og:image" content="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps44.jpg">
+<meta property="og:image" content="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps45.jpg">
+<meta property="article:published_time" content="2020-01-01T04:59:05.000Z">
+<meta property="article:modified_time" content="2020-07-21T14:20:32.474Z">
+<meta property="article:author" content="ylyang">
+<meta property="article:tag" content="Vivado HLS">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps23.jpg">
+
+<link rel="canonical" href="ylyang.xyz/2020/01/01/VivadoHLS%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%B5%81%E7%A8%8B%E4%BB%8B%E7%BB%8D/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>VivadoHLS的设计流程介绍 | 静水流深的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+   <script type="text/javascript" src="/js/myjs/clicklove.js"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <main class="main">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+        <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line toggle-line-first"></span>
+        <span class="toggle-line toggle-line-middle"></span>
+        <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">静水流深的博客</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">ylyang's blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">20</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">172</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">126</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#VivadoHLS的设计流程（介绍）"><span class="nav-number">1.</span> <span class="nav-text">VivadoHLS的设计流程（介绍）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#传统的RTL设计流程："><span class="nav-number">1.1.</span> <span class="nav-text">传统的RTL设计流程：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#高层综合（HLS）的设计流程"><span class="nav-number">1.2.</span> <span class="nav-text">高层综合（HLS）的设计流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Vivado-HLS中的Solutions"><span class="nav-number">1.3.</span> <span class="nav-text">Vivado HLS中的Solutions</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#波形查看器"><span class="nav-number">1.4.</span> <span class="nav-text">波形查看器</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#VIVADO-HLS设计流程（实例）"><span class="nav-number">2.</span> <span class="nav-text">VIVADO HLS设计流程（实例）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#看一个Demo"><span class="nav-number">2.1.</span> <span class="nav-text">看一个Demo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建工程"><span class="nav-number">2.2.</span> <span class="nav-text">创建工程</span></a></li></ol></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ylyang"
+      src="/images/tou2.jpg">
+  <p class="site-author-name" itemprop="name">ylyang</p>
+  <div class="site-description" itemprop="description">云山苍苍，江水泱泱；先生之风，山高水长。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">172</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">126</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/yangyl7239" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;yangyl7239" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:yuanlin.young@gmail.com" title="E-Mail → mailto:yuanlin.young@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://ylyang.xyz/" title="https:&#x2F;&#x2F;ylyang.xyz">Home</a>
+        </li>
+    </ul>
+  </div>
+
+      </section>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </header>
+
+      
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/yangyl7239" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div id="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+      <div class="main-inner">
+        
+
+        <div class="content post posts-expand">
+          
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2020/01/01/VivadoHLS%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%B5%81%E7%A8%8B%E4%BB%8B%E7%BB%8D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/tou2.jpg">
+      <meta itemprop="name" content="ylyang">
+      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="静水流深的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          VivadoHLS的设计流程介绍
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="文章创建时间：2020-01-01 12:59:05" itemprop="dateCreated datePublished" datetime="2020-01-01T12:59:05+08:00">2020-01-01</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Vivado-HLS/" itemprop="url" rel="index"><span itemprop="name">Vivado HLS</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="VivadoHLS的设计流程（介绍）"><a href="#VivadoHLS的设计流程（介绍）" class="headerlink" title="VivadoHLS的设计流程（介绍）"></a>VivadoHLS的设计流程（介绍）</h1><h2 id="传统的RTL设计流程："><a href="#传统的RTL设计流程：" class="headerlink" title="传统的RTL设计流程："></a>传统的RTL设计流程：</h2><p><img data-src="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps23.jpg" alt="img"> </p>
+<p>如果采用传统的这种流程，就需要用硬件描述语言比如VHDL、Verilog或者System Verilog描述算法以及相应的Test Bench，然后执行行为级仿真（RTL Simulation），这个过程是一个迭代的过程，以验证算法的正确性，然后再执行综合（Synthesis）和实现（Implementation），在这个阶段要实现设计的收敛（Design Closure），要从Latency、Timing和Resource三个角度进行考察，最后进行系统级的全面的测试，这也是一个迭代的过程。</p>
+<a id="more"></a>
+
+<p><img data-src="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps24.jpg" alt="img"> </p>
+<p><img data-src="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps25.jpg" alt="img"> </p>
+<h2 id="高层综合（HLS）的设计流程"><a href="#高层综合（HLS）的设计流程" class="headerlink" title="高层综合（HLS）的设计流程"></a>高层综合（HLS）的设计流程</h2><p>而在高层综合（HLS）的设计流程中，我们就会站在抽象度更高的C/C++级别描述我们的算法以及Test Bench，描述我们的仿真（C Simulation），这个过程也是一个迭代的过程，然后通过高级综合工具（HLS），帮助我们完成C/C++到RTL的转换，这个过程被称为C综合（C Synthesis），在这个阶段就要考虑到设计收敛，从Latency、Timing和Resource三个角度进行考察，后续流程跟传统的RTL流程一致，也就是包括RTL综合（RTL Synthesis）、实现（Implementation），也要进行系统级的全面的测试，这个过程也是一个迭代的过程。</p>
+<p><img data-src="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps26.jpg" alt="img"> </p>
+<p><img data-src="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps27.jpg" alt="img"> </p>
+<p>结合Vivado HLS，可以来看一下，我们需要用C/C++描述算法以及Test Bench，同时还要准备好相应的Constraints/Directives，这就构成了Vivado HLS的设计输入，Directives并不需要手工输入完成，Vivado HLS提供了一个图形用户界面帮助我们完成这个任务，Vivado HLS还提供了一些C Library，包括Math、Video、DSP和Linear alaebra帮助我们加速C算法的描述，Vivado HLS的输出是VHDL/Verilog，但是在工程中不会直接拿这个代码去使用，Vivado HLS会帮助我们把他封装成一个IP（Intellectual Property），这样我们就可以把IP添加到Vivado的IP Catalog中使用，可以在Vivado的IP Intergrater中使用，或者在Vivado的RTL工程中通过实例化IP的方式使用，这跟Vivado提出的以IP为核心的设计理念是一致的，此外，Vivado HLS的输出结果也可以导入到sisin（误）中，以模块化的方式使用，这也是一种很常用的方式。</p>
+<p><img data-src="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps28.jpg" alt="img"> </p>
+<p><img data-src="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps29.jpg" alt="img"> </p>
+<p>这个流程进一步细化，具体流程如上图所示，先准备好source code和test bench，然后添加source code，添加test bench，C的仿真，C的综合，在C综合的需要添加Directives，然后进行C/RTL的协同仿真，最后导出RTL结果。</p>
+<p>在这个过程中特别需要强调的一点是，C Test Bench对我们整个流程而言是非常重要的文件，这里C Test Bench是一个Self-checking mode（自我检查模式），本身包含真实的结果，用于和仿真的结果作对比，以验证仿真结果是否正确，此外，C Test Bench还用于自动生成RTL Test Bench，在协同仿真（CoSimulaion）阶段，可以在输出中看到Generating RTL test bench …的输出信息，</p>
+<p><img data-src="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps30.jpg" alt="img"> </p>
+<p>结合Vivado HLS的菜单，再看一下流程：</p>
+<p><img data-src="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps31.jpg" alt="img"> </p>
+<p>结合Vivado HLS的菜单可以看一下流程：</p>
+<p>第一步，做C仿真</p>
+<p>第二步，做C综合</p>
+<p>第三步，做C/RTL协同仿真</p>
+<p>第四步，导出RTL</p>
+<p>完成C综合之后，可以打开C综合的报告，去查看相应的性能评估，资源利用率的评估，以及接口的信息，做C/RTL协同仿真后，还可以查看RTL的仿真波形。</p>
+<p><img data-src="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps32.jpg" alt="img"> </p>
+<p>每一步都会生成相应的文件夹</p>
+<p>每一步都是根据前面所讲的顺序去执行的</p>
+<p>C Test Bench对Vivado HLS来说是至关重要的</p>
+<p>综合报告可以帮我们分析时序、资源利用率，综合后的性能等等</p>
+<p>波形查看器提供了一个很直观的方式帮我们查看输入输出端口之间的时序关系</p>
+<h2 id="Vivado-HLS中的Solutions"><a href="#Vivado-HLS中的Solutions" class="headerlink" title="Vivado HLS中的Solutions"></a>Vivado HLS中的Solutions</h2><p><img data-src="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps33.jpg" alt="img"> </p>
+<p>解决方案：</p>
+<p>一个工程可以有多个不同的解决方案</p>
+<p>每一个解决方案都有他自己的directives</p>
+<p>这些directives是用来优化C综合的</p>
+<p>Directive可以写在source file里，也可以写在directive file里，推荐写在directive file里</p>
+<p><img data-src="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps34.jpg" alt="img"> </p>
+<p>这些solution之间有什么区别呢，从前边我们就可以看到，每个solution都有自己的directive，而这些directive的目的就是去优化C的综合，所以说不同的Solution对应不同的directive，以便用来查看不同的directive对C综合的效能的影响，所以Vivado HLS为我们提供了一个很方便的创建solution的按钮，帮助我们比较不同solution之间的结果</p>
+<h2 id="波形查看器"><a href="#波形查看器" class="headerlink" title="波形查看器"></a>波形查看器</h2><p><img data-src="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps35.jpg" alt="img"> </p>
+<p>波形查看器可以帮助我们很方便的查看RTL的仿真结果</p>
+<p><img data-src="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps36.jpg" alt="img"> </p>
+<p>使用方式：</p>
+<p>在C/RTL Simulation中选择Vivado Simulation或者Auto</p>
+<p>Dump Trace选择port或者all</p>
+<p>点击OK</p>
+<p>然后就可以点开波形查看器</p>
+<p><img data-src="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps37.jpg" alt="img"> </p>
+<p>在波形查看器中，预先对Block-level IO、C inputs和C outputs做了分组，以便能快速的查看相应的端口和信号。</p>
+<p><img data-src="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps38.jpg" alt="img"> </p>
+<p>Vivado HLS支持C，C++和System C</p>
+<p>强烈建议对每一个C综合的设计都创建相应的C Test Bench</p>
+<p>为了达到最好的C综合的结果，应该去创建多个solution，以用来查看这些solution对C综合效能的影响</p>
+<p>Vivado HLS提供了直观的方式来查看协同仿真（CoSimulation）的结果</p>
+<p>Vivado HLS对于算法的开发起到了很大的加速作用</p>
+<p>结论：好的C Coding Style + 好的 Directives = 好的、最佳的结果</p>
+<h1 id="VIVADO-HLS设计流程（实例）"><a href="#VIVADO-HLS设计流程（实例）" class="headerlink" title="VIVADO HLS设计流程（实例）"></a>VIVADO HLS设计流程（实例）</h1><p><img data-src="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps39.jpg" alt="img"> </p>
+<p>设计输入包括：Test Bench、C/C++ Source Code、Directives</p>
+<p>设计输出包括：IP可以放到IP Catalog中、DCP（就是RTL代码综合后的网表文件）、SysGen（我们可以把仿真后的结果导入到SyaGen中使用）</p>
+<p><img data-src="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps40.jpg" alt="img"> </p>
+<p>Test Bench设计的重要性：第一，用于验证C算法功能的正确性，第二，在C/RTL Cosimulation（C/RTL协同仿真）过程中用于生成RTL验证的Test Bench</p>
+<p><img data-src="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps41.jpg" alt="img"> </p>
+<p>对于VIVADO HLS，只有一个顶层函数用于综合，</p>
+<p>函数下面的子函数也是可以被综合的</p>
+<p>通常情况下，子函数被综合后也有相应的VHDL或者Verilog代码，而且跟C语言描述的代码结构一致，但是也有例外，比如如果子函数所需要的逻辑量很小，或者算法功能很简单，综合时就会输出一个信息，Inlining function，就会只有一个顶层的VHDL架构，但是也可以通过directive把Inline关掉。</p>
+<p>不可以被综合的情况：动态内存分配和涉及到操作系统层面的一些操作。</p>
+<h2 id="看一个Demo"><a href="#看一个Demo" class="headerlink" title="看一个Demo"></a>看一个Demo</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 头文件VectorAdd.h</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> N 5 <span class="comment">//the length of vector</span></span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> <span class="keyword">data_t</span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">VectorAdd</span><span class="params">(<span class="keyword">data_t</span> A[N], <span class="keyword">data_t</span> c, <span class="keyword">data_t</span> B[N])</span></span>;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"VectorAdd.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">VectorAdd</span><span class="params">(<span class="keyword">data_t</span> A[N], <span class="keyword">data_t</span> c, <span class="keyword">data_t</span> B[N])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> i;</span><br><span class="line">    myloop:</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; N; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        B[i] = A[i] + c;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//test Bench</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">data_t</span> A[N] = &#123;<span class="number">-4</span>, <span class="number">-3</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>&#125;;</span><br><span class="line">    <span class="keyword">data_t</span> C = <span class="number">5</span>;</span><br><span class="line">    <span class="keyword">data_t</span> B[N] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">    <span class="keyword">data_t</span> RefB[N] = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>&#125;;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> errcnt = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    VectorAdd(A, c, B);</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; setfill(<span class="string">'-'</span>) &lt;&lt; setw(<span class="number">30</span>) &lt;&lt; <span class="string">'-'</span> &lt;&lt; <span class="string">'\n'</span>;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; setfill(<span class="string">' '</span>) &lt;&lt; setw(<span class="number">10</span>) &lt;&lt; left &lt;&lt; <span class="string">"A"</span>;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; setfill(<span class="string">' '</span>) &lt;&lt; setw(<span class="number">10</span>) &lt;&lt; left &lt;&lt; <span class="string">'C'</span>;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; setfill(<span class="string">' '</span>) &lt;&lt; setw(<span class="number">10</span>) &lt;&lt; left &lt;&lt; <span class="string">'B'</span> &lt;&lt; <span class="string">'\n'</span>;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; setfill(<span class="string">'-'</span>) &lt;&lt; setw(<span class="number">30</span>) &lt;&lt; <span class="string">'-'</span> &lt;&lt; <span class="string">'\n'</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; N; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; setfill(<span class="string">' '</span>) &lt;&lt; setw(<span class="number">10</span>) &lt;&lt; left &lt;&lt; A[i];</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; setfill(<span class="string">' '</span>) &lt;&lt; setw(<span class="number">10</span>) &lt;&lt; left &lt;&lt; c;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; setfill(<span class="string">' '</span>) &lt;&lt; setw(<span class="number">10</span>) &lt;&lt; left &lt;&lt; B[i];</span><br><span class="line">        <span class="keyword">if</span>(B[i] == RefB[i])</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">cout</span> &lt;&lt; <span class="string">'\n'</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">cout</span> &lt;&lt; <span class="string">"("</span> &lt;&lt; RefB[i] &lt;&lt; <span class="string">")"</span> &lt;&lt; <span class="string">'\n'</span>;</span><br><span class="line">            errcnt++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; setfill(<span class="string">'-'</span>) &lt;&lt; setw(<span class="number">30</span>) &lt;&lt; <span class="string">'-'</span> &lt;&lt; <span class="string">'\n'</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span>(errcnt &gt; <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; setfill(<span class="string">'-'</span>) &lt;&lt; setw(<span class="number">30</span>) &lt;&lt; <span class="string">'-'</span> &lt;&lt; <span class="string">'\n'</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"Test Pass"</span> &lt;&lt; <span class="string">'\n'</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Test Bench中最终结果，错误的个数大于0，返回1，没有错误返回0。</p>
+<h2 id="创建工程"><a href="#创建工程" class="headerlink" title="创建工程"></a>创建工程</h2><p><img data-src="1.PNG" alt="1"></p>
+<p>项目名字可以跟函数名字不一致，然要指定用于综合的顶层函数的名字：</p>
+<p><img data-src="2.PNG" alt="2"></p>
+<p>然后再加test bench：</p>
+<p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%B5%81%E7%A8%8B%E4%BB%8B%E7%BB%8D%5C3.PNG" alt="3"></p>
+<p>然后创建一个Solution，选板子，Uncertainty先不用管：</p>
+<p><img data-src="4.PNG" alt="4"></p>
+<p>这就创建好了一个Vivado HLS工程</p>
+<p><img data-src="5.PNG" alt="5"></p>
+<p>执行<code>C</code>的仿真：</p>
+<p><img data-src="6.PNG" alt="6"></p>
+<p>仿真结束会给出仿真结果，可以看到Test Pass，没有问题。</p>
+<p><img data-src="7.PNG" alt="7"></p>
+<p>然后执行C综合，综合结束之后会自动打开综合报告，切换到Outline，可以看相应的Performance，也可以看Utilization：</p>
+<p><img data-src="8.PNG" alt="8"></p>
+<p>在左边栏Solution文件夹的syn文件夹中有相应的report文件夹和verilog和vhdl文件夹</p>
+<p><img data-src="9.PNG" alt="9"></p>
+<p>Directive：</p>
+<p><img data-src="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps42.jpg" alt="img"> </p>
+<p>可以写在单独的Directive文件里，此时可以在directive的面板下看到每个directive前面都有个“%”百分号</p>
+<p><img data-src="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps43.jpg" alt="img"> </p>
+<p>也可以写在C Source file里面，此时directive面板里面会以“#”＃号标记。</p>
+<p>两种方式对比：</p>
+<p>第一，如果是在单独的directive文件中，每个directive是一个tcl命令：</p>
+<p>优点：每个solution都有自己独立的directive；</p>
+<p>如果这个solution需要重新综合，只有这个solution下面的directive会起到作用；</p>
+<p>缺点：如果需要把C source file给第三方工具，则directive的tcl文件也要被包含在其中；</p>
+<p>第二，directive在C source file中以pragma形式：</p>
+<p>优点：给到第三方工具时，只用source file就能重现结果； 缺点：如果solution需要重新综合，由于directive写在source file里，这时候所有的directive都会被重新执行。</p>
+<p><img data-src="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps44.jpg" alt="img"> </p>
+<p>第一，最好在源代码中为每一个for循环创建一个标签，以便于设置directive；</p>
+<p>第二，推荐在directive文件中存储directives；</p>
+<p>第三，关于Test Bench的返回值，如果仿真通过（结果正确）就返回0，如果仿真不通过（结果错误）就返回1；</p>
+<p>第四，通常情况下，生成的RTL代码的层次和原始的C函数的层次是一致的。</p>
+<p><img data-src="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps45.jpg" alt="img"> </p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Vivado-HLS/" rel="tag"><i class="fa fa-tag"></i> Vivado HLS</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/11/05/Http%E5%92%8CHttps/" rel="prev" title="计算机网络之Http和Https">
+      <i class="fa fa-chevron-left"></i> 计算机网络之Http和Https
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/01/01/VivadoHLS%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/" rel="next" title="Vivado HLS的工作原理">
+      Vivado HLS的工作原理 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+        </div>
+        
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Powered by ylyang</span>
+</div>
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="//cdn.jsdelivr.net/npm/ribbon.js@1/dist/ribbon.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
