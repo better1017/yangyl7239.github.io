@@ -27,12 +27,12 @@
     var CONFIG = {"hostname":"ylyang.xyz","root":"/","scheme":"Gemini","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":{"enable":true,"onlypost":false,"loadingImg":null},"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"path":"./public/search.xml"};
   </script>
 
-  <meta name="description" content="for循环优化 - 基本衡量指标看一个例子在头文件里定义了一个变量N &#x3D; 3  N是循环边界，for循环执行的是乘加操作  以上程序可以用以下这样一个状态来表示，一共有四个状态，分别是C0、C1、C2、C3， 在这四个状态中， C0是读取数据b和c C1是获取数组xin[]的0号地址xin[0] C2是从0号地址读取相应的数据 C3完成相应的计算 名词介绍假定每个状态都消耗一个时钟周期，for循环">
+  <meta name="description" content="for循环优化 - 基本衡量指标看一个例子在头文件里定义了一个变量N &#x3D; 3  N是循环边界，for循环执行的是乘加操作  以上程序可以用以下这样一个状态来表示，一共有四个状态，分别是C0、C1、C2、C3，">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Vivado HLS之for循环优化">
 <meta property="og:url" content="ylyang.xyz/2020/01/05/VivadoHLS%E4%B9%8Bfor%E5%BE%AA%E7%8E%AF%E4%BC%98%E5%8C%96/index.html">
 <meta property="og:site_name" content="静水流深的博客">
-<meta property="og:description" content="for循环优化 - 基本衡量指标看一个例子在头文件里定义了一个变量N &#x3D; 3  N是循环边界，for循环执行的是乘加操作  以上程序可以用以下这样一个状态来表示，一共有四个状态，分别是C0、C1、C2、C3， 在这四个状态中， C0是读取数据b和c C1是获取数组xin[]的0号地址xin[0] C2是从0号地址读取相应的数据 C3完成相应的计算 名词介绍假定每个状态都消耗一个时钟周期，for循环">
+<meta property="og:description" content="for循环优化 - 基本衡量指标看一个例子在头文件里定义了一个变量N &#x3D; 3  N是循环边界，for循环执行的是乘加操作  以上程序可以用以下这样一个状态来表示，一共有四个状态，分别是C0、C1、C2、C3，">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8Bfor%E5%BE%AA%E7%8E%AF%E4%BC%98%E5%8C%96%5C1.PNG">
 <meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8Bfor%E5%BE%AA%E7%8E%AF%E4%BC%98%E5%8C%96%5C2.PNG">
@@ -106,7 +106,7 @@
 <meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8Bfor%E5%BE%AA%E7%8E%AF%E4%BC%98%E5%8C%96%5C71.PNG">
 <meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8Bfor%E5%BE%AA%E7%8E%AF%E4%BC%98%E5%8C%96%5C72.PNG">
 <meta property="article:published_time" content="2020-01-05T04:59:05.000Z">
-<meta property="article:modified_time" content="2020-08-06T08:05:00.737Z">
+<meta property="article:modified_time" content="2020-08-06T08:08:46.004Z">
 <meta property="article:author" content="ylyang">
 <meta property="article:tag" content="Vivado HLS">
 <meta name="twitter:card" content="summary">
@@ -433,6 +433,8 @@
 <p>N是循环边界，for循环执行的是乘加操作</p>
 <p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8Bfor%E5%BE%AA%E7%8E%AF%E4%BC%98%E5%8C%96%5C2.PNG" alt="2"></p>
 <p>以上程序可以用以下这样一个状态来表示，一共有四个状态，分别是<code>C0、C1、C2、C3</code>，</p>
+<a id="more"></a>
+
 <p>在这四个状态中，</p>
 <p>C0是读取数据b和c</p>
 <p>C1是获取数组xin[]的0号地址xin[0]</p>

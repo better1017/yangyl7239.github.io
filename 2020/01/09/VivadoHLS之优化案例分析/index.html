@@ -51,7 +51,7 @@
 <meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90%5C15.PNG">
 <meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90%5C16.PNG">
 <meta property="article:published_time" content="2020-01-09T04:59:05.000Z">
-<meta property="article:modified_time" content="2020-08-06T08:05:48.016Z">
+<meta property="article:modified_time" content="2020-08-06T08:09:25.341Z">
 <meta property="article:author" content="ylyang">
 <meta property="article:tag" content="Vivado HLS">
 <meta name="twitter:card" content="summary">
@@ -377,6 +377,8 @@
 <p>2、对于数组，可以使用Array_Partition，把数组分割成不同的部分，而这种分割的方式可以是block、cyclic、complete</p>
 <p>3、对于loop，还可以采用UNROLL这种方式，这时候会有option、factor，他其实是控制循环的被复制成并行的几份，、去执行</p>
 <p>4、DataFlow可以作用于函数，也可以作用于循环，实际是一种并发操作的方式，从这里可以看出，改善吞吐率其实是通过提高并行度来实现的</p>
+<a id="more"></a>
+
 <p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90%5C1.PNG" alt="1"></p>
 <h2 id="PipeLine作用于函数或者循环的不同"><a href="#PipeLine作用于函数或者循环的不同" class="headerlink" title="PipeLine作用于函数或者循环的不同"></a>PipeLine作用于函数或者循环的不同</h2><p>当pipeline作用于函数的时候，从<code>I / O</code>角度来看是连续的，当pipeline作用于循环的时候可以看到，本次循环和下次循环之间是有一个空挡的，从<code>I / O</code>角度来看有一个Bubble（无操作时间）</p>
 <p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90%5C2.PNG" alt="2"></p>

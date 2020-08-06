@@ -61,7 +61,7 @@
 <meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C25.PNG">
 <meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C26.PNG">
 <meta property="article:published_time" content="2020-01-07T04:59:05.000Z">
-<meta property="article:modified_time" content="2020-08-06T08:05:21.001Z">
+<meta property="article:modified_time" content="2020-08-06T08:09:00.408Z">
 <meta property="article:author" content="ylyang">
 <meta property="article:tag" content="Vivado HLS">
 <meta name="twitter:card" content="summary">
@@ -384,6 +384,8 @@
 
       
         <h1 id="数组优化-数组分割"><a href="#数组优化-数组分割" class="headerlink" title="数组优化 - 数组分割"></a>数组优化 - 数组分割</h1><p>对于数组，我们可以通过resource这个directive明确的告知vivado HLS当前的这个数组是采用什么样的Memory来实现，比如是通过分布式的还是通过block RAM，是采用单端口还是采用双端口，如果没有使用resource，Vivado HLS会自行决定采用单端口还是双端口，取决于哪种方式可以有效的降低Initiation interval以及Latency。</p>
+<a id="more"></a>
+
 <p>数组最终会以memory（RAM、ROM、FIFO）的形式出现，如果数组是作为顶层函数的形参，那么他最终就会以相应的memory的接口来呈现，包括相应的读写地址，以及数据，当然还有读写使能，如果数组是在读写的内部，那么最终就会映射为block RAM，LUTRAM，Ultra RAM，或者是寄存器取决于在设计中采用的优化策略和优化方法</p>
 <p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C1.PNG" alt="1"></p>
 <h2 id="看例子"><a href="#看例子" class="headerlink" title="看例子"></a>看例子</h2><p>在例子中，如果我们要同时获取mem[]数组相邻的三个元素，把他们相加，输出的值给到另外一个元素，在默认的情况下我们会看到Resource/Control的过程，可以看到这时候mem被映射为双端口：p0、p1，但是结果sum就是单端口，每次只能写入一个数据，但是我们可以很明确的将mem指定为双端口，这时候要把循环展开，这个指令就是通过resource的directive实现的，这时候我们看到整个的读写过程，很明显因为sum变成了双端口，所以可以同时写入两个数据，更要说明的是因为这里的循环时展开的，所以也就使得相应的加法操作变成了并行，由此我们可以看到Latency从默认情形下的13变成了3，Interval由14变成了4，优化结果很明显。</p>
