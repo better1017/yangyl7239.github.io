@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/logo.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/logo.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/logo.ico">
+  <link rel="mask-icon" href="/images/logo.ico" color="#222">
+  <meta name="google-site-verification" content="QrRqAEoLHOBZnSt7mRkhAt6dCoj3nREdeG7IU9IKL1E">
+  <meta name="msvalidate.01" content="9A1D61A279FB6EF4CF3128BF57AFCBAC">
+  <meta name="baidu-site-verification" content="5Iz7ysEFLe">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  
+  <link rel="stylesheet" href="/lib/animate-css/animate.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1/themes/blue/pace-theme-corner-indicator.min.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1/pace.min.js"></script>
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ylyang.xyz","root":"/","scheme":"Gemini","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":{"enable":true,"onlypost":false,"loadingImg":null},"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"path":"./public/search.xml"};
+  </script>
+
+  <meta name="description" content="数组优化 - 数组分割对于数组，我们可以通过resource这个directive明确的告知vivado HLS当前的这个数组是采用什么样的Memory来实现，比如是通过分布式的还是通过block RAM，是采用单端口还是采用双端口，如果没有使用resource，Vivado HLS会自行决定采用单端口还是双端口，取决于哪种方式可以有效的降低Initiation interval以及Latency">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VivadoHLS之数组优化">
+<meta property="og:url" content="ylyang.xyz/2020/07/25/VivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96/index.html">
+<meta property="og:site_name" content="静水流深的博客">
+<meta property="og:description" content="数组优化 - 数组分割对于数组，我们可以通过resource这个directive明确的告知vivado HLS当前的这个数组是采用什么样的Memory来实现，比如是通过分布式的还是通过block RAM，是采用单端口还是采用双端口，如果没有使用resource，Vivado HLS会自行决定采用单端口还是双端口，取决于哪种方式可以有效的降低Initiation interval以及Latency">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C1.PNG">
+<meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C2.PNG">
+<meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C3.PNG">
+<meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C4.PNG">
+<meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C5.PNG">
+<meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C6.PNG">
+<meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C7.PNG">
+<meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C8.PNG">
+<meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C9.PNG">
+<meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C10.PNG">
+<meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C11.PNG">
+<meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C12.PNG">
+<meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C13.PNG">
+<meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C14.PNG">
+<meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C15.PNG">
+<meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C16.PNG">
+<meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C18.PNG">
+<meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C17.PNG">
+<meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C19.PNG">
+<meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C20.PNG">
+<meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C21.PNG">
+<meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C22.PNG">
+<meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C23.PNG">
+<meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C24.PNG">
+<meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C25.PNG">
+<meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C26.PNG">
+<meta property="article:published_time" content="2020-07-25T07:03:49.567Z">
+<meta property="article:modified_time" content="2020-07-26T04:09:31.422Z">
+<meta property="article:author" content="ylyang">
+<meta property="article:tag" content="Vivado HLS">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C1.PNG">
+
+<link rel="canonical" href="ylyang.xyz/2020/07/25/VivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>VivadoHLS之数组优化 | 静水流深的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+   <script type="text/javascript" src="/js/myjs/clicklove.js"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <main class="main">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+        <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line toggle-line-first"></span>
+        <span class="toggle-line toggle-line-middle"></span>
+        <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">静水流深的博客</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">ylyang's blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">20</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">178</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">126</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#数组优化-数组分割"><span class="nav-number">1.</span> <span class="nav-text">数组优化 - 数组分割</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#看例子"><span class="nav-number">1.1.</span> <span class="nav-text">看例子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三种方法（Three-Forms-of-Partition）"><span class="nav-number">1.2.</span> <span class="nav-text">三种方法（Three Forms of Partition）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、block"><span class="nav-number">1.2.1.</span> <span class="nav-text">1、block</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、cyclic"><span class="nav-number">1.2.2.</span> <span class="nav-text">2、cyclic</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3、register"><span class="nav-number">1.2.3.</span> <span class="nav-text">3、register</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多维数组"><span class="nav-number">1.3.</span> <span class="nav-text">多维数组</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#看一个例子"><span class="nav-number">1.3.1.</span> <span class="nav-text">看一个例子</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">1.4.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数组优化-数组映射和重组"><span class="nav-number">2.</span> <span class="nav-text">数组优化  - 数组映射和重组</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#映射（Map）"><span class="nav-number">2.1.</span> <span class="nav-text">映射（Map）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#横向（水平）映射"><span class="nav-number">2.1.1.</span> <span class="nav-text">横向（水平）映射</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#纵向（竖直）映射"><span class="nav-number">2.1.2.</span> <span class="nav-text">纵向（竖直）映射</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数组分割配合横向映射"><span class="nav-number">2.1.3.</span> <span class="nav-text">数组分割配合横向映射</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重组（Reshape）-ARRAY-RESHSPE"><span class="nav-number">2.2.</span> <span class="nav-text">重组（Reshape）-  ARRAY_RESHSPE</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、block-1"><span class="nav-number">2.2.1.</span> <span class="nav-text">1、block</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、cyclic-1"><span class="nav-number">2.2.2.</span> <span class="nav-text">2、cyclic</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3、complete"><span class="nav-number">2.2.3.</span> <span class="nav-text">3、complete</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#例子"><span class="nav-number">2.2.4.</span> <span class="nav-text">例子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结-1"><span class="nav-number">2.2.5.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数据优化-其他方法"><span class="nav-number">3.</span> <span class="nav-text">数据优化 - 其他方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#如何定义一个ROM？"><span class="nav-number">3.1.</span> <span class="nav-text">如何定义一个ROM？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、const-initial-value"><span class="nav-number">3.1.1.</span> <span class="nav-text">1、const + initial value</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、头文件的方式"><span class="nav-number">3.1.2.</span> <span class="nav-text">2、头文件的方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3、Vivado-HLS推导出相应的ROM"><span class="nav-number">3.1.3.</span> <span class="nav-text">3、Vivado HLS推导出相应的ROM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4、数组的初始化"><span class="nav-number">3.1.4.</span> <span class="nav-text">4、数组的初始化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结-2"><span class="nav-number">3.2.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ylyang"
+      src="/images/tou2.jpg">
+  <p class="site-author-name" itemprop="name">ylyang</p>
+  <div class="site-description" itemprop="description">云山苍苍，江水泱泱；先生之风，山高水长。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">178</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">126</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/yangyl7239" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;yangyl7239" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:yuanlin.young@gmail.com" title="E-Mail → mailto:yuanlin.young@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://ylyang.xyz/" title="https:&#x2F;&#x2F;ylyang.xyz">Home</a>
+        </li>
+    </ul>
+  </div>
+
+      </section>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </header>
+
+      
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/yangyl7239" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div id="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+      <div class="main-inner">
+        
+
+        <div class="content post posts-expand">
+          
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2020/07/25/VivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/tou2.jpg">
+      <meta itemprop="name" content="ylyang">
+      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="静水流深的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          VivadoHLS之数组优化
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="文章创建时间：2020-07-25 15:03:49" itemprop="dateCreated datePublished" datetime="2020-07-25T15:03:49+08:00">2020-07-25</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Vivado-HLS/" itemprop="url" rel="index"><span itemprop="name">Vivado HLS</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="数组优化-数组分割"><a href="#数组优化-数组分割" class="headerlink" title="数组优化 - 数组分割"></a>数组优化 - 数组分割</h1><p>对于数组，我们可以通过resource这个directive明确的告知vivado HLS当前的这个数组是采用什么样的Memory来实现，比如是通过分布式的还是通过block RAM，是采用单端口还是采用双端口，如果没有使用resource，Vivado HLS会自行决定采用单端口还是双端口，取决于哪种方式可以有效的降低Initiation interval以及Latency。</p>
+<p>数组最终会以memory（RAM、ROM、FIFO）的形式出现，如果数组是作为顶层函数的形参，那么他最终就会以相应的memory的接口来呈现，包括相应的读写地址，以及数据，当然还有读写使能，如果数组是在读写的内部，那么最终就会映射为block RAM，LUTRAM，Ultra RAM，或者是寄存器取决于在设计中采用的优化策略和优化方法</p>
+<p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C1.PNG" alt="1"></p>
+<h2 id="看例子"><a href="#看例子" class="headerlink" title="看例子"></a>看例子</h2><p>在例子中，如果我们要同时获取mem[]数组相邻的三个元素，把他们相加，输出的值给到另外一个元素，在默认的情况下我们会看到Resource/Control的过程，可以看到这时候mem被映射为双端口：p0、p1，但是结果sum就是单端口，每次只能写入一个数据，但是我们可以很明确的将mem指定为双端口，这时候要把循环展开，这个指令就是通过resource的directive实现的，这时候我们看到整个的读写过程，很明显因为sum变成了双端口，所以可以同时写入两个数据，更要说明的是因为这里的循环时展开的，所以也就使得相应的加法操作变成了并行，由此我们可以看到Latency从默认情形下的13变成了3，Interval由14变成了4，优化结果很明显。</p>
+<p>由此可以看到，数组往往是设计过程中的瓶颈</p>
+<p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C2.PNG" alt="2"></p>
+<h2 id="三种方法（Three-Forms-of-Partition）"><a href="#三种方法（Three-Forms-of-Partition）" class="headerlink" title="三种方法（Three Forms of Partition）"></a>三种方法（Three Forms of Partition）</h2><p>Vivado HLS提供了三种对数组进行分割的方法，分别是block、cyclic、register，仍然以上面的例子为例，mem数组长度为6的一个数组</p>
+<h3 id="1、block"><a href="#1、block" class="headerlink" title="1、block"></a>1、block</h3><p>如果我们采用Block的方式、Factor为3，就意味着数组分成三份，是一种等分成三份的方式，所以0号、1号作为一组，2号、3号作为一组，4号、5号作为一组，在相应的directive窗口中可以看到，<code>block factor=3 dim=1</code>，dim也就是dimension，因为这里的数组是个一维数组</p>
+<h3 id="2、cyclic"><a href="#2、cyclic" class="headerlink" title="2、cyclic"></a>2、cyclic</h3><p>我们还可以采用第二种partition的方式，就是Cyclic，Factor=3，这时候我们要注意分割方式有所不同，依然要分成3份，但是0、1、2属于不同的memory，3、4、5属于不同的memory，从而0、3构成第一个memory，1、4构成第二个memory，2、5构成第三个memory，同样这时在directive窗口中就会看到<code>cyclic factor=3 dim=1</code>，</p>
+<h3 id="3、register"><a href="#3、register" class="headerlink" title="3、register"></a>3、register</h3><p>如果采用Register的方式，这时候0 - 5这六个元素就变成了0 - 5对应的六个register，就是一种完全并行的方式，在directive窗口中就可以看到<code>complete dim=1</code>，</p>
+<p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C3.PNG" alt="3"></p>
+<p>我们看一下这三种分割方式对于前边的例子会有怎样的影响，很显然，对于上面的例子来说，采用block、cyclic他们的并行增强了，基本上效果是一致的，采用complete是一种完全并行的方式，因为他全部采用了register，</p>
+<p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C4.PNG" alt="4"></p>
+<p>但是并非是越多的block效果越好，事实上block的个数取决于真实的数据流，从前面的例子中可以看到，我们在获得一次和的过程中，需要有三个输入，三个输入可以分解成两个block，一个block是一个双端口，因为每个block、每个memory作为双端口可以提供两个数据，如果是两个block也就是两个memory，至少可以提供4个数据，完全满足这种数据流，所以我们并没有必要去把它分解成三个block，因此我们这里做一个对比，当block=2，和block=3的时候，其实情形是一样的，最终的性能Latency和Interval是一样的，同样的，如果我们选择Cyclic的方式，cyclic=2和cyclic=3也是一样的，从资源角度看，尽管有一些变化，但是可以忽略不计</p>
+<p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C5.PNG" alt="5"></p>
+<h2 id="多维数组"><a href="#多维数组" class="headerlink" title="多维数组"></a>多维数组</h2><p>对于多维数组，dimension该如何设置，例如有如下一个三维数组，Vivado HLS的认定规则是：10是第一维，6是第二维，4是第三维。</p>
+<p>当我们选择dim=3进行partition的时候，这时候就变成了如下中间这种形式，当选择dim=1的时候，就变成了如下右边这种形式，需要说明的是，当dim=1时，是把<code>My_array_0[6][4]</code>作为一个整体来看的</p>
+<h3 id="看一个例子"><a href="#看一个例子" class="headerlink" title="看一个例子"></a>看一个例子</h3><p>在下面这个例子中，这是数组的加法，对数组元素进行相加，所以要求a和b是一个相同维度的数组，这里的a是一个4x5也就是4行5列的数组，对这个数组a做约束，首先通过resource把它设置为单端口，第二把它做分割，对他的第一维分割，并且分解成四块，第一维就是4x5的4对应的维度，同理，数组b和数组sum也是同样的方式，同时还要注意相应的循环要展开，所以如果<code>block factor=4, dim=1</code>，九八数组a分解成了如下四个block，可以看到每一行对应一个block，如果把<code>block factor=2, dim=1</code>，就会分解成如下两个block，这时候第0行、第1行作为block 0，第2行、第3行作为block 1，这个方式跟一维数组的方式是类似的，只是在做block分割的时候是把其中的每一行作为一个整体来看待的</p>
+<p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C6.PNG" alt="6"></p>
+<p>从仿真结果也可以进一步来验证这种<code>block factor=4, dim=1</code>，和block factor=2, dim=1的时候所获得的元素是什么样子的，所以跟我们前边分割的方式是完全一致的，</p>
+<p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C7.PNG" alt="7"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>1、Vivado HLS提供了三种数组分割的方式：block，cyclic、complete</p>
+<p>2、数组分割可以提高吞吐率</p>
+<h1 id="数组优化-数组映射和重组"><a href="#数组优化-数组映射和重组" class="headerlink" title="数组优化  - 数组映射和重组"></a>数组优化  - 数组映射和重组</h1><p>Optimization Methods of Array: Map and Reshape</p>
+<h2 id="映射（Map）"><a href="#映射（Map）" class="headerlink" title="映射（Map）"></a>映射（Map）</h2><p>在C代码中如果有多个比较小的数组，可以通过Map合并成一个大的数组，从而减少block RAM的消耗，从而降低对资源的用量</p>
+<p>当设备支持时，每一个数组都能够映射到block RAM或者UltraRAM中</p>
+<p>Vivado HLS对于ARRAY_MAP提供了两种方式，一种是横向（水平），一种是纵向（竖直）</p>
+<ul>
+<li>横向映射（Horizontal mapping）</li>
+</ul>
+<p>得到一个包含更多元素的单个数组（Get a single array with more elements）</p>
+<ul>
+<li>纵向映射（Vertical mapping）</li>
+</ul>
+<p>获得一个具有更大位宽的单个数组（Get a single array with larger bit-width）</p>
+<p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C8.PNG" alt="8"></p>
+<h3 id="横向（水平）映射"><a href="#横向（水平）映射" class="headerlink" title="横向（水平）映射"></a>横向（水平）映射</h3><p>假如有两个一维数组<code>A[N]</code>和<code>B[M]</code>，长度分别为N和M</p>
+<p>如果我们选择水平方向的map，最终合并之后的数组长度变成了N+M，两个数组时前后拼接在一起变成了一个更大的数组，最终的数组形式如紫色图所示，这里可以看到数组从0变化到M+N-1，同时需要注意，数组的宽度，也就是存储元素的位宽可以是不一样的</p>
+<p>在Vivado HLS中通过相应的ARRAY_MAP就可以选择，mode参数选择横向还是纵向，合并后的数组可以起一个名字，在instancwe上取，对于这个数组<code>A[N]</code>和<code>B[M]</code>，合并之后的数组的维度就变成了N+M</p>
+<p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C9.PNG" alt="9"></p>
+<p>对于横向映射的数组允许有Offset，也就是地址偏移，可以看到下面这个例子他们不是无缝对接，而是中间有一些空挡，从仿真结果也可以进行验证，当offset=0时，也就是无缝对接的时候，他们是0、1、2、3，但是当offset=2时，可以看到地址的变化，2、3、4、5，因为offset=2，起始地址变成了2</p>
+<p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C10.PNG" alt="10"></p>
+<p>这里还要强调一下，这种方式虽然减少了相应的资源的使用，但是对吞吐率并没有改善，因为memory个数减少了意味着读出的端口的个数也减少了</p>
+<p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C11.PNG" alt="11"></p>
+<h3 id="纵向（竖直）映射"><a href="#纵向（竖直）映射" class="headerlink" title="纵向（竖直）映射"></a>纵向（竖直）映射</h3><p>还是以两个一维数组<code>A[N]</code>和<code>B[M]</code>，长度分别为N和M为例</p>
+<p>对于纵向的合并，是把相应的元素对应的位置做位拼接，所以最终的数组长度仍然是原始数组中最长的那个数组的长度，但是宽度宽度发生了变化，是因为做了位拼接，所以最终的数组就变成了如下图3，假设N&gt;M，这里数组的长度就变成了N，但他的宽度就变成了A和B宽度之和</p>
+<p>纵向映射的方式也是在directive中设置数组的模式（mode）也可以去指定合并后数组的名字（instance）</p>
+<p>这里主要就是强调对于纵向映射的数组，合并后的长度就是N和M的最大值</p>
+<p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C12.PNG" alt="12"></p>
+<h3 id="数组分割配合横向映射"><a href="#数组分割配合横向映射" class="headerlink" title="数组分割配合横向映射"></a>数组分割配合横向映射</h3><p>之间提到的数组分割中的array_partition，是把数组分割成多个模块</p>
+<p>其实array_partition是可以跟横向映射一块使用的，例如，先通过partition把数组分解成两个模块，然后再通过横向的array_map把相应的分割的部分再进行合并，这样做的好处是在减少使用资源的同时也可以获得较好的吞吐率，</p>
+<p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C13.PNG" alt="13"></p>
+<h2 id="重组（Reshape）-ARRAY-RESHSPE"><a href="#重组（Reshape）-ARRAY-RESHSPE" class="headerlink" title="重组（Reshape）-  ARRAY_RESHSPE"></a>重组（Reshape）-  ARRAY_RESHSPE</h2><p>重组是将ARRAY_PARTITION和纵向的ARRAY_MAP结合在一起的，这样可以降低资源的用量，同时对于数据的并行读取也会有好处，因为ARRAY_PARTITION的目的就是并行的获取数据，提高数据的并行性</p>
+<p>相应的，因为ARRAY_PARTITION有3种模式，所以ARRAY_RESHAPE也会有类似的3种方式</p>
+<p>这里我们以一维数组为例</p>
+<h3 id="1、block-1"><a href="#1、block-1" class="headerlink" title="1、block"></a>1、block</h3><p>可以看到，这种情况下是将数组一分为二，然后纵向拼接相应的位置上的元素，拼接在一起，所以最终的长度是原先的1/2，宽度变成了原先的2倍</p>
+<h3 id="2、cyclic-1"><a href="#2、cyclic-1" class="headerlink" title="2、cyclic"></a>2、cyclic</h3><p>再看cyclic，这时候是把数组交织的分成两部分，最终reshape之后的数组，长度是原来的1/2，宽度变成原来宽度的2倍</p>
+<h3 id="3、complete"><a href="#3、complete" class="headerlink" title="3、complete"></a>3、complete</h3><p>他是同时获得了n个register，同时将n个register合并，合成一个宽度是原来n倍的寄存器，不同于Array_Partition和横向的映射组合，Array_Reshape是针对同一个数组的</p>
+<p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C14.PNG" alt="14"></p>
+<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><p>在这个例子中，代码的</p>
+<p>第一部分是一个for循环，在这个for循环中，将数组pa赋值给了数组A，然后对数组A执行相应的操作，操作内容是对偶数元素加5，对奇数元素减5，</p>
+<p>第二部分是把数组pb赋值给了数组B，然后对B进行操作是把B的前一半元素加5，后一半元素减5</p>
+<p>第三部分是对处理后的值，A和B分别乘以2，再回写到原来的pa和pb中</p>
+<p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C15.PNG" alt="15"></p>
+<p>对这个例子分别进行array_map的横向映射，array_map的纵向映射，以及reshape，采用的是cyclic和block两种方式</p>
+<p>从结果可以看到，对于Latency，只有reshape也就是s_r1这个solution会有改善，从资源来看，array_map的横向映射和array_map的纵向映射都是把block RAM的个数减小到1，所以对比下来看，array_map对于资源的用量是可以减小的，但是对于数据吞吐率是没有改善的，而Array_Reshape可以通过本身包含的partition来提高吞吐率，在一定程度上获得了资源（面积Area）和吞吐率的折中。</p>
+<p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C16.PNG" alt="16"></p>
+<h3 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h3><p>Vivado HLS提供了两种map的方式，包括横向和纵向，他们都能帮助我们减少资源的用量，主要是memory资源</p>
+<p>但是Array_map对于数据吞吐率并没有改善</p>
+<p>Array_Reshape是将纵向的Array_Map和Array_Partition结合在一起，所以他可以获得资源和数据吞吐率的一个比较好的折中</p>
+<p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C18.PNG" alt="18"></p>
+<h1 id="数据优化-其他方法"><a href="#数据优化-其他方法" class="headerlink" title="数据优化 - 其他方法"></a>数据优化 - 其他方法</h1><h2 id="如何定义一个ROM？"><a href="#如何定义一个ROM？" class="headerlink" title="如何定义一个ROM？"></a>如何定义一个ROM？</h2><h3 id="1、const-initial-value"><a href="#1、const-initial-value" class="headerlink" title="1、const + initial value"></a>1、const + initial value</h3><p>最简单的方式就是用关键字const + initial value，这种方式简单易行，不足之处就是如果我们定义的ROM比较大，也就是初始值很多的情况下，在代码里写这些初始值是一个很繁琐的过程，容易出错。</p>
+<p>同时从代码的管理角度而言也是很不方便的。</p>
+<p> 相应的我们可以在综合后的报告里看到资源的占用量</p>
+<p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C17.PNG" alt="17"></p>
+<h3 id="2、头文件的方式"><a href="#2、头文件的方式" class="headerlink" title="2、头文件的方式"></a>2、头文件的方式</h3><p>采用头文件的方式，将相应的初始值放到头文件中，这样既简单同时对代码的维护和工程的管理都很方便，注意在代码中蓝色方框标记的部分有一个<code>.h</code>的头文件，在写法上<code>#include &quot;des_1_coef.h&quot;</code>要单独占一行。</p>
+<p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C19.PNG" alt="19"></p>
+<p>对于<code>.h</code>文件中的内容，一个例子，这里需要用逗号，而在最后一行是数值再加上一个空格，是没有标点符号的，相应的在综合之后就可以看到资源用量，这里给的例子是整个的ROM的长度，很小，所以是用查找表来实现的，可以看到有相应的LUT、Words、Bits</p>
+<p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C20.PNG" alt="20"></p>
+<h3 id="3、Vivado-HLS推导出相应的ROM"><a href="#3、Vivado-HLS推导出相应的ROM" class="headerlink" title="3、Vivado HLS推导出相应的ROM"></a>3、Vivado HLS推导出相应的ROM</h3><p>如果ROM里头的存储值是通过数学公式计算得到的，那么Vivado HLS也可以帮助去推导出相应的ROM</p>
+<p>在这个例子中有一个函数<code>init_sin_table()</code>，这里边其实是通过sin值函数去计算相应的数值，然后在下边的函数中会调用<code>init_sin_table()</code>，这时候在综合后的报告里就能看到Vivado HLS会帮助我们推导出一个相应的ROM</p>
+<p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C21.PNG" alt="21"></p>
+<p>对于ROM可以改变它的输出的Latency，在默认情形下用的输出Latency是2，可以通过增加Latency改善这条路径上的时序，在相应的directive窗口可以看到Latency(optional)，默认是2，现在改为3，</p>
+<p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C22.PNG" alt="22"></p>
+<p>要想知道是否生效，可以查看生成的RTL代码进行验证，当Latency=2时可以看到地址有一级Latency，输出有一级Latency，当Latency=3时，地址有一级Latency，输出有一级Latency，最终的输出还有一级Latency，总共是3级。</p>
+<p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C23.PNG" alt="23"></p>
+<h3 id="4、数组的初始化"><a href="#4、数组的初始化" class="headerlink" title="4、数组的初始化"></a>4、数组的初始化</h3><p>对于数组，如果是映射为memory，需要在前面加关键字static，这个关键字不仅能保证Vivado HLS把数组作为memory实现，还可以保证最终实现的结果跟RTL的结果行为上是一致的，所谓的行为上是一致的，体现在当数组有初始值的时候，如果没有加static关键字，一旦在对RAM或者ROM（也就是memory）进行操作的时候将会对memory进行一个初始化的过程，初始化需要的时间跟memory有很大的关系，比如在这个例子中memory是一个长度为8的memory，那么他至少需要8个时钟周期进行初始化，相应的如果memory是1024的长度，那么就需要1024个时钟周期进行初始化，如果前面加了static关键字，那么初始化的值就一定会被写进return文件里头，不会再有相应的初始化的过程</p>
+<p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C24.PNG" alt="24"></p>
+<p>所以这里我们可以看到，static所起的作用</p>
+<p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C25.PNG" alt="25"></p>
+<h2 id="总结-2"><a href="#总结-2" class="headerlink" title="总结"></a>总结</h2><p>在我们使用数组的时候，如果确定是我们RTL代码里的memory，我们一定要加关键字static</p>
+<p>同样的，如果我们是要做一个ROM，就要加关键字const，可以采用头文件的方式也可以采用在代码中直接赋值的方式</p>
+<p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E6%95%B0%E7%BB%84%E4%BC%98%E5%8C%96%5C26.PNG" alt="26"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Vivado-HLS/" rel="tag"><i class="fa fa-tag"></i> Vivado HLS</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/07/23/VivadoHLS%E4%B9%8Bfor%E5%BE%AA%E7%8E%AF%E4%BC%98%E5%8C%96/" rel="prev" title="Vivado HLS之for循环优化">
+      <i class="fa fa-chevron-left"></i> Vivado HLS之for循环优化
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/07/26/VivadoHLS%E4%B9%8B%E5%87%BD%E6%95%B0%E5%B1%82%E9%9D%A2%E7%9A%84%E4%BC%98%E5%8C%96/" rel="next" title="Vivado HLS之函数层面的优化">
+      Vivado HLS之函数层面的优化 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+        </div>
+        
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Powered by ylyang</span>
+</div>
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="//cdn.jsdelivr.net/npm/ribbon.js@1/dist/ribbon.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

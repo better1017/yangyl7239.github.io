@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/logo.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/logo.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/logo.ico">
+  <link rel="mask-icon" href="/images/logo.ico" color="#222">
+  <meta name="google-site-verification" content="QrRqAEoLHOBZnSt7mRkhAt6dCoj3nREdeG7IU9IKL1E">
+  <meta name="msvalidate.01" content="9A1D61A279FB6EF4CF3128BF57AFCBAC">
+  <meta name="baidu-site-verification" content="5Iz7ysEFLe">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  
+  <link rel="stylesheet" href="/lib/animate-css/animate.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1/themes/blue/pace-theme-corner-indicator.min.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1/pace.min.js"></script>
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ylyang.xyz","root":"/","scheme":"Gemini","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":{"enable":true,"onlypost":false,"loadingImg":null},"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"path":"./public/search.xml"};
+  </script>
+
+  <meta name="description" content="案例分析优化吞吐率的相关directive1、首先是pipeline，pipeline可以作用于函数，也可以作用于循环，当作用于循环的时候有个option是rewind，可以进一步的改善吞吐率 2、对于数组，可以使用Array_Partition，把数组分割成不同的部分，而这种分割的方式可以是block、cyclic、complete 3、对于loop，还可以采用UNROLL这种方式，这时候会有o">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VivadoHLS之优化案例分析">
+<meta property="og:url" content="ylyang.xyz/2020/07/26/VivadoHLS%E4%B9%8B%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90/index.html">
+<meta property="og:site_name" content="静水流深的博客">
+<meta property="og:description" content="案例分析优化吞吐率的相关directive1、首先是pipeline，pipeline可以作用于函数，也可以作用于循环，当作用于循环的时候有个option是rewind，可以进一步的改善吞吐率 2、对于数组，可以使用Array_Partition，把数组分割成不同的部分，而这种分割的方式可以是block、cyclic、complete 3、对于loop，还可以采用UNROLL这种方式，这时候会有o">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90%5C1.PNG">
+<meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90%5C2.PNG">
+<meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90%5C3.PNG">
+<meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90%5C4.PNG">
+<meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90%5C5.PNG">
+<meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90%5C6.PNG">
+<meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90%5C7.PNG">
+<meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90%5C8.PNG">
+<meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90%5C9.PNG">
+<meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90%5C10.PNG">
+<meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90%5C11.PNG">
+<meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90%5C12.PNG">
+<meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90%5C13.PNG">
+<meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90%5C14.PNG">
+<meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90%5C15.PNG">
+<meta property="og:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90%5C16.PNG">
+<meta property="article:published_time" content="2020-07-26T09:10:14.504Z">
+<meta property="article:modified_time" content="2020-07-28T08:08:05.776Z">
+<meta property="article:author" content="ylyang">
+<meta property="article:tag" content="Vivado HLS">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="e:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90%5C1.PNG">
+
+<link rel="canonical" href="ylyang.xyz/2020/07/26/VivadoHLS%E4%B9%8B%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>VivadoHLS之优化案例分析 | 静水流深的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+   <script type="text/javascript" src="/js/myjs/clicklove.js"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <main class="main">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+        <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line toggle-line-first"></span>
+        <span class="toggle-line toggle-line-middle"></span>
+        <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">静水流深的博客</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">ylyang's blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">20</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">178</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">126</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#案例分析"><span class="nav-number">1.</span> <span class="nav-text">案例分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#优化吞吐率的相关directive"><span class="nav-number">1.1.</span> <span class="nav-text">优化吞吐率的相关directive</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PipeLine作用于函数或者循环的不同"><span class="nav-number">1.2.</span> <span class="nav-text">PipeLine作用于函数或者循环的不同</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对Latency进行优化"><span class="nav-number">1.3.</span> <span class="nav-text">对Latency进行优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对Area进行优化"><span class="nav-number">1.4.</span> <span class="nav-text">对Area进行优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#案例分析：Cordic算法"><span class="nav-number">1.5.</span> <span class="nav-text">案例分析：Cordic算法</span></a></li></ol></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ylyang"
+      src="/images/tou2.jpg">
+  <p class="site-author-name" itemprop="name">ylyang</p>
+  <div class="site-description" itemprop="description">云山苍苍，江水泱泱；先生之风，山高水长。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">178</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">126</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/yangyl7239" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;yangyl7239" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:yuanlin.young@gmail.com" title="E-Mail → mailto:yuanlin.young@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://ylyang.xyz/" title="https:&#x2F;&#x2F;ylyang.xyz">Home</a>
+        </li>
+    </ul>
+  </div>
+
+      </section>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </header>
+
+      
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/yangyl7239" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div id="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+      <div class="main-inner">
+        
+
+        <div class="content post posts-expand">
+          
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="ylyang.xyz/2020/07/26/VivadoHLS%E4%B9%8B%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/tou2.jpg">
+      <meta itemprop="name" content="ylyang">
+      <meta itemprop="description" content="云山苍苍，江水泱泱；先生之风，山高水长。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="静水流深的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          VivadoHLS之优化案例分析
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="文章创建时间：2020-07-26 17:10:14" itemprop="dateCreated datePublished" datetime="2020-07-26T17:10:14+08:00">2020-07-26</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Vivado-HLS/" itemprop="url" rel="index"><span itemprop="name">Vivado HLS</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="案例分析"><a href="#案例分析" class="headerlink" title="案例分析"></a>案例分析</h1><h2 id="优化吞吐率的相关directive"><a href="#优化吞吐率的相关directive" class="headerlink" title="优化吞吐率的相关directive"></a>优化吞吐率的相关directive</h2><p>1、首先是pipeline，pipeline可以作用于函数，也可以作用于循环，当作用于循环的时候有个option是rewind，可以进一步的改善吞吐率</p>
+<p>2、对于数组，可以使用Array_Partition，把数组分割成不同的部分，而这种分割的方式可以是block、cyclic、complete</p>
+<p>3、对于loop，还可以采用UNROLL这种方式，这时候会有option、factor，他其实是控制循环的被复制成并行的几份，、去执行</p>
+<p>4、DataFlow可以作用于函数，也可以作用于循环，实际是一种并发操作的方式，从这里可以看出，改善吞吐率其实是通过提高并行度来实现的</p>
+<p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90%5C1.PNG" alt="1"></p>
+<h2 id="PipeLine作用于函数或者循环的不同"><a href="#PipeLine作用于函数或者循环的不同" class="headerlink" title="PipeLine作用于函数或者循环的不同"></a>PipeLine作用于函数或者循环的不同</h2><p>当pipeline作用于函数的时候，从<code>I / O</code>角度来看是连续的，当pipeline作用于循环的时候可以看到，本次循环和下次循环之间是有一个空挡的，从<code>I / O</code>角度来看有一个Bubble（无操作时间）</p>
+<p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90%5C2.PNG" alt="2"></p>
+<h2 id="对Latency进行优化"><a href="#对Latency进行优化" class="headerlink" title="对Latency进行优化"></a>对Latency进行优化</h2><p>对于Latency有一个directive就叫做Latency，他可以作用于function也可以作用于loop，此外还有一个loop_merge，就是把顺序的Loop合并在一起，还有一个Loop_Flatten其实是把嵌套的循环打平</p>
+<p>这里需要说明，当使用Latency这个directive的时候，如果是针对循环，它指的是一次循环的Latency，如果我们期望得到的是完成整个循环所需要的Latency，先要做一个region的设置，针对region去设置Latency</p>
+<p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90%5C3.PNG" alt="3"></p>
+<h2 id="对Area进行优化"><a href="#对Area进行优化" class="headerlink" title="对Area进行优化"></a>对Area进行优化</h2><p>1、Data types和bit widths并不是directive，但是同样可以优化资源（面积）</p>
+<p>Inline</p>
+<p>Allocation</p>
+<p>针对array可以采用Array_Map和Array_rESHAPE</p>
+<p>还有针对函数的Function_Instantiate</p>
+<p> <img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90%5C4.PNG" alt="4"></p>
+<h2 id="案例分析：Cordic算法"><a href="#案例分析：Cordic算法" class="headerlink" title="案例分析：Cordic算法"></a>案例分析：Cordic算法</h2><p>Cordic算法本质上是通过一系列微旋转来计算超越函数，比如说正余弦，在这个过程中，这些微旋转变成了一些移位的操作，可以通过这些方式来计算三角函数，如果这里x0设置为1/An，y0设置位0，那么最后就可以得到正余弦的结果，这里要求z0的取值范围是-99 ~ +99，我们再进一步把它缩小为-Π/2 ~ +Π/2</p>
+<p>对于-Π ~ Π的区间，要先做预处理，把它映射到-Π/2 ~ Π/2，得到结果之后在做后处理，得到真正的函数值</p>
+<p>所以需要三个函数，预处理 -&gt; 中间的计算单元 -&gt; 最后的后处理</p>
+<p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90%5C5.PNG" alt="5"></p>
+<p>接下来通过Vivado HLS将其转化为相应的RTL代码，并提高吞吐率</p>
+<p>先看一下函数代码</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 头文件</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;ap_fixed.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;ap_int.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> WA 17</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> FA 14</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> WS 16</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> FA 14</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> ap_fixed&lt;WA, WA-FA&gt; <span class="keyword">di_t</span>;</span><br><span class="line"><span class="keyword">typedef</span> ap_fixed&lt;WA, WA-FA&gt; <span class="keyword">di_t</span>;</span><br><span class="line"><span class="keyword">typedef</span> ap_fixed&lt;WA, WA-FA&gt; <span class="keyword">di_t</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">do_t</span> Kn = <span class="number">0.607252935</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">di_t</span> PI = <span class="number">3.1415926</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">cir_cordic</span><span class="params">(<span class="keyword">di_t</span> alpha, <span class="keyword">do_t</span> &amp;mysin, <span class="keyword">do_t</span> &amp;cos_out)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"cir_codic.h"</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">pre_cir_codic</span><span class="params">(<span class="keyword">di_t</span> full_alpha, <span class="keyword">di_t</span> &amp;alpha, <span class="keyword">flag_t</span> &amp;flag)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(full_alpha &gt; PI/<span class="number">2</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        alpha = PI - full_alpha;</span><br><span class="line">        flag = <span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(full_alpha &lt; -PI/<span class="number">2</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        alpha = -PI - full_alpha;</span><br><span class="line">        flag = <span class="number">3</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        alpha = full_alpha;</span><br><span class="line">        flag = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">cir_cordic_calculate</span><span class="params">(<span class="keyword">di_t</span> alpha, <span class="keyword">flag_t</span> flag, <span class="keyword">do_t</span> &amp;mysin, <span class="keyword">do_t</span> &amp;mycos, <span class="keyword">flag_t</span> flag_delay)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">int</span> N = <span class="number">16</span>;</span><br><span class="line">    <span class="keyword">do_t</span> xi[N];</span><br><span class="line">    <span class="keyword">do_t</span> yi[N];</span><br><span class="line">    <span class="keyword">di_t</span> zi[N];</span><br><span class="line">    <span class="keyword">flag_t</span> flag_delay_a[N];</span><br><span class="line">    </span><br><span class="line">    xi[<span class="number">0</span>] = Kn;</span><br><span class="line">    yi[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">    zi[<span class="number">0</span>] = alpha;</span><br><span class="line">    flag_delay_a[<span class="number">0</span>] = flag;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">di_t</span> myarctan[<span class="number">16</span>] = &#123;</span><br><span class="line">        #included <span class="string">"myarctan.h"</span></span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">int</span> m = <span class="number">0</span>;</span><br><span class="line">    loop:</span><br><span class="line">    <span class="keyword">for</span>(m = <span class="number">0</span>; m &lt; N; m++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(zi[m] &gt;= <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            xi[m+<span class="number">1</span>] = xi[m] - (yi[m] &gt;&gt; m);</span><br><span class="line">            yi[m+<span class="number">1</span>] = yi[m] + (xi[m] &gt;&gt; m);</span><br><span class="line">            zi[m+<span class="number">1</span>] = zi[m] - myarctan[m];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            xi[m+<span class="number">1</span>] = xi[m] + (yi[m] &gt;&gt; m);</span><br><span class="line">            yi[m+<span class="number">1</span>] = yi[m] - (xi[m] &gt;&gt; m);</span><br><span class="line">            zi[m+<span class="number">1</span>] = zi[m] + myarctan[m];</span><br><span class="line">        &#125;</span><br><span class="line">        flag_delay_a[m+<span class="number">1</span>] = flag_delay_a[m];</span><br><span class="line">    &#125;</span><br><span class="line">    mysin = yi[N<span class="number">-1</span>];</span><br><span class="line">    mycos = xi[N<span class="number">-1</span>];</span><br><span class="line">    flag_delay = flag_delay_a[N<span class="number">-1</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//后处理</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">post_cir_cordic</span><span class="params">(<span class="keyword">do_t</span> mysin, <span class="keyword">do_t</span> mycos, <span class="keyword">flag_t</span> flag_delay, <span class="keyword">do_t</span> &amp;sin_out, <span class="keyword">do_t</span> &amp;cos_out)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">switch</span>(<span class="keyword">int</span>(flag_delay))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">2</span> : sin_out = mysin; cos_out = -mycos; <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">3</span> : sin_out = mysin; cos_out = -mycos; <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">default</span> : sin_out = mysin; cos_out = mycos; <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">cir_cordic</span><span class="params">(<span class="keyword">di_t</span> full_alpha, <span class="keyword">do_t</span> &amp;sin_out, <span class="keyword">do_t</span> &amp;cos_out)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">di_t</span> alpha;</span><br><span class="line">    <span class="keyword">flag_t</span> flag;</span><br><span class="line">    <span class="keyword">do_t</span> mysin;</span><br><span class="line">    <span class="keyword">do_t</span> mycos;</span><br><span class="line">    flag_ flag_delay;</span><br><span class="line">    </span><br><span class="line">    pre_cir_codic(full_alpha, alpha, flag);</span><br><span class="line">    cir_codic_calculate(alpha, flag, mysin, mycos, flag_delay);</span><br><span class="line">    post_cir_codic(mysin, mycos, flag_delay, sin_out, cos_out);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//测试函数</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iomanip&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;cmath&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;math.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"cir_codic.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"ReafFileVec.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">int</span> N = <span class="number">629</span>;</span><br><span class="line">    <span class="keyword">char</span> *fd_alpha = <span class="string">"myalpha.dat"</span>;</span><br><span class="line">    <span class="keyword">char</span> *fd_sin = <span class="string">"mysin.dat"</span>;</span><br><span class="line">    <span class="keyword">char</span> *fd_cos = <span class="string">"mycos_dat"</span>;</span><br><span class="line">    <span class="keyword">di_t</span> alpha[N] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">    <span class="keyword">do_t</span> sin_Ref[n] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">    <span class="keyword">do_t</span> cos_Ref[n] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">    <span class="keyword">do_t</span> sin_Res[n] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">    <span class="keyword">do_t</span> cos_Res[n] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">    <span class="keyword">int</span> ErrCntSin = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> ErrCntCos = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">float</span> precision = <span class="built_in">pow</span>(<span class="number">2</span>, <span class="number">-10</span>);</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    </span><br><span class="line">    ReadFileVec &lt;N, <span class="keyword">di_t</span>, <span class="keyword">float</span>&gt; (fd_alpha, alpha);</span><br><span class="line">    ReadFileVec &lt;N, <span class="keyword">do_t</span>, <span class="keyword">float</span>&gt; (fd_sin, sinRef);</span><br><span class="line">    ReadFileVec &lt;N, <span class="keyword">do_t</span>, <span class="keyword">float</span>&gt; (fd_cos, cosRef);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; N; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        cir_codic(alpha[i], sinres[i], cosres[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; setfill(<span class="string">'-'</span>) &lt;&lt; setw(<span class="number">90</span>) &lt;&lt; <span class="string">'-'</span> &lt;&lt; <span class="string">'\n'</span>;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; setfill(<span class="string">' '</span>) &lt;&lt; setw(<span class="number">18</span>) &lt;&lt; right &lt;&lt; <span class="string">"Alpha"</span>;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; setfill(<span class="string">' '</span>) &lt;&lt; setw(<span class="number">18</span>) &lt;&lt; right &lt;&lt; <span class="string">"sin"</span>;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; setfill(<span class="string">' '</span>) &lt;&lt; setw(<span class="number">18</span>) &lt;&lt; right &lt;&lt; <span class="string">"sinRef"</span>;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; setfill(<span class="string">' '</span>) &lt;&lt; setw(<span class="number">18</span>) &lt;&lt; right &lt;&lt; <span class="string">"cos"</span>;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; setfill(<span class="string">' '</span>) &lt;&lt; setw(<span class="number">18</span>) &lt;&lt; right &lt;&lt; <span class="string">"cosRef"</span> &lt;&lt; <span class="string">'\n'</span>;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; setfill(<span class="string">'-'</span>) &lt;&lt; setw(<span class="number">90</span>) &lt;&lt; <span class="string">'-'</span> &lt;&lt; <span class="string">'\n'</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; N; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; setfill(<span class="string">' '</span>) &lt;&lt; setw(<span class="number">18</span>) &lt;&lt; right &lt;&lt; alpha[i];</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; setfill(<span class="string">' '</span>) &lt;&lt; setw(<span class="number">18</span>) &lt;&lt; right &lt;&lt; sinres[i];</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; setfill(<span class="string">' '</span>) &lt;&lt; setw(<span class="number">18</span>) &lt;&lt; right &lt;&lt; sinRef[i];</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; setfill(<span class="string">' '</span>) &lt;&lt; setw(<span class="number">18</span>) &lt;&lt; right &lt;&lt; cosres[i];</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; setfill(<span class="string">' '</span>) &lt;&lt; setw(<span class="number">18</span>) &lt;&lt; right &lt;&lt; cosRef[i];</span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">abs</span>(<span class="keyword">float</span>(sinres[i]-sinRef[i])) &gt; precision)</span><br><span class="line">        &#123;</span><br><span class="line">            ErrCntSin++;</span><br><span class="line">            <span class="built_in">cout</span> &lt;&lt; setfill(<span class="string">' '</span>) &lt;&lt; setw(<span class="number">18</span>) &lt;&lt; right &lt;&lt; <span class="string">"(sin failed)"</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">abs</span>(<span class="keyword">float</span>(cosres[i]-cosRef[i])) &gt; precision)</span><br><span class="line">        &#123;</span><br><span class="line">            ErrCntCos++;</span><br><span class="line">            <span class="built_in">cout</span> &lt;&lt; setfill(<span class="string">' '</span>) &lt;&lt; setw(<span class="number">18</span>) &lt;&lt; right &lt;&lt; <span class="string">"(cos failed)"</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">'\n'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; setfill(<span class="string">'-'</span>) &lt;&lt; setw(<span class="number">90</span>) &lt;&lt; <span class="string">'-'</span> &lt;&lt;<span class="string">'\n'</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span>(ErrCntSin + ErrCntCos &gt; <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(ErrCntSin &gt; <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">cout</span>&lt;&lt;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(ErrCntCos &gt; <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">cout</span>&lt;&lt; <span class="string">"There are "</span> &lt;&lt; ErrCntCos &lt;&lt; <span class="string">" cos results failed"</span> &lt;&lt; <span class="string">'\n'</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"Test failed for precision: "</span> &lt;&lt; presicion &lt;&lt; <span class="string">'\n'</span>;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; setfill(<span class="string">'-'</span>) &lt;&lt; setw(<span class="number">90</span>) &lt;&lt; <span class="string">'-'</span> &lt;&lt; <span class="string">'\n'</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"Test Passed for precision: "</span> &lt;&lt; precision &lt;&lt; <span class="string">'\n'</span>;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; setfill(<span class="string">'-'</span>) &lt;&lt; setw(<span class="number">90</span>) &lt;&lt; <span class="string">'-'</span> &lt;&lt; <span class="string">'\n'</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后创建Vivado HLS的工程，然后进行系统仿真，出现下面的信息说明仿真结果通过了</p>
+<p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90%5C6.PNG" alt="6"></p>
+<p>然后再做C的综合，出现下面的结果说明C综合通过</p>
+<p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90%5C7.PNG" alt="7"></p>
+<p>综合结束后会有相应的综合报告，可以看到Latency等信息，可以看到Latency和Interval都是比较大的</p>
+<p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90%5C8.PNG" alt="8"></p>
+<p>然后我们就可以做C和RTL的Co-Simulation，做完Co-Simulation之后就可以打开波形查看器，去看最终的结果</p>
+<p>设置sin_out和cos_out，</p>
+<p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90%5C9.PNG" alt="9"></p>
+<p>设置输出是一个定点数，有符号数，小数部分是14位</p>
+<p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90%5C10.PNG" alt="10"></p>
+<p>同时把它设置为模拟波形的方式来显示</p>
+<p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90%5C11.PNG" alt="11"></p>
+<p>现在就可以看到整个曲线的样子</p>
+<p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90%5C12.PNG" alt="12"></p>
+<p>针对Latency进行优化</p>
+<p>创建一个solution命名为s_pipeline，针对for循环去做pipeline</p>
+<p>对for循环添加directive，UNROLL和PIPELINE，然后再进行综合，综合后的结果可以看到，Latency变成了6，Interval变成了7，有了显著的变化，但是我们期望Interval是1，所以我们进一步优化</p>
+<p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90%5C13.PNG" alt="13"></p>
+<p>创建solution，s_pipeline_fun，作用于主函数本身进行pipeline，然后进行综合，这时候综合报告显示，Latency变成了5，Interval变成了1</p>
+<p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90%5C14.PNG" alt="14"></p>
+<p>然后将三次综合结合结果进行对比，可以看到Latency和Interval的变化</p>
+<p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90%5C15.PNG" alt="15"></p>
+<p>在资源方面的变化也可以做一个对比</p>
+<p><img data-src="E:%5Cblog2%5Csource_posts%5CVivadoHLS%E4%B9%8B%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90%5C16.PNG" alt="16"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Vivado-HLS/" rel="tag"><i class="fa fa-tag"></i> Vivado HLS</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/07/26/VivadoHLS%E4%B9%8B%E5%87%BD%E6%95%B0%E5%B1%82%E9%9D%A2%E7%9A%84%E4%BC%98%E5%8C%96/" rel="prev" title="Vivado HLS之函数层面的优化">
+      <i class="fa fa-chevron-left"></i> Vivado HLS之函数层面的优化
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+        </div>
+        
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Powered by ylyang</span>
+</div>
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="//cdn.jsdelivr.net/npm/ribbon.js@1/dist/ribbon.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

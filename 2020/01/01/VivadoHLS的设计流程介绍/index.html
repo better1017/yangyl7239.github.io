@@ -27,12 +27,12 @@
     var CONFIG = {"hostname":"ylyang.xyz","root":"/","scheme":"Gemini","version":"8.0.0-rc.4","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":{"enable":true,"onlypost":false,"loadingImg":null},"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"path":"./public/search.xml"};
   </script>
 
-  <meta name="description" content="VivadoHLS的设计流程（介绍）传统的RTL设计流程：  如果采用传统的这种流程，就需要用硬件描述语言比如VHDL、Verilog或者System Verilog描述算法以及相应的Test Bench，然后执行行为级仿真（RTL Simulation），这个过程是一个迭代的过程，以验证算法的正确性，然后再执行综合（Synthesis）和实现（Implementation），在这个阶段要实现设计">
+  <meta name="description" content="VivadoHLS的设计流程（介绍）传统的RTL设计流程：  如果采用传统的RTL设计流程，就需要用硬件描述语言比如VHDL、Verilog或者System Verilog描述算法以及相应的Test Bench，然后执行行为级仿真（RTL Simulation），这个过程是一个迭代的过程，以验证算法的正确性，然后再执行综合（Synthesis）和实现（Implementation），在这个阶段要实">
 <meta property="og:type" content="article">
 <meta property="og:title" content="VivadoHLS的设计流程介绍">
 <meta property="og:url" content="ylyang.xyz/2020/01/01/VivadoHLS%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%B5%81%E7%A8%8B%E4%BB%8B%E7%BB%8D/index.html">
 <meta property="og:site_name" content="静水流深的博客">
-<meta property="og:description" content="VivadoHLS的设计流程（介绍）传统的RTL设计流程：  如果采用传统的这种流程，就需要用硬件描述语言比如VHDL、Verilog或者System Verilog描述算法以及相应的Test Bench，然后执行行为级仿真（RTL Simulation），这个过程是一个迭代的过程，以验证算法的正确性，然后再执行综合（Synthesis）和实现（Implementation），在这个阶段要实现设计">
+<meta property="og:description" content="VivadoHLS的设计流程（介绍）传统的RTL设计流程：  如果采用传统的RTL设计流程，就需要用硬件描述语言比如VHDL、Verilog或者System Verilog描述算法以及相应的Test Bench，然后执行行为级仿真（RTL Simulation），这个过程是一个迭代的过程，以验证算法的正确性，然后再执行综合（Synthesis）和实现（Implementation），在这个阶段要实">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps23.jpg">
 <meta property="og:image" content="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps24.jpg">
@@ -62,12 +62,16 @@
 <meta property="og:image" content="ylyang.xyz/2020/01/01/VivadoHLS%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%B5%81%E7%A8%8B%E4%BB%8B%E7%BB%8D/7.PNG">
 <meta property="og:image" content="ylyang.xyz/2020/01/01/VivadoHLS%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%B5%81%E7%A8%8B%E4%BB%8B%E7%BB%8D/8.PNG">
 <meta property="og:image" content="ylyang.xyz/2020/01/01/VivadoHLS%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%B5%81%E7%A8%8B%E4%BB%8B%E7%BB%8D/9.PNG">
+<meta property="og:image" content="ylyang.xyz/2020/01/01/VivadoHLS%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%B5%81%E7%A8%8B%E4%BB%8B%E7%BB%8D/10.PNG">
+<meta property="og:image" content="ylyang.xyz/2020/01/01/VivadoHLS%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%B5%81%E7%A8%8B%E4%BB%8B%E7%BB%8D/11.PNG">
+<meta property="og:image" content="ylyang.xyz/2020/01/01/VivadoHLS%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%B5%81%E7%A8%8B%E4%BB%8B%E7%BB%8D/12.PNG">
+<meta property="og:image" content="ylyang.xyz/2020/01/01/VivadoHLS%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%B5%81%E7%A8%8B%E4%BB%8B%E7%BB%8D/13.PNG">
+<meta property="og:image" content="ylyang.xyz/2020/01/01/VivadoHLS%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%B5%81%E7%A8%8B%E4%BB%8B%E7%BB%8D/14.PNG">
 <meta property="og:image" content="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps42.jpg">
 <meta property="og:image" content="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps43.jpg">
 <meta property="og:image" content="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps44.jpg">
-<meta property="og:image" content="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps45.jpg">
 <meta property="article:published_time" content="2020-01-01T04:59:05.000Z">
-<meta property="article:modified_time" content="2020-07-21T14:20:32.474Z">
+<meta property="article:modified_time" content="2020-07-22T04:53:12.711Z">
 <meta property="article:author" content="ylyang">
 <meta property="article:tag" content="Vivado HLS">
 <meta name="twitter:card" content="summary">
@@ -180,7 +184,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">172</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">178</span></a>
 
   </li>
         <li class="menu-item menu-item-tags">
@@ -265,7 +269,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">172</span>
+          <span class="site-state-item-count">178</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -390,7 +394,7 @@
 
       
         <h1 id="VivadoHLS的设计流程（介绍）"><a href="#VivadoHLS的设计流程（介绍）" class="headerlink" title="VivadoHLS的设计流程（介绍）"></a>VivadoHLS的设计流程（介绍）</h1><h2 id="传统的RTL设计流程："><a href="#传统的RTL设计流程：" class="headerlink" title="传统的RTL设计流程："></a>传统的RTL设计流程：</h2><p><img data-src="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps23.jpg" alt="img"> </p>
-<p>如果采用传统的这种流程，就需要用硬件描述语言比如VHDL、Verilog或者System Verilog描述算法以及相应的Test Bench，然后执行行为级仿真（RTL Simulation），这个过程是一个迭代的过程，以验证算法的正确性，然后再执行综合（Synthesis）和实现（Implementation），在这个阶段要实现设计的收敛（Design Closure），要从Latency、Timing和Resource三个角度进行考察，最后进行系统级的全面的测试，这也是一个迭代的过程。</p>
+<p>如果采用传统的RTL设计流程，就需要用硬件描述语言比如VHDL、Verilog或者System Verilog描述算法以及相应的Test Bench，然后执行行为级仿真（RTL Simulation），这个过程是一个迭代的过程，以验证算法的正确性，然后再执行综合（Synthesis）和实现（Implementation），在这个阶段要实现设计的收敛（Design Closure），要从Latency、Timing和Resource三个角度进行考察，最后进行系统级的全面的测试，这也是一个迭代的过程。</p>
 <a id="more"></a>
 
 <p><img data-src="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps24.jpg" alt="img"> </p>
@@ -475,8 +479,18 @@
 <p><img data-src="7.PNG" alt="7"></p>
 <p>然后执行C综合，综合结束之后会自动打开综合报告，切换到Outline，可以看相应的Performance，也可以看Utilization：</p>
 <p><img data-src="8.PNG" alt="8"></p>
-<p>在左边栏Solution文件夹的syn文件夹中有相应的report文件夹和verilog和vhdl文件夹</p>
+<p>在左边栏Solution文件夹的syn文件夹中有相应的report文件夹和verilog和vhdl文件夹，代码可读性不好。</p>
 <p><img data-src="9.PNG" alt="9"></p>
+<p>接下来选择C/RTL的协同仿真：</p>
+<p><img data-src="10.PNG" alt="10"></p>
+<p>然后会显示协同仿真的结果</p>
+<p><img data-src="11.PNG" alt="11"></p>
+<p>然后查看波形图</p>
+<p><img data-src="12.PNG" alt="12"></p>
+<p>重新创建一个Solution，加directive，%号开头表示directive放在独立的文件里，#开头表示directive放在源代码文件里</p>
+<p><img data-src="13.PNG" alt="13"></p>
+<p>综合完成后可以跟第一个solution综合的结果进行对比，这里只是做了pipeline，就可以看到latency和Interval都减小了</p>
+<p><img data-src="14.PNG" alt="14"></p>
 <p>Directive：</p>
 <p><img data-src="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps42.jpg" alt="img"> </p>
 <p>可以写在单独的Directive文件里，此时可以在directive的面板下看到每个directive前面都有个“%”百分号</p>
@@ -493,8 +507,7 @@
 <p>第一，最好在源代码中为每一个for循环创建一个标签，以便于设置directive；</p>
 <p>第二，推荐在directive文件中存储directives；</p>
 <p>第三，关于Test Bench的返回值，如果仿真通过（结果正确）就返回0，如果仿真不通过（结果错误）就返回1；</p>
-<p>第四，通常情况下，生成的RTL代码的层次和原始的C函数的层次是一致的。</p>
-<p><img data-src="file:///C:%5CUsers%5Cylyang%5CAppData%5CLocal%5CTemp%5Cksohtml8288%5Cwps45.jpg" alt="img"> </p>
+<p>第四，通常情况下，生成的RTL代码的层次和原始的C函数的层次是一致的。 </p>
 
     </div>
 
